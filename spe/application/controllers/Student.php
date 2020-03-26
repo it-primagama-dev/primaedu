@@ -302,4 +302,579 @@ class Student extends CI_Controller {
 		echo json_encode($data);		
 	}
 
+	public function register()
+	{	
+		restrict();
+		$data['breadcrumb_1'] = '<a href="'.base_url().'student/register">Pendaftaran Siswa</a>';
+		$this->template->set('title', 'Pendaftaran Siswa');
+		$this->template->load('template', 'student/register',$data);
+	}
+
+	public function get_stage()
+	{
+		$arr = array(
+				'from' => 'Student_Stage a',
+				'where' => array('a.Status' =>'1'),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);		
+	}
+
+	public function get_programpack($stage)
+	{
+		$arr = array(
+				'from' => 'Program_Pack a',
+				'where' => array('a.StageCode' => $stage),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);		
+	}
+
+	public function get_subjects()
+	{
+		$program = $this->input->post('program');
+		$arr = array(
+				'select' => array(
+					'c.RecID',
+					'a.PackName',
+					'c.SubjectsName',
+					'a.PackType'
+				),
+				'from' => 'Program_Pack a',
+				'join' => array(
+					'Program_Header b' => array(
+						'on' => 'a.ProgramHeaderID=b.RecID',
+						'type' => 'inner',
+					),
+					'Program_Subjects c' => array(
+						'on' => 'b.RecID=c.ProgramHeaderID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('a.RecID' => $program),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);	
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}	
+		echo json_encode($data);	
+	}
+
+	public function input_program_tmp()
+	{
+		//$programval = $_POST['programdetail'];
+		$program = explode(",", $_POST['programdetail']);
+
+		$data = [];
+		for ($i=0; $i < count($program); $i++) { 
+			array_push($data, [
+				'ProgramDetailID'=> $program[$i],
+				'BranchCode'=> $this->session->userdata('KodeAreaCabang'),
+				'CreatedDate'=> date('Y-m-d H:i:s'),
+				'CreatedBy'=> $this->session->userdata('Username')
+			]);
+		}
+		$msg = $this->config_model->insert_multiple($data,'Program_Student_Tmp');
+
+		echo data_json(array("message"=>"Program Berhasil ditambahkan","notify"=>"success"));
+	}
+
+	public function get_program_tmp()
+	{
+		//$program = $this->input->get('program');
+		$arr = array(
+				'select' => array(
+					'a.RecID',
+					'b.ProgramDetailName'
+				),
+				'from' => 'Program_Student_Tmp a',
+				'join' => array(
+					'Program_Detail b' => array(
+						'on' => 'a.ProgramDetailID=b.RecID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('a.BranchCode' => $this->session->userdata('KodeAreaCabang'), 'a.CreatedBy' => $this->session->userdata('Username')),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);	
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);	
+	}
+
+	public function save_student()
+	{
+		$nisp = $this->config_model->get_nisp();
+		$pscd = $this->config_model->get_studentprogramcode();
+		$receiptid = $this->config_model->get_receiptid();
+		//echo $pscd;
+
+		    $data2 = array(
+		    	'params' => array(
+			   		'StudentID' => $nisp,
+			   		'Name' => $this->input->post('Name'),
+			   		'PhoneNumber' => $this->input->post('PhoneNumber'),
+			   		'School' => $this->input->post('School'),
+			   		'Stage' => $this->input->post('Stage'),
+					'BranchCode'=> $this->session->userdata('KodeAreaCabang'),
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+			   	),
+			   	'from' => 'Student_Profile',
+		    );
+		    $msg1 = $this->config_model->insert($data2);
+
+		    $data2 = array(
+		    	'params' => array(
+			   		'StudentID' => $nisp,
+			   		'ProgramPackID' => $this->input->post('ProgramPack'),
+			   		'RegisterPrice' => $this->input->post('RegPrice'),
+			   		'ProgramPrice' => $this->input->post('ProPrice'),
+			   		'Year' => 6,
+			   		'ProgramStudentCode' => $pscd,
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+			   	),
+			   	'from' => 'Program_Student',
+		    );
+		    $msg2 = $this->config_model->insert($data2);
+
+			$program = explode(",", $_POST['Subjects']);
+			$data = [];
+			for ($i=0; $i < count($program); $i++) { 
+				array_push($data, [
+					'SubjectsID'=> $program[$i],
+					'ProgramStudentCode'=> $pscd,
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+				]);
+			}
+			$msg3 = $this->config_model->insert_multiple($data,'Program_StudentDetail');
+
+		    $data4 = array(
+		    	'params' => array(
+			   		'ProgramStudentCode' => $pscd,
+			   		'ReceiptID' => $receiptid,
+			   		'Method' => 1,
+			   		'Amount' => $this->input->post('RegPrice'),
+			   		'Status' => 2,
+			   		'PaymentFor' => 1,
+					'PaymentDateTime'=> date('Y-m-d H:i:s'),
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+			   	),
+			   	'from' => 'Program_Payment',
+		    );
+		    $msg4 = $this->config_model->insert($data4);
+
+			if ($msg1==true && $msg2==true && $msg3==true && $msg4==true) {
+				echo data_json(array("message"=>"Data siswa berhasil disimpan.","notify"=>"success","nisp"=>$nisp));
+			} else {
+				echo data_json(array("message"=>"Data siswa gagal disimpan.","notify"=>"error"));
+			}
+
+	}
+
+	public function load_studentsave()
+	{
+		$nisp = $this->input->post('nisp');
+		$arr = array(
+				'select' => array(
+					'a.RecID as RecIDStudent',
+					'a.StudentID as NISP',
+					'a.Name',
+					'a.School',
+					'a.PhoneNumber',
+					'f.StageName',
+					'd.PackName',
+					'b.RegisterPrice',
+					'b.ProgramPrice',
+					'e.SubjectsName'
+				),
+				'from' => 'Student_Profile a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.StudentID=b.StudentID',
+						'type' => 'inner',
+					),
+					'Program_StudentDetail c' => array(
+						'on' => 'b.ProgramStudentCode=c.ProgramStudentCode',
+						'type' => 'inner',
+					),
+					'Program_Pack d' => array(
+						'on' => 'b.ProgramPackID=d.RecID',
+						'type' => 'inner',
+					),
+					'Program_Subjects e' => array(
+						'on' => 'c.SubjectsID=e.RecID',
+						'type' => 'inner',
+					),
+					'Student_Stage f' => array(
+						'on' => 'a.Stage=f.StageCode',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('a.StudentID' => $nisp),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);	
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);	
+	}
+
+	public function detail_st()
+	{	
+		$StudentID = base64_decode($this->input->post('StudentID'));
+		$Code = base64_decode($this->input->post('Code'));
+		restrict();
+		if($Code==1){
+		$data['breadcrumb_1'] = '<a href="'.base_url().'student/pay_st">Pembayaran Program Siswa</a>';
+		$data['breadcrumb_2'] = '<a href="#">Data Program & Pembayaran Siswa</a>';
+		} else {
+		$data['breadcrumb_1'] = '<a href="'.base_url().'student/register">Pendaftaran Siswa</a>';
+		$data['breadcrumb_2'] = '<a href="#">Data Program & Pembayaran Siswa</a>';
+		}
+		$data['sid'] = $StudentID;
+		$this->template->set('title', 'Data Program & Pembayaran Siswa');
+		$this->template->load('template', 'student/detail_st',$data);
+	}
+
+	public function get_detailst()
+	{
+		$StudentID = $this->input->post('StudentID');
+		$arr = array(
+				'select' => array(
+					'a.RecID as RecIDStudent',
+					'a.StudentID as NISP',
+					'a.Name',
+					'a.School',
+					'a.PhoneNumber',
+					'f.StageName',
+					'd.PackName',
+					'b.RegisterPrice',
+					'b.ProgramPrice',
+					'e.SubjectsName',
+					'a.Stage'
+				),
+				'from' => 'Student_Profile a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.StudentID=b.StudentID',
+						'type' => 'inner',
+					),
+					'Program_StudentDetail c' => array(
+						'on' => 'b.ProgramStudentCode=c.ProgramStudentCode',
+						'type' => 'inner',
+					),
+					'Program_Pack d' => array(
+						'on' => 'b.ProgramPackID=d.RecID',
+						'type' => 'inner',
+					),
+					'Program_Subjects e' => array(
+						'on' => 'c.SubjectsID=e.RecID',
+						'type' => 'inner',
+					),
+					'Student_Stage f' => array(
+						'on' => 'a.Stage=f.StageCode',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('a.RecID' => $StudentID),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);
+
+		$arr2 = array(
+				'select' => array(
+					'a.RecID as RecIDStudent',
+					'a.StudentID as NISP',
+					'c.PackName',
+					'b.RegisterPrice',
+					'b.ProgramPrice',
+					'b.ProgramStudentCode',
+					'b.ProgramPackID'
+				),
+				'from' => 'Student_Profile a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.StudentID=b.StudentID',
+						'type' => 'inner',
+					),
+					'Program_Pack c' => array(
+						'on' => 'b.ProgramPackID=c.RecID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('a.RecID' => $StudentID),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item2 = $this->config_model->find($arr2);
+
+		$arr3 = array(
+				'select' => array(
+					'ReceiptID',
+					'InvoiceNumber',
+					'Method',
+					"CASE a.Method 
+					  WHEN 1 THEN 'Cash'
+					  WHEN 2 THEN 'VA BCA'
+					  WHEN 8 THEN 'VA Permata'
+					END as Method",
+					'Amount',
+					"CASE a.Status 
+					  WHEN 1 THEN 'Menunggu Pembayaran'
+					  WHEN 2 THEN 'Lunas'
+					  WHEN 8 THEN 'Pembayaran Gagal'
+					  WHEN 9 THEN 'Expired'
+					  WHEN 10 THEN 'Cancel'
+					END as Status",
+					"CASE a.PaymentFor 
+					  WHEN 1 THEN 'Pendaftaran'
+					  WHEN 2 THEN 'Bimbingan'
+					END as PaymentFor",
+					'PaymentDateTime',
+					'b.ProgramStudentCode'
+				),
+				'from' => 'Program_Payment a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.ProgramStudentCode=b.ProgramStudentCode',
+						'type' => 'inner',
+					),
+					'Student_Profile c' => array(
+						'on' => 'b.StudentID=c.StudentID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('c.RecID' => $StudentID),
+			);
+		$item3 = $this->config_model->find($arr3);
+
+		$arr4 = array(
+				'select' => array(
+					'b.ProgramStudentCode',
+					'b.RegisterPrice',
+					'b.ProgramPrice',
+					'sum(a.Amount) as TotNom'
+				),
+				'from' => 'Program_Payment a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.ProgramStudentCode=b.ProgramStudentCode',
+						'type' => 'inner',
+					),
+					'Student_Profile c' => array(
+						'on' => 'b.StudentID=c.StudentID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('c.RecID' => $StudentID, 'a.Status' => 2),
+				'group_by' => array('b.ProgramStudentCode','b.RegisterPrice','b.ProgramPrice'),
+			);
+		$item4 = $this->config_model->find($arr4);
+
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+			$data['rows2'] = $item2->result_array();
+			$data['rows3'] = $item3->result_array();
+			$data['rows4'] = $item4->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);	
+	}
+
+	public function pay_st()
+	{	
+		restrict();
+		$data['breadcrumb_1'] = '<a href="#">Pembayaran Program Siswa</a>';
+		$this->template->set('title', 'Pembayaran Program Siswa');
+		$this->template->load('template', 'student/pay_st',$data);
+	}
+
+	public function get_branch_st()
+	{
+		$arr = array(
+				'from' => 'Student_Profile a',
+				'where' => array('a.BranchCode' =>$this->session->userdata('KodeAreaCabang')),
+				'order_by' => array('a.RecID' => '')
+			);
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);		
+	}
+
+	public function program_stadd()
+	{	
+		restrict();
+		$data['breadcrumb_1'] = '<a href="#">Tambah Program Siswa</a>';
+		$this->template->set('title', 'Tambah Program Siswa');
+		$this->template->load('template', 'student/program_stadd',$data);
+	}
+
+	public function add_programst()
+	{	
+		$StudentID = base64_decode($this->input->post('StudentID'));
+		restrict();
+		$data['breadcrumb_1'] = '<a href="'.base_url().'student/program_stadd">Tambah Program Siswa</a>';
+		$data['breadcrumb_2'] = '<a href="#">Data Program Siswa</a>';
+
+		$data['sid'] = $StudentID;
+		$this->template->set('title', 'Data Program Siswa');
+		$this->template->load('template', 'student/add_programst',$data);
+	}
+
+	public function get_programpack_add($stage,$StudentID)
+	{
+		$sql = "SELECT 
+				ab.PackName,
+				ab.StageCode,
+				ab.PackType,
+				ab.RecID,
+				(select SUM(a.PackType) from Program_Pack a JOIN Program_Student b ON a.RecID=b.ProgramPackID where a.StageCode = ab.StageCode and b.StudentID = '$StudentID') as JML
+			from Program_Pack ab 
+			where ab.StageCode = '$stage'
+			GROUP BY ab.PackName,ab.StageCode,ab.PackType,ab.RecID
+			HAVING ab.PackType <= (SELECT COUNT(RecID) from Program_Pack where StageCode=ab.StageCode)-(select SUM(a.PackType) from Program_Pack a JOIN Program_Student b ON a.RecID=b.ProgramPackID where a.StageCode = ab.StageCode and b.StudentID = '$StudentID') ";
+		$item = $this->db->query($sql);		
+		$data = $item->result_array();
+		echo json_encode($data);		
+	}
+
+	public function get_subjects_add()
+	{
+		$program = $this->input->post('program');
+		$StudentID = $this->input->post('StudentID');
+		$arr = "SELECT c.RecID,c.SubjectsName,a.RecID as PackID,a.PackType from Program_Pack a 
+					join Program_Header b ON a.ProgramHeaderID=b.RecID
+					join Program_Subjects c ON b.RecID=c.ProgramHeaderID
+					left join (Select bc.SubjectsID from Program_Student ab
+								join Program_StudentDetail bc on ab.ProgramStudentCode=bc.ProgramStudentCode 
+								where StudentID = '$StudentID') d ON c.RecID=d.SubjectsID 
+				WHERE a.RecID = '$program' and d.SubjectsID is null";
+		$item = $this->db->query($arr);	
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}	
+		echo json_encode($data);	
+	}
+
+	public function save_addprogram()
+	{
+		$nisp = $this->input->post('StudentID');
+		$pscd = $this->config_model->get_studentprogramcode();
+		$receiptid = $this->config_model->get_receiptid();
+		//echo $pscd;
+
+		    $data2 = array(
+		    	'params' => array(
+			   		'StudentID' => $nisp,
+			   		'ProgramPackID' => $this->input->post('ProgramPack'),
+			   		'RegisterPrice' => $this->input->post('RegPrice'),
+			   		'ProgramPrice' => $this->input->post('ProPrice'),
+			   		'Year' => 6,
+			   		'ProgramStudentCode' => $pscd,
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+			   	),
+			   	'from' => 'Program_Student',
+		    );
+		    $msg2 = $this->config_model->insert($data2);
+
+			$program = explode(",", $_POST['Subjects']);
+			$data = [];
+			for ($i=0; $i < count($program); $i++) { 
+				array_push($data, [
+					'SubjectsID'=> $program[$i],
+					'ProgramStudentCode'=> $pscd,
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+				]);
+			}
+			$msg3 = $this->config_model->insert_multiple($data,'Program_StudentDetail');
+
+		    $data4 = array(
+		    	'params' => array(
+			   		'ProgramStudentCode' => $pscd,
+			   		'ReceiptID' => $receiptid,
+			   		'Method' => 1,
+			   		'Amount' => $this->input->post('RegPrice'),
+			   		'Status' => 2,
+			   		'PaymentFor' => 1,
+					'PaymentDateTime'=> date('Y-m-d H:i:s'),
+					'CreatedDate'=> date('Y-m-d H:i:s'),
+					'CreatedBy'=> $this->session->userdata('Username')
+			   	),
+			   	'from' => 'Program_Payment',
+		    );
+		    $msg4 = $this->config_model->insert($data4);
+
+			if ($msg2==true && $msg3==true && $msg4==true) {
+				echo data_json(array("message"=>"Data siswa berhasil disimpan.","notify"=>"success"));
+			} else {
+				echo data_json(array("message"=>"Data siswa gagal disimpan.","notify"=>"error"));
+			}
+
+	}
+
+	public function get_detailpay()
+	{
+		$psdc = $this->input->post('psdc');
+		$arr = array(
+				'select' => array(
+					'b.ProgramStudentCode',
+					'b.RegisterPrice',
+					'b.ProgramPrice',
+					'c.PackName',
+					'sum(a.Amount) as TotNom'
+				),
+				'from' => 'Program_Payment a',
+				'join' => array(
+					'Program_Student b' => array(
+						'on' => 'a.ProgramStudentCode=b.ProgramStudentCode',
+						'type' => 'inner',
+					),
+					'Program_Pack c' => array(
+						'on' => 'b.ProgramPackID=c.RecID',
+						'type' => 'inner',
+					),
+				),
+				'where' => array('b.ProgramStudentCode' => $psdc, 'a.Status' => 2),
+				'group_by' => array('b.ProgramStudentCode','b.RegisterPrice','b.ProgramPrice','c.PackName'),
+			);
+		$item = $this->config_model->find($arr);
+
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);	
+	}
+
+	public function receipt()
+	{	
+		restrict();
+		$data['breadcrumb_1'] = '<a href="#">Tambah Program Siswa</a>';
+		$this->template->set('title', 'Tambah Program Siswa');
+		$this->load->view('student/receipt',$data);
+	}
+
 }
