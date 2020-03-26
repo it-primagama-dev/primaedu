@@ -1,0 +1,79 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("nilai/save") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("nilai/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Nilai
+
+    <small class="on-right">Edit nilai</small>
+</h1>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="KodeJadwal">Nama Siswa</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("NamaSiswa", "size" => 30, "ReadOnly" => "ReadOnly") )?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 1</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai1", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 2</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai2", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 3</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai3", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 4</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai4", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 5</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai5", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 6</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai6", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 7</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai7", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 8</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai8", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 9</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai9", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <label for="KodeJadwal">Nilai 10</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Nilai10", "min" => "0", "max" => "100")) ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField(array("ProgramSiswaRecId", "type" => "number")) ?>
+            <?php echo $this->tag->hiddenField(array("RecId", $RecId))?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

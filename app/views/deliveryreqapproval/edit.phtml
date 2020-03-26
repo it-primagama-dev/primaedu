@@ -1,0 +1,64 @@
+
+<?php echo $this->getContent(); ?> 
+
+<h1>
+    <?php echo $this->tag->linkTo(array("deliveryreqapproval/", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Jumlah barang yang dikirim
+    <small class="on-right">Detail Pengiriman</small>
+</h1>
+
+
+
+
+<table class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Kode Barang</th>
+            <th>Nama Barang</th>
+            <th>Jumlah Pesanan</th>
+			 <th>Jumlah Pengiriman</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+    if(isset($page)){
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+        foreach ($page->items as $purchreqline) { ?>
+        <tr>
+            <td align="right">
+                <label for="PurchReqId"><?php echo $i.".";?></label><?php $i++;?>
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->ItemId; ?>
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->ItemName; ?>
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->Qty; ?>
+            </td>
+			<td align="left">
+                <?php echo $purchreqline->QtyRemaining; ?>
+            </td>
+        </tr>
+        <?php }
+        } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="4">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+
+    </tbody>
+</table>
+

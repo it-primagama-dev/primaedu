@@ -1,0 +1,61 @@
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+			<p>Andin</p>
+            <label for="PurchReqName">Deskripsi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+            </div>
+			<?php
+			$test =$this->modelsManager->createBuilder()
+                        ->columns("PurchReqId")
+                        ->from("Konfirmasipembayaran")
+                        ->where("Status='Approved'")
+                        ->getQuery()
+                        ->execute()
+                        ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+			?>
+            
+			<table  width="400px">
+			<tr><td >
+			 <label for="Bank">Nama Bank
+            <div class="input-control text" data-role="input-control">
+                <select name="bank" id="Bank" onchange="myFunction()">
+					<option value="BCA"> BCA</option>
+					<option value="Mandiri"> MANDIRI</option>
+					<option value="">-other-</option>
+					
+				</select>
+            </div>
+			</td>
+			</tr>
+			</table>
+                   <label for="PurchReqDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("PurchReqDate", "size" => 30)) ?>
+            </div>
+
+
+            <label for="Nominal">Jumlah yang di bayarkan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Nominal", "size" => 30,"class" => "idrCurrency")) ?>
+            </div>
+
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("Bank").value;
+	if(x==""){
+		 document.getElementById("demo").style.display = "block";
+	}
+}
+</script>

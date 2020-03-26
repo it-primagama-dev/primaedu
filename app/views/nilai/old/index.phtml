@@ -1,0 +1,43 @@
+
+<?php echo $this->getContent() ?>
+
+<div align="right">
+    <?php //echo $this->tag->linkTo(array("nilai/new", "Create nilai")) ?>
+</div>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("nilai/new", 'Input nilai<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+
+<?php echo $this->tag->form(array("nilai/search", "autocomplete" => "off", "enctype" => "multipart/form-data")) ?>
+
+<div class="grid fluid">
+    <div align="left">
+        <h1>Cari Nilai Siswa</h1>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label for="ProgramSiswaRecId">Program Siswa</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                    echo $this->tag->select(
+                        array(
+                            "ProgramSiswaRecId",
+                            $program,
+                            "using" => array("RecID", "NamaProgram")//,//"NamaProgram"),
+                        )
+                    );
+                ?>
+            </div>
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+
+</div>
+
+</form>
+

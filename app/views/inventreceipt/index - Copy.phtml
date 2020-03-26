@@ -1,0 +1,172 @@
+
+<?php echo $this->getContent() ?>
+
+<h1>
+    Penerimaan Barang
+   <!-- <small class="place-right"><?php echo $this->tag->linkTo("inventreceipt/index", 'Tambah Baru<i class="icon-plus on-right smaller"></i>') ?></small>-->
+</h1>
+
+<?php echo $this->tag->form(array("inventreceipt/search", "autocomplete" => "off")) ?>
+
+<?php
+$areacabang = $this->session->auth['areacabang'];
+?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span4">
+            <label for="RecId">Nomor PR</label>
+            <div class="input-control text" data-role="input-control">
+                <select name="PurchReqId" id="PurchReqId" style="width:100%;height:100%;padding:5px;">
+                <?php
+                    /*
+                    echo $this->tag->select(
+                        array(
+                            "PurchReqId",
+                            //Purchreqheader::find("Status = 'Approved'"),
+                            Purchreqheader::find(array("conditions" => "Purchreqheader.Status = 'Approved' AND Purchreqheader.Cabang = $areacabang", "Join" => "Purchreqline")),
+                            //"using" => array("RecId", "PurchReqId"),
+                            "using" => array("RecId", "QtyRemaining"),
+                            "style" => "width:100%;height:100%;padding:5px;",
+                            "id" => "PurchReqId"
+                        )
+                    );*/
+
+                    
+                    $Purchreqheader = Purchreqheader::query()
+                                    ->leftJoin("Purchreqline","Purchreqheader.RecId = Purchreqline.Purchreqheader")
+                                    ->where("Purchreqheader.Status = 'Approved'")
+                                    ->andWhere("Purchreqheader.Cabang = $areacabang")
+                                    ->andWhere("Purchreqline.QtyRemaining > 0")
+                                    ->execute();
+
+                    for($i=0;$i<count($Purchreqheader);$i++){
+                ?>
+                        <option value="<?php echo $Purchreqheader[$i]->RecId?>"><?php echo $Purchreqheader[$i]->PurchReqId ?></option>
+                <?php
+                    }
+                    
+                ?>
+
+               
+                </select>
+
+                 <?php
+                 /*
+                echo $this->tag->select(array("PurchReqId", $NoPR, "using" => array("RecId", "PurchReqId"),
+                    "id" => "PurchReqId"))
+                    */
+                ?>
+            </div>
+        </div>
+        <div class="span4">
+            <label for="ReceiptDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-format="yyyy-mm-dd" data-date="<?php echo date('Y-m-d');?>">
+                <?php echo $this->tag->textField(array("ReceiptDate", "id" => "ReceiptDate")) ?>
+            </div>
+        </div>
+        <div class="span4">
+            <label for="PackingSlipId">Nomor SPJ</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PackingSlipId", "size" => 30 , "id" => "PackingSlipId")) ?>
+            </div>
+        </div>
+        <?php echo $this->tag->submitButton("Retrieve") ?>
+    </div>
+</div>
+</form>
+
+<!-- Result View -->
+<script type="text/javascript">
+    function deleteList(id){
+        document.getElementById("item"+id).innerHTML="";
+    }
+
+    function getDateAndSlipId(){
+        var PurchReqIdSubmit = document.getElementById("PurchReqIdSubmit");
+        var ReceiptDateSubmit = document.getElementById("ReceiptDateSubmit");
+        var PackingSlipIdSubmit = document.getElementById("PackingSlipIdSubmit");
+
+        PurchReqIdSubmit.value = document.getElementById("PurchReqId").value;
+        ReceiptDateSubmit.value = document.getElementById("ReceiptDate").value;
+        PackingSlipIdSubmit.value = document.getElementById("PackingSlipId").value;
+
+        $('.loader').hide();
+
+
+        return true;
+    }
+</script> 
+
+<?php echo $this->tag->form(array("inventreceipt/editQty", "autocomplete" => "off", "onclick" => "return getDateAndSlipId();")) ?>
+
+<!-- Set PurchReqId, ReceiptDate, and PackingSlipId on submit -->
+<input type="hidden" name="PurchReqIdSubmit" id="PurchReqIdSubmit" value="" />
+<input type="hidden" name="ReceiptDateSubmit" id="ReceiptDateSubmit" value="" />
+<input type="hidden" name="PackingSlipIdSubmit" id="PackingSlipIdSubmit" value="" />
+ 
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>Nama Barang</th>
+            <th>Jumlah Pesanan</th>
+            <th>Sisa Pembelian</th>
+            <th>Qty Akan Diterima</th>
+            <th>Action</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php 
+        if(isset($page->items)){
+            $i=0;
+            foreach ($page->items as $inventreceipt) { 
+    ?>
+        <tr>
+            <tr id="item<?=$i?>">
+            <td><?php echo $inventreceipt->ItemName; ?></td>
+            <td><?php echo (isset($inventreceipt) ? $inventreceipt->Qty : "-"); ?></td>
+            <td><?php echo (isset($inventreceipt) ? $inventreceipt->QtyRemaining : "-"); ?></td>
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("". $inventreceipt->RecId, "type" => "number", "min" => 1, "max" => 100000 , "size" => 30)) ?>
+                </div>
+            </td>
+            <td style="text-align:center;"><input type="button" value="Delete" onclick="deleteList(<?=$i?>)"></td>
+        </tr>
+    <?php 
+                $i++;
+            }
+    ?>
+            <tr style="text-align:right;background:#FFF;">
+                <td colspan="5"><?php echo $this->tag->submitButton(array("Post")) ?></td>
+            </tr>
+    
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("inventreceipt/search", "First") ?></td>
+                        <td><?php echo $this->tag->linkTo("inventreceipt/search?page=" . $page->before, "Previous") ?></td>
+                        <td><?php echo $this->tag->linkTo("inventreceipt/search?page=" . $page->next, "Next") ?></td>
+                        <td><?php echo $this->tag->linkTo("inventreceipt/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    <?php 
+        } 
+        else
+        { 
+    ?>
+        <tbody>
+            <tr style="text-align:center;">
+                <td colspan="5">- No Data -</td>
+            </tr>
+        </tbody>
+    <?php } ?>
+</table>
+</form>

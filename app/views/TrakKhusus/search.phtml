@@ -1,0 +1,113 @@
+<?php
+
+ use Phalcon\Tag; 
+ echo $this->getContent();
+
+ ?>
+
+<h1 style="padding-left:2%;">
+    Konfirmasi Pembayaran
+</h1>
+<script language="javascript">
+    
+    function onApproved(g){
+        var RecId = g.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan '+g.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            g.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+			 g.elements.namedItem("Remarks").value = Remarks;
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<script language="javascript">
+    
+    function onReject(f){
+        var RecId = f.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan reject '+f.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            f.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>Kode Cabang</th>
+            <th>Nama Cabang</th>
+            <th>Area</th>
+            <th>Alamat</th>
+			<th>No HP</th>
+			<th>Action</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $areacabang) { 	
+											
+                
+               ?>
+				
+			
+            <tr>
+			
+        
+				 <td><?php echo $areacabang->KodeAreaCabang?></td>
+				 <td><?php echo $areacabang->NamaAreaCabang?></td>
+				 <td><?php echo $areacabang->getNamaArea()  ?></td>
+                <td><?php echo $areacabang->Alamat ?></td>
+				<td><?php echo $areacabang->NoHandPhone?></td>	
+		<?php echo $this->tag->form(array("Tracking/index", "autocomplete" => "off")) ?>
+                <input type="hidden" name="Cabang" id="Cabang" value="<?= $areacabang->RecID?>" />
+			
+			
+                <td><?php echo $this->tag->submitButton("Check") ?></td>
+                </form>				
+              
+
+               
+            </tr>
+				  <?php }} 
+       
+      
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+     <?php echo $this->tag->linkTo(array("Trakkhusus/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Trakkhusus/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Trakkhusus/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Trakkhusus/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+
+</div>

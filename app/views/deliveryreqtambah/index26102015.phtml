@@ -1,0 +1,40 @@
+<?php echo $this->getContent() ?>
+
+
+<?php echo $this->tag->form(array("deliveryreqheader/search", "autocomplete" => "off")) ?>
+
+<div align="left">
+    <h1>Cari Pengiriman</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+
+
+	            <label for="KodeArea">Area</label>
+				<?php
+				
+				// Using data from a resultset
+				echo $this->tag->select(
+					array(
+						"Cabang",
+						Areacabang::find("KodeAreaCabang like 'A%'"),
+						"using" => array("KodeAreaCabang", "NamaAreaCabang")
+					)
+				);
+				?>
+
+            <label for="PurchReqId">Kode Pembelian</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqId", "size" => 30)) ?>
+            </div>
+
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

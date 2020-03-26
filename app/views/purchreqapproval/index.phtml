@@ -1,0 +1,120 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1 style="padding-left:2%;">
+    Pembelian Approval
+</h1>
+
+<script language="javascript">
+    
+    function onReject(f){
+        var RecId = f.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan reject '+f.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            f.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>No. PR</th>
+            <th>Keterangan</th>
+            <th>Diminta Oleh</th>
+            <th>Tangal</th>
+            <th>Status</th>
+            <th colspan="4">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $purchreqheader) { ?>
+
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $purchreqheader->PurchReqId ?></td>
+                <td><?php echo $purchreqheader->PurchReqName ?></td>
+                <td><?php echo $purchreqheader->Requester ?></td>
+                <td><?php echo $purchreqheader->PurchReqDate ?></td>
+                <td><?php echo $purchreqheader->Status ?></td>
+
+                <?php echo $this->tag->form(array("purchreqapproval/approved", "autocomplete" => "off")) ?>
+                <?php
+                
+                $test = $this->modelsManager->createBuilder()
+                        ->columns("DepositLain,Deposit")
+                        ->from("Purchreqheader")
+                        ->where("Cabang = '$purchreqheader->Cabang' AND PurchReqDate < '$purchreqheader->PurchReqDate' and PurchReqId!='$purchreqheader->PurchReqId'")
+                        ->orderBy("PurchReqDate DESC")
+                        ->limit("1")
+                        ->getQuery()
+                        ->execute()
+                        ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+                          foreach ($test as $tes=>$value){
+                              $deposit=$value[Deposit];
+                              $depositlain=$value[DepositLain];
+                              $totaldeposit=$deposit+$depositlain;
+
+                        } 
+                    ?>
+                <input type="hidden" name="RecId" value="<?=$purchreqheader->RecIdd?>" />
+                <input type="hidden" name="PurchReqId" value="<?=$purchreqheader->PurchReqId?>" />
+                <input type="hidden" name="PurchReqDate" value="<?=$purchreqheader->PurchReqDate?>" />
+                <input type="hidden" name="Cabang" value="<?=$purchreqheader->Cabang?>" />
+                <input type="hidden" name="Harga" value="<?=$purchreqheader->harga?>" />
+                <input type="hidden" name="Deposit" value="<?=$totaldeposit?>" />
+                <td><?php echo $this->tag->submitButton("Approved") ?></td>
+                </form>
+
+                <?php echo $this->tag->form(array("purchreqapproval/reject", "autocomplete" => "off" , "onsubmit" => "return onReject(this);")) ?>
+                <input type="hidden" name="RecId" value="<?=$purchreqheader->RecIdd?>" />
+                <input type="hidden" name="PurchReqName" value="<?=$purchreqheader->PurchReqName?>" />
+                <input type="hidden" name="Remarks" value="" />
+                <td><?php echo $this->tag->submitButton("Reject") ?></td>
+                </form>
+                <td><?php echo $this->tag->linkTo("purchreqapproval/edit/".$purchreqheader->RecIdd, "Detail") ?></td>
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("purchreqapproval/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("purchreqapproval/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("purchreqapproval/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("purchreqapproval/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

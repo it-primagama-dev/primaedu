@@ -1,0 +1,92 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1 style="padding-left:2%;">
+    Daftar Pemesanan Tidak Complete
+</h1>
+
+<script language="javascript">
+    
+    function onReject(f){
+        var RecId = f.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan reject '+f.elements.namedItem("deliveryReqName").value+' :');
+
+        if(Remarks != null){
+            f.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>No. PR</th>
+            <th>area</th>
+            <th>Cabang</th>
+            <th>Tangal&Waktu</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $deliveryreqheader) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $deliveryreqheader->PurchReqId ?></td>
+                <td><?php echo $deliveryreqheader->area ?></td>
+                <td><?php echo $deliveryreqheader->namacabang ?></td>
+                <td><?php echo $deliveryreqheader->CreatedDateTime ?></td>
+	            <td><?php echo $this->tag->linkTo("deliveryreqless/qty/".$deliveryreqheader->RecId, "Input barang yang dikirim") ?></td>	
+				 <?php echo $this->tag->form(array("deliveryreqless/susulan", "autocomplete" => "off")) ?>
+				 <input type="hidden" name="reqid" value="<?= $deliveryreqheader->PurchReqId?>" />
+				  <input type="hidden" name="Cabang" value="<?= $deliveryreqheader->Cabang?>" />
+				   <input type="hidden" name="Area" value="<?=$deliveryreqheader->area?>" />
+				 </td>
+				 
+                <td><?php echo $this->tag->submitButton("Packing slip susulan") ?></td>
+                </form>
+				
+				
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("deliveryreqless/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

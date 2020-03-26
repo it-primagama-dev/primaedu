@@ -1,0 +1,82 @@
+
+{{ form("ismart/create", "method":"post") }}
+
+<h1>
+    {{ link_to("ismart/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>') }}
+    I-Smart
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+{{ content() }}
+
+<div class="grid fluid">
+    <legend>Detail I-Smart</legend>
+    <div class="row">
+        
+        <div class="span6">
+            <label for="NamaISmart">Nama I-Smart</label>
+            <div class="input-control text" data-role="input-control">
+                {{ text_field("NamaISmart", "maxlength" : 30) }}
+            </div>
+            
+            <label for="Grade">Grade</label>
+            <div class="input-control select" data-role="input-control">
+                {{ select_static("Grade", ["AA" : "A+", "B" : "B", "C" : "C"]) }}
+            </div>
+            
+            <label for="TipeISmart">Tipe I-Smart</label>
+            <div class="input-control select" data-role="input-control">
+                {{ select_static("TipeISmart", ["Tetap" : "Tetap", "Honor" : "Honor", "IBM" : "IBM"]) }}
+            </div>
+        </div>
+        
+        <div class="span3">
+            <label for="TanggalLahir">Tanggal Lahir</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                {{ text_field("TanggalLahir", "maxlength" : 30) }}
+            </div>
+            
+            <label for="JenisKelamin">Jenis Kelamin</label>
+            <div class="input-control select" data-role="input-control">
+                {{ select_static("JenisKelamin", ["L" : "Laki laki", "P" : "Perempuan"])}}
+            </div>
+            
+             <label for="Pekerjaan">Pekerjaan</label>
+            <div class="input-control text" data-role="input-control">
+                {{ text_field("Pekerjaan", "maxlength" : 30) }}
+            </div>
+        </div>
+            
+        <div class="span3">
+            <label for="TanggalGabung">Tanggal Gabung</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                {{ text_field("TanggalGabung", "maxlength" : 30) }}
+            </div>
+            
+            <label for="Telepon">Nomor Telepon</label>
+            <div class="input-control text" data-role="input-control">
+                {{ text_field("Telepon", "maxlength" : 30) }}
+            </div>
+            
+            <label for="Email">Email</label>
+            <div class="input-control text" data-role="input-control">
+                {{ text_field("Email", "maxlength" : 30) }}
+            </div>
+        </div>   
+    </div>
+    
+    <legend>Detail Alamat</legend>
+    <div class="row">
+        <div class="span6">
+            <label for="Alamat">Alamat</label>
+            <div class="input-control textarea" data-role="input-control">
+                {{ text_area("Alamat", "maxlength" : 30) }}
+            </div>
+        </div>
+    </div>
+
+    {{ submit_button("Simpan") }}
+
+</div>
+
+</form>

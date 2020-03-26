@@ -1,0 +1,73 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1 style="padding-left:2%;">
+Barcode Siswa
+</h1>
+<?php echo $this->tag->form("barcodesiswa/cari") ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span4">
+            <label for="kd">No VA / Barcode</label>
+            <div class="input-control text">
+                <?php echo $this->tag->textField("KodeCabang") ?>
+            </div>
+            <button type="submit">Cari</button>
+        </div>
+    </div>
+</div>
+</form>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>No VA</th>
+            <th>Barcode</th>
+        </tr>
+    </thead>
+    <tbody  align="center">
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $deliveryreqheader) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $deliveryreqheader->NoVA ?></td>
+                <td><?php echo $deliveryreqheader->bcode ?></td>
+                </form>
+				
+				
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("barcodesiswa/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodesiswa/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodesiswa/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodesiswa/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

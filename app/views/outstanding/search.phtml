@@ -1,0 +1,53 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Pembelian
+
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/new", 'Tambah<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Requester</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th colspan="4">Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($page->items as $konfirmasipembayaranapp) { ?>
+            <tr>
+                <td><?php echo $konfirmasipembayaranapp->PurchReqId ?></td>
+                <td><?php echo $konfirmasipembayaranapp->PurchReqName ?></td>
+                <td><?php echo $konfirmasipembayaranapp->Requester ?></td>
+                <td><?php echo $konfirmasipembayaranapp->PurchReqDate ?></td>
+                <td><?php echo $konfirmasipembayaranapp->Status ?></td>
+                <td><?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/edit/" . $Konfirmasi->RecId, "Approved")); ?></td>
+                <td><?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/delete/" . $konfirmasipembayaranapp->RecId, "Reject")); ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/search", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/search?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/search?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("konfirmasipembayaranapp/search?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

@@ -1,0 +1,38 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("ruangan/save") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("ruangan/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Ruangan
+    <small class="on-right">Ubah Ruangan</small>
+</h1>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+            
+            <label for="KodeRuangan">Kode Ruangan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeRuangan", "disabled" => "disabled")) ?>
+            </div>
+            
+            <label for="NamaRuangan">Nama Ruangan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("NamaRuangan", "size" => 30)) ?>
+            </div>
+            
+            <label for="Kapasitas">Kapasitas</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Kapasitas", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField("KodeRuangan") ?>
+            <?php echo $this->tag->hiddenField("RecID") ?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

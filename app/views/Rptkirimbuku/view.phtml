@@ -1,0 +1,141 @@
+<?php
+ use Phalcon\Tag; ?>
+ <?php echo $this->getContent(); ?>
+
+<style type="text/css">
+    @media print{@page {size: A4 landscape}}
+</style>
+<table class="tablePrint" style="width:100%;">
+    <tr>
+        <td colspan="7">
+            <table style="width:100%;">
+                <tr>
+                    <td align="center"><?php echo $rpt_img;?></td>
+                    <td align="center" width="75%">
+                        <h2><u><?php echo $rpt_title; ?></u></h2>
+                    </td>
+                    <td width="20%" align="right">
+                        <a href="#" id="downloadBtn" class="btn btn-primary pull-right">Download</a>
+                        <a href="javascript::void();" onclick="window.print();" id="printLink" class="btn btn-success pull-right">Print</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Periode : <?php echo $rpt_datefrom;
+							if($rpt_dateto){ echo" - ".$rpt_dateto;}  ?></b>
+                    </td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7"><hr color="#000000"/></td>
+    </tr>
+</table>
+<table class="table bordered hovered table2excel" style="table-layout: fixed; border-collapse: collapse">
+    <thead>
+        <tr>
+            <th>No</th>
+			<th width='80'>Area</th>
+			<th>Kode Cabang</th>
+			<th>Nama Cabang</th>
+			<th>Kode Barang</th>
+			<th>Item ID</th>
+            <th>Jumlah Barang</th>
+            <th>Nomor PR</th>
+            <th>Status Pembelian</th>
+            <th>Tanggal Pembelian</th>
+            <th>Approve Area Manager</th>
+            <th>Submit Pembayaran</th>
+            <th>Approve Finance Pusat</th>
+            <th>Keterangan Keuangan</th>
+            <th>Logistik/Packing Slip</th>
+            <th>Pengiriman</th>
+ 
+        </tr>
+    </thead>
+    <tbody>
+					
+			<?php 
+					foreach ($result as $list) { 
+					$no=$no+1;
+					?>
+						
+
+									<?php	
+$sqlam = "select TOP 1 konfirmasipembayaran.status as astatus,print_PS,convert(varchar,konfirmasipembayaran.PurchReqDate ,105) as 
+         PurchReqDate, (SELECT SUM(NOMINAL) FROM Konfirmasipembayaran WHERE purchreqid='$list->PurchReqId' 
+		 and Status='Approved' GROUP BY PurchReqId)AS NOMINAL,SUM(purchreqline.PRICE*purchreqline.QTY) AS HARGA ,
+		 convert(varchar,konfirmasipembayaran.print_time ,105) as printDate,
+		 convert(varchar,konfirmasipembayaran.approvaldate ,105) as approvaldate,convert(varchar,konfirmasipembayaran.print_time ,108)as 
+		 waktuprint,convert(varchar,konfirmasipembayaran.PurchReqDate ,108)as waktu,
+		 convert(varchar,konfirmasipembayaran.approvaldate ,108)as waktuapp  from konfirmasipembayaran JOIN purchreqheader on 
+		 Konfirmasipembayaran.PurchReqId=
+		 purchreqheader.PurchReqId join purchreqline on purchreqheader.RecId=purchreqline.Purchreqheader
+		where konfirmasipembayaran.PurchReqId='$list->PurchReqId' and konfirmasipembayaran.Status='approved'
+		group by konfirmasipembayaran.PurchReqId,konfirmasipembayaran.status,konfirmasipembayaran.PurchReqDate,konfirmasipembayaran.NOMINAL,
+		konfirmasipembayaran.print_time,konfirmasipembayaran.approvaldate,konfirmasipembayaran.PurchReqDate,konfirmasipembayaran.print_PS";
+        $appam = $this->db->query($sqlam);
+		 $rappam=$appam->fetchArray();
+				 ?>
+
+
+
+						<tr>
+							<td><?php echo $no;?></td>
+							<td><?php echo $list->NamaArea ?></td>
+							<td><?php echo $list->KodeCabang ?></td>
+							<td><?php echo $list->NamaCabang ?></td>
+							<td><?php echo $list->ItemId ?></td>
+							<td><?php echo $list->ItemName ?></td>
+							<td><?php echo $list->Qty ?></td>
+							<td><?php echo $list->PurchReqId ?></td>
+							<td><?php echo $list->Status ?></td>
+							<td><?php echo $list->PurchReqDate ?></td>
+							<td><?php echo $list->ApprovalDate ?></td>
+							<td><?php echo $rappam['PurchReqDate']."<br>".$rappam['waktu']; ?></td>
+							<td><?php echo $rappam['approvaldate']."<br>".$rappam['waktuapp']; ?></td>
+							<td>
+							<?php 
+							
+							$Nominal=$list->Deposit+$rappam['NOMINAL'];
+
+							if($Nominal=$rappam['HARGA']){echo "LUNAS";}
+									  elseif($Nominal<$rappam['HARGA']){echo "Kurang :".$rappam['HARGA']-$Nominal;
+									  }else{
+									  $deposit=$Nominal-$rappam['HARGA'];
+									  if($deposit){
+									  echo "Deposit anda : ".$Nominal-$rappam['HARGA'];
+									  }else{}
+									  }
+							 	?>
+							 </td>
+
+							<td><?php echo $rappam['printDate']."<br>".$rappam['waktuprint']; ?></td>
+									<?php	
+
+$sqldr = "select deliveryreqheader.ResiId,convert(varchar,CreatedDateTime ,105) as tgl,convert(varchar,CreatedDateTime,108)as waktu,koli from 		  deliveryreqheader where deliveryreqheader.PurchReqId='$list->PurchReqId'";
+        $deliver = $this->db->query($sqldr);
+		 $rdeliver=$deliver->fetchArray();
+				 ?>
+							
+							
+							<td><?php echo $rdeliver['tgl']."<br>".$rdeliver['waktu']; ?></td>
+							
+						</tr>	
+					<?php } ?>
+				
+		
+		
+    </tbody>
+</table>
+
+<script>
+    $('#downloadBtn').on('click', function () {
+        $(".table2excel").table2excel({
+            exclude: ".noExl",
+            name: "Primaedu",
+            filename: "{{ rpt_title }}.xls"
+        });
+    });
+</script>

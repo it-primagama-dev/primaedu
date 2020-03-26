@@ -1,0 +1,63 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("scheduledetail/save") ?>
+
+<div align="center">
+    <h1>Ubah Detail Jadwal</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <?php echo $this->tag->hiddenField("Schedule") ?>
+
+            <label for="Tanggal">Tanggal</label>
+            <div id="Tanggal" class="input-control text">
+                <?php echo $this->tag->textField(array("Tanggal", "size" => 30)) ?>
+            </div>
+
+            <label for="Jam">Jam</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->timeField(array("Jam", "type" => "time")) ?>
+            </div>
+
+            <label for="Ruangan">Ruangan</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("Ruangan", $ruangan, "using" => array("RecID", "NamaRuangan"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <label for="Guru">Guru</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("Guru", $guru, "using" => array("RecID", "NamaISmart"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+            
+            <label for="BidangStudi">Bidang Studi</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("BidangStudi", $bidangstudi, "using" => array("KodeBidangStudi", "NamaBidangStudi"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField("RecId") ?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>
+
+<script>
+    $("#Tanggal").datepicker({
+        effect: "slide",
+        format: "yyyy-mm-dd"
+    });
+</script>

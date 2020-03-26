@@ -1,0 +1,49 @@
+<?php echo $this->getContent() ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("purchreqheader/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<?php echo $this->tag->form(array("purchreqheader/search", "autocomplete" => "off")) ?>
+
+<div align="left">
+    <h1>Cari Pembelian</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="PurchReqId">Kode Pembelian</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqId", "size" => 30)) ?>
+            </div>
+
+            <label for="PurchReqName">Deskripsi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+            </div>
+
+            <label for="Requester">Requester</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Requester", "size" => 30)) ?>
+            </div>
+
+            <label for="PurchReqDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("PurchReqDate", "size" => 30)) ?>
+            </div>
+
+            <label for="Status">Status</label>
+            <div class="input-control select" data-role="input-control">
+                <?php echo $this->tag->selectStatic("Status", array("" => " --- ","Draft"=> "Draft", "Inreview"=> "Inreview", "Approved"=> "Approved", "Rejected"=> "Rejected", "Canceled" => "Canceled")) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

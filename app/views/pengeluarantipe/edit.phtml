@@ -1,0 +1,36 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("pengeluarantipe/save") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Tipe Pengeluaran
+    <small class="on-right">Ubah Pengeluaran</small>
+</h1>
+
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="BiayaGroup">Group Pengeluaran</label>
+            <div class="input-control select" data-role="input-control">
+                <?php echo $this->tag->select(array("BiayaGroup", $biayagroup ,"using" => ["RecID", "NamaBiayaGroup"])) ?>
+            </div>
+            <label for="KodePengeluaran">Kode Pengeluaran</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodePengeluaran", "size" => 30)) ?>
+            </div>
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField("RecId") ?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

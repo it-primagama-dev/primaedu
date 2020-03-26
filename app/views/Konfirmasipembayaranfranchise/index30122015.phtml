@@ -1,0 +1,163 @@
+<?php
+
+ use Phalcon\Tag; 
+ echo $this->getContent();
+
+ ?>
+
+<h1 style="padding-left:2%;">
+    Konfirmasi Pembayaran
+</h1>
+<script language="javascript">
+    
+    function onApproved(g){
+        var RecId = g.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan '+g.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            g.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+			 g.elements.namedItem("Remarks").value = Remarks;
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<script language="javascript">
+    
+    function onReject(f){
+        var RecId = f.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan reject '+f.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            f.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>No. PR</th>
+			 <th>Cabang</th>
+            <th>Keterangan</th>
+            <th>Pembayaran</th>
+			<th>Tagihan</th>
+			 <th>Nama Bank</th>
+            <th>Tangal</th>
+            <th>Status</th>
+            <th colspan="4">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $Konfirmasipembayaran) { 	
+				  if(!isset($NoPR)){
+                    $test = $this->modelsManager->createBuilder()
+                        ->columns("Deposit")
+                        ->from("Purchreqheader")
+                        ->where("Cabang = '$Konfirmasipembayaran->Cabang' AND PurchReqDate < '$Konfirmasipembayaran->PurchReqDate' and PurchReqId!='$Konfirmasipembayaran->PurchReqId'")
+                        ->orderBy("PurchReqDate DESC")
+						->limit("1")
+                        ->getQuery()
+                        ->execute()
+                        ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+                          foreach ($test as $tes=>$value){
+							  $deposit=$value[Deposit];
+							  if ($deposit!=0 or $deposit!=null){
+								  $data=$Konfirmasipembayaran->harga-$deposit;
+							  }else{
+								  $data=$Konfirmasipembayaran->harga;
+							  }
+							  
+					
+						  }
+						
+																
+                
+               ?>
+				
+			
+            <tr>
+			
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+				 <td><?php echo $Konfirmasipembayaran->PurchReqId?></td>
+				 <td><?php echo $Konfirmasipembayaran->NamaAreaCabang?></td>
+                <td><?php echo $Konfirmasipembayaran->PurchReqName ?></td>
+                <td><?php echo $Konfirmasipembayaran->Nominal?></td>
+				<td><?php echo  $data ?></td>
+				<td><?php echo $Konfirmasipembayaran->Bank?></td>				
+                <td><?php echo $Konfirmasipembayaran->PurchReqDate ?></td>
+                <td><?php echo $Konfirmasipembayaran->Status ?></td>
+
+                <?php echo $this->tag->form(array("Konfirmasipembayaranapp/approved", "autocomplete" => "off", "onsubmit" => "return onApproved(this);")) ?>
+                <input type="hidden" name="RecId" value="<?=$Konfirmasipembayaran->RecId?>" />
+				 <input type="hidden" name="PurchReqId" value="<?=$Konfirmasipembayaran->PurchReqId?>" />
+				 <input type="hidden" name="PurchReqName" value="<?=$Konfirmasipembayaran->PurchReqName?>" />
+				 <input type="hidden" name="Nominal" value="<?=$Konfirmasipembayaran->Nominal?>" />
+				 <input type="hidden" name="harga" value="<?=$Konfirmasipembayaran->harga?>" />
+				 <input type="hidden" name="rec" value="<?=$Konfirmasipembayaran->rec?>" />
+                <input type="hidden" name="Remarks" value="" />
+                <td><?php echo $this->tag->submitButton("Approved") ?></td>
+                </form>
+
+                <?php echo $this->tag->form(array("Konfirmasipembayaranapp/OnHold", "autocomplete" => "off" , "onsubmit" => "return onReject(this);")) ?>
+                <input type="hidden" name="RecId" value="<?=$Konfirmasipembayaran->RecId?>" />
+				 <input type="hidden" name="rec" value="<?=$Konfirmasipembayaran->rec?>" />
+                <input type="hidden" name="PurchReqName" value="<?=$Konfirmasipembayaran->PurchReqName?>" />
+                <input type="hidden" name="Remarks" value="" />
+                <td><?php echo $this->tag->submitButton("OnHold") ?></td>
+                </form>
+				 <?php echo $this->tag->form(array("Konfirmasipembayaranapp/reject", "autocomplete" => "off" , "onsubmit" => "return onReject(this);")) ?>
+                <input type="hidden" name="RecId" value="<?=$Konfirmasipembayaran->RecId?>" />
+                <input type="hidden" name="PurchReqName" value="<?=$Konfirmasipembayaran->PurchReqName?>" />
+                <input type="hidden" name="Remarks" value="" />
+                <td><?php echo $this->tag->submitButton("Rejected") ?></td>
+                </form>
+              
+            </tr>
+				  <?php }} 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("Konfirmasipembayaranapp/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Konfirmasipembayaranapp/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Konfirmasipembayaranapp/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("Konfirmasipembayaranapp/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

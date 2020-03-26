@@ -1,0 +1,56 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("scheduledetail/index/".$scheduleRecId, "Go Back")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("scheduledetail/new/".$scheduleRecId, "Tambah Detail Jadwal ")); ?>
+        </td>
+    </tr>
+</table>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>RecId</th>
+            <th>Kode Detail Jadwal</th>
+            <th>Jadwal</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
+            <th>Ruangan</th>
+            <th>Guru</th>
+             <th colspan="2">Action</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($page->items as $scheduledetail) { ?>
+        <tr>
+            <td><?php echo $scheduledetail->RecId ?></td>
+            <td><?php echo $scheduledetail->KodeSchedulDetail ?></td>
+            <td><?php echo $scheduleRecId ?></td>
+            <td><?php echo $scheduledetail->Tanggal ?></td>
+            <td><?php echo $scheduledetail->Jam ?></td>
+            <td><?php echo $scheduledetail->Ruangan //$ruangan->NamaRuangan ?></td>
+            <td><?php echo $scheduledetail->Guru //$guru->NamaISmart ?></td>
+            <td><?php echo $this->tag->linkTo(array("scheduledetail/edit/" . $scheduledetail->RecId ."/".$scheduledetail->Schedule, "Edit")); ?></td>
+            <td><?php echo $this->tag->linkTo(array("scheduledetail/delete/" . $scheduledetail->RecId, "Delete")); ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+        
+</table>
+
+<?php //echo $scheduleRecId; ?>
+
+<div class="place-left"><?php echo 'halaman '.$page->current, " dari ", $page->total_pages ?></div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo("scheduledetail/search", "First") ?>
+    <?php echo $this->tag->linkTo("scheduledetail/search?page=" . $page->before, "Previous") ?>
+    <?php echo $this->tag->linkTo("scheduledetail/search?page=" . $page->next, "Next") ?>
+    <?php echo $this->tag->linkTo("scheduledetail/search?page=" . $page->last, "Last") ?>
+</div>

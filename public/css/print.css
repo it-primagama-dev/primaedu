@@ -1,0 +1,84 @@
+/* 
+    Document   : print
+    Created on : Mar 18, 2015, 11:34:39 AM
+    Author     : SyahrulFadli
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body {
+    font-family: OpenSans;
+    font-size: 11pt;
+}
+#print {
+    margin-top: 2cm;
+    margin-right: 1cm;
+    margin-bottom: 1.5cm;
+    margin-left: 1cm
+}
+.pad1 {
+    padding: 8pt;
+}
+.tablePrint {
+    border-collapse: collapse;
+}
+.tablePrint th {
+    text-align: center;
+}
+.tablePrint,
+.tablePrint th,
+.tablePrint td {
+    border: 1px solid #000000;
+}
+.printTitle {
+    font-size: 16pt;
+    font-weight: bold;
+}
+.tablePrintContent {
+    width: 100%;
+}
+.tablePrintContent,
+.tablePrintContent th,
+.tablePrintContent td {
+    border: none;
+    padding-top: 6pt;
+}
+.tablePrintContent td:nth-child(1) {
+    width: 27%;
+}
+.tablePrintContent td:nth-child(2) {
+    width: 2%;
+    text-align: center;
+}
+.tablePrintContent td:nth-child(3) {
+    border-bottom: 1px solid #000000;
+}
+.tablePrintBottom {
+    width: 100%;
+    padding-top: 10pt;
+}
+.tablePrintBottom,
+.tablePrintBottom td {
+    border: none;
+}
+.tablePrintBottom td {
+    width: 50%
+}
+.signature {
+    display: inline-block;
+}
+.signatureFiller {
+    display: inline-block;
+    height: 12mm;
+}
+.totalAmount {
+    font-size: 14pt;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.posLeft {
+    text-align: left;
+}
+.posRight {
+    text-align: right;
+}

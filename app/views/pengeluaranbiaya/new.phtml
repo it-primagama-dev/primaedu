@@ -1,0 +1,80 @@
+
+<?php echo $this->tag->form("pengeluaranbiaya/create") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Pengeluaran Biaya
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="BiayaGroup">Grup Pengeluaran</label>
+            <div class="input-control select" data-role="input-control">
+                <?php echo $this->tag->select(array("BiayaGroup", $biayagroup ,"using" => ["RecID", "NamaBiayaGroup"])) ?>
+            </div>
+
+            <label for="Pengeluaran">Tipe Pengeluaran</label>
+            <div class="input-control select" data-role="input-control">
+                <select id="Pengeluaran" name="Pengeluaran"></select>
+            </div>
+
+            <label for="TahunAjaran">Tahun Ajaran</label>
+            <div class="input-control select" data-role="input-control">
+                <?php echo $this->tag->select(array("TahunAjaran", $tahunajaran ,"using" => ["RecID", "Description"])) ?>
+            </div>
+
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <label for="Tanggal">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("Tanggal", "size" => 30)) ?>
+            </div>
+
+            <label for="Jumlah">Jumlah</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Jumlah", "class" => "idrCurrency")) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>
+
+<script>
+    $("#BiayaGroup").on("change", function () {
+        var url = "<?php echo $this->url->get('pengeluaranbiaya/getTipeExp/') ?>" + $(this).val();
+        $.getJSON(url).done(function (data) {
+            $("#Pengeluaran").empty();
+            if (data.status === "OK") {
+                var htmlcontent = "";
+                $.each(data.listData, function (i, list) {
+                    htmlcontent += "<option value=\"" + list.id + "\">" + list.desc + "</option>";
+                });
+                $("#Pengeluaran").html(htmlcontent);
+            }
+        });
+    });
+    $(document).on("ready", function () {
+        var url = "<?php echo $this->url->get('pengeluaranbiaya/getTipeExp/') ?>" + $("#BiayaGroup").val();
+        $.getJSON(url).done(function (data) {
+            $("#Pengeluaran").empty();
+            if (data.status === "OK") {
+                var htmlcontent = "";
+                $.each(data.listData, function (i, list) {
+                    htmlcontent += "<option value=\"" + list.id + "\">" + list.desc + "</option>";
+                });
+                $("#Pengeluaran").html(htmlcontent);
+            }
+        });
+    });
+</script>

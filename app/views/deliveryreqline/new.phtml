@@ -1,0 +1,34 @@
+
+<?php echo $this->tag->form("deliveryreqline/create") ?>
+
+<?php echo $this->getContent(); ?>
+
+<div align="center">
+    <h1>Tambah Detail Item</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <?php echo $this->tag->textField("Deliveryreqheader") ?>
+
+            <label for="ItemId">Nama Barang</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("ItemId", $item, "using" => array("KodeItem", "NamaItem"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <label for="Qty">Qty</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("Qty", "min" => 0, "max" => 100000)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

@@ -1,0 +1,47 @@
+
+<h1>
+    <?php echo $this->tag->linkTo("absensi/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>') ?>
+    Presensi
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+
+<?php echo $this->tag->form(array("absensi/create","onsubmit" => "test()")) ?>
+<div class="grid fluid">
+
+    <div class="row">
+        <div class="span6">
+            <label for="KodeSiswa">Kode siswa</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeSiswa", "type" => "number")) ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label for="AbsenTime">Jam presensi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->timeField(array("AbsenTime", "type" => "number")) ?>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label for="AbsenDate">Tanggal presensi</label>
+            <div class="input-control text" data-role="input-control">
+                <div class="input-control text" data-role="datepicker" data-format="yyyy-mm-dd" data-date="<?php echo date('Y-m-d')?>">
+                    <?php echo $this->tag->textField(array("AbsenDate", "type" => "number")) ?>
+                </div>
+            </div>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+
+    
+</div>
+</form>

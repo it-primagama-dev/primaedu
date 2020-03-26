@@ -1,0 +1,291 @@
+/************************************************
+ * Author       : hamzah                        *
+ * Email        : if.hamzah93@gmail.com         *
+ * Blogger      : hamzahkerenz.blogspot.com     *
+ ************************************************/
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Open Sans', sans-serif;
+  background: #EDEDED;
+}
+
+#page-inner {
+    width:100%;
+    margin:10px 20px 10px 0px;
+    background-color:transparent;
+    padding: 15px 30px;
+}
+
+#page-wrapper {
+	position: relative;
+	top: 80px;
+	/*box-shadow: 0 0 10px #757575;
+	-moz-box-shadow: 0 0 10px #757575;
+	-webkit-box-shadow: 0 0 10px #757575;*/
+}
+
+.header {
+    margin: 0 30px;
+}
+
+i.fa.fa-bars {
+    font-size: 20px;
+    margin: 12px 0 0;
+}
+
+i.fa.fa-bars:hover {
+	color: #F36A5A;
+}
+
+/*----------------------------------------------
+    MENU STYLES    
+------------------------------------------------*/
+div#sideNav:hover {
+    color: #FFFFFF;
+}
+
+#sideNav {
+    float: left;
+    left: 0;
+    z-index: 3;
+    color: #FFFFFF;
+    cursor:pointer;
+    border-radius: 0;
+    width: 14px;
+    font-size: 48px;
+    line-height: 0;
+    margin: 7px 0 0 20px;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #78DD20;
+    color: #000000;
+    transition: all 0.3s;
+    overflow: auto;
+    position: fixed;
+	top: 50px;
+    height: 100%;
+    color: #e1ffff;
+    z-index: 1;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    color: #000000;
+    text-decoration: none;
+    border-bottom: 1px dashed #5c5c5c;
+}
+#sidebar ul li a:hover {
+    color: #fff;
+    background: black;
+}
+
+#sidebar ul li.active > a, a[aria-expanded="true"] {
+    color: #fff;
+    background: #144287;
+}
+
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+#sidebar .active[aria-expanded="false"]::before, .active[aria-expanded="true"]::before {
+    content: '\e259';
+    display: block;
+    position: absolute;
+    right: 20px;
+    font-family: 'Glyphicons Halflings';
+    font-size: 0.6em;
+}
+
+#sidebar .active[aria-expanded="true"]::before {
+    content: '\e260';
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #fafafa;
+}
+
+#sidebar ul,
+#sidebar li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    cursor: pointer;
+}
+.navbar-default {
+	padding: 0px;
+	background: #144287;
+}
+
+.navbar-brand img {
+	width: 180px;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+	color:  #FFFFFF;
+	background-color: #30F;
+}
+
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:hover {
+	color:  #FFFFFF;
+	background-color: #30F;
+}
+
+.footer {
+	font-size: 14px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: #337ab7;
+    text-align: center;
+	background-color: #f5f5f5;
+}
+
+#myTab > li.active > a, #myTab > li.active > a:hover, #myTab > li.active > a:focus{
+	border-top: 3px solid #16a765;
+}
+#myTab > li a {
+	font-variant: all-petite-caps;
+    color: #337ab7;
+    font-weight: bold;
+    font-size: 16px;
+}
+#myTab {
+	margin-bottom: 25px;
+}
+
+/*----------------------------------------------
+    MEDIA QUERIES     
+------------------------------------------------*/
+ 
+@media(min-width:768px) {
+    #page-wrapper{
+		margin: 0 0 0 230px;
+		padding: 0;
+	}
+	
+	#page-wrapper {
+		position: relative;
+		top: 72px;
+	}
+}
+
+@media(max-width: 768px) {
+    #sidebar {
+		min-width: 100%;
+		max-width: 100%;
+		background: #78DD20;
+		color: #000000;
+		transition: all 0.3s;
+		position: relative;
+		display: table;
+		top: auto;
+		height:auto;
+		color: #e1ffff;
+		z-index: 1;
+	}
+	#sideNav{
+		display:none;
+	}
+	.navbar-default {
+		padding: 0px;
+		background: #144287;
+	}
+	.navbar-nav {
+		margin: 0px;
+	}
+	.navbar-collapse {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color:  #FFFFFF;
+		background-color: #30F;
+	}
+
+	.navbar-default .navbar-nav > li > a,
+	.navbar-default .navbar-nav > li > a:hover {
+		color:  #FFFFFF;
+		background-color: #30F;
+	}
+}
+
+@media(max-width:480px) {
+	.navbar-brand img {
+		width: 180px;
+	}
+	#page-wrapper {
+		position: relative;
+		top: 93px;
+	}
+	.page-header small {
+		display: block;
+		padding-top: 14px;
+		font-size: 19px;
+	}
+	#sidebar {
+		min-width: 100%;
+		max-width: 100%;
+		background: #78DD20;
+		color: #000000;
+		transition: all 0.3s;
+		position: relative;
+		display: table;
+		top: auto;
+		height:auto;
+		color: #e1ffff;
+		z-index: 1;
+	}
+	.navbar-default {
+		padding: 0px;
+		background: #144287;
+		z-index: 1000;
+	}
+	.navbar-nav {
+		margin: 0px;
+	}
+	.navbar-collapse {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color:  #FFFFFF;
+		background-color: #30F;
+	}
+
+	.navbar-default .navbar-nav > li > a,
+	.navbar-default .navbar-nav > li > a:hover {
+		color:  #FFFFFF;
+		background-color: #30F;
+	}
+}

@@ -1,0 +1,53 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1>
+    <?php echo $this->tag->linkTo("absensi/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>') ?>
+    Presensi
+    <small class="on-right">Hasil Pencarian</small>
+</h1>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Kode Siswa</th>
+            <th>Nama Siswa</th>
+            <th>Tanggal Presensi</th>
+            <th>Waktu Presensi</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php 
+        $i=1;
+        if(isset($_GET['page'])){
+            if(intval($_GET['page'])>1) $i+= (intval($_GET['page'])-1)*10;
+        }
+        foreach ($page->items as $absensi) { 
+    ?>
+        <tr>
+            <td width="1%"><?php echo $i."." ?></td><?php $i++?>
+            <td width="4%"><?php echo $absensi->VirtualAccount;//echo $absensi->KodeSiswa ?></td>
+            <td width="40%"><?php echo $absensi->NamaSiswa ?></td>
+            <td><?php echo $absensi->AbsenDate ?></td>
+            <td><?php echo $absensi->AbsenTime ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("absensi/search", "First") ?></td>
+                        <td><?php echo $this->tag->linkTo("absensi/search?page=" . $page->before, "Previous") ?></td>
+                        <td><?php echo $this->tag->linkTo("absensi/search?page=" . $page->next, "Next") ?></td>
+                        <td><?php echo $this->tag->linkTo("absensi/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

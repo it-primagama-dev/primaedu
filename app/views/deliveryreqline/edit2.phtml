@@ -1,0 +1,37 @@
+
+
+<?php echo $this->tag->form("deliveryreqline/save") ?>
+<?php echo $this->getContent(); ?>
+
+
+<div align="center">
+    <h1>Edit Detail Item</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+
+            <label for="ItemId">Nama Barang</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("ItemId", $item, "using" => array("KodeItem", "NamaItem"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <label for="Qty">Qty</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->numericField(array("QtyRemaining", "min" => 0, "max" => 1000000)) ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField("RecId") ?>
+			<?php echo $this->tag->hiddenField("Deliveryrecheader") ?>
+			<?php echo $this->tag->hiddenField("Qty") ?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

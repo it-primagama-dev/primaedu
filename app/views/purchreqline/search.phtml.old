@@ -1,0 +1,60 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("purchreqline/index", "Go Back")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("purchreqline/new", "Create ")); ?>
+        </td>
+    </tr>
+</table>
+
+<table class="browse" align="center">
+    <thead>
+        <tr>
+            <th>RecId</th>
+            <th>Purchreqheader</th>
+            <th>ItemId</th>
+            <th>ItemName</th>
+            <th>Qty</th>
+            <th>IsReceipt</th>
+            <th>CreatedBy</th>
+            <th>CreatedDateTime</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($page->items as $purchreqline) { ?>
+        <tr>
+            <td><?php echo $purchreqline->RecId ?></td>
+            <td><?php echo $purchreqline->Purchreqheader ?></td>
+            <td><?php echo $purchreqline->ItemId ?></td>
+            <td><?php echo $purchreqline->ItemName ?></td>
+            <td><?php echo $purchreqline->Qty ?></td>
+            <td><?php echo $purchreqline->IsReceipt ?></td>
+            <td><?php echo $purchreqline->CreatedBy ?></td>
+            <td><?php echo $purchreqline->CreatedDateTime ?></td>
+            <td><?php echo $this->tag->linkTo(array("purchreqline/edit/" . $purchreqline->RecId, "Edit")); ?></td>
+            <td><?php echo $this->tag->linkTo(array("purchreqline/delete/" . $purchreqline->RecId, "Delete")); ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("purchreqline/search", "First") ?></td>
+                        <td><?php echo $this->tag->linkTo("purchreqline/search?page=" . $page->before, "Previous") ?></td>
+                        <td><?php echo $this->tag->linkTo("purchreqline/search?page=" . $page->next, "Next") ?></td>
+                        <td><?php echo $this->tag->linkTo("purchreqline/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

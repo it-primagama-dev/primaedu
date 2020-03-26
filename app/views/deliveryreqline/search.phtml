@@ -1,0 +1,60 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("deliveryreqline/index", "Go Back")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("deliveryreqline/new", "Create ")); ?>
+        </td>
+    </tr>
+</table>
+
+<table class="browse" align="center">
+    <thead>
+        <tr>
+            <th>RecId</th>
+            <th>Deliveryreqheader</th>
+            <th>ItemId</th>
+            <th>ItemName</th>
+            <th>Qty</th>
+            <th>IsReceipt</th>
+            <th>CreatedBy</th>
+            <th>CreatedDateTime</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($page->items as $deliveryreqline) { ?>
+        <tr>
+            <td><?php echo $deliveryreqline->RecId ?></td>
+            <td><?php echo $deliveryreqline->Deliveryreqheader ?></td>
+            <td><?php echo $deliveryreqline->ItemId ?></td>
+            <td><?php echo $deliveryreqline->ItemName ?></td>
+            <td><?php echo $deliveryreqline->Qty ?></td>
+            <td><?php echo $deliveryreqline->IsReceipt ?></td>
+            <td><?php echo $deliveryreqline->CreatedBy ?></td>
+            <td><?php echo $deliveryreqline->CreatedDateTime ?></td>
+            <td><?php echo $this->tag->linkTo(array("deliveryreqline/edit/" . $deliveryreqline->RecId, "Edit")); ?></td>
+            <td><?php echo $this->tag->linkTo(array("deliveryreqline/delete/" . $deliveryreqline->RecId, "Delete")); ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("deliveryreqline/search", "First") ?></td>
+                        <td><?php echo $this->tag->linkTo("deliveryreqline/search?page=" . $page->before, "Previous") ?></td>
+                        <td><?php echo $this->tag->linkTo("deliveryreqline/search?page=" . $page->next, "Next") ?></td>
+                        <td><?php echo $this->tag->linkTo("deliveryreqline/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

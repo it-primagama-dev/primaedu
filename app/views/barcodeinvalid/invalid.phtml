@@ -1,0 +1,55 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+    <legend><h1 style="padding-left:2%;">
+    <i class="icon-list fg-darker smaller"></i>
+ Daftar Barcode Bermasalah</h1></legend>
+
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Cabang</th>
+            <th>Barcode</th>
+            <th>Aksi</th>
+            <th>Barcode Pengganti</th>
+            <th>Keterangan</th>
+        </tr>
+    </thead>
+    <tbody  align="center">
+        <?php 
+        if($result != null){
+            $i=1;
+            foreach ($result as $row) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $row->KodeAreaCabang .' - '. $row->NamaAreaCabang ?></td>
+                <td><?php echo $row->Barcode ?></td>
+                <td><?php echo $row->Aksi ?></td>
+                <?php if ($row->BarcodePengganti != '' ) { ;?>
+                <td><?php echo $row->BarcodePengganti ?></td>
+                <?php } else { ?>
+                <td> - </td>
+                <?php } ?>
+                <td><?php echo $row->Keterangan ?></td>
+                </form>
+				
+				
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>

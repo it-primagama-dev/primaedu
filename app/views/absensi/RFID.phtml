@@ -1,0 +1,40 @@
+<div style="position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:1000;background-color:#fafafa">
+<h1 style="text-align:left;padding-left:2%;">
+    <?php echo $this->tag->linkTo("absensi/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>') ?>
+    Presensi
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+{{flash.output()}}
+
+
+<?php echo $this->tag->form(array("absensi/RFID","onsubmit" => "test()")) ?>
+<div class="grid fluid" style="text-align:left;padding-left:2%;">
+
+    <div class="row">
+        <div class="span6">
+            <label for="KodeSiswa">Kode siswa</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeSiswa", "type" => "number")) ?>
+            </div>
+            <?php //echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+    
+</div>
+</form>
+</div>
+
+<script type="text/javascript">
+	function setSiswaFocus()
+	{
+		input=document.getElementById("KodeSiswa");
+		input.value="";
+		input.focus();
+	}
+	
+	setSiswaFocus();
+</script>
+

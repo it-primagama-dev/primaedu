@@ -1,0 +1,52 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("scheduleheader/save") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("scheduleheader", "Back")) ?></td>
+    </tr>
+</table>
+
+<div align="center">
+    <h1>Edit Jadwal</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="KodeJadwal">Kode Jadwal</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("KodeJadwal", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Description">Description</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Program">Program</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->select(array("Program", $program, "using" => array("RecID", "NamaProgram"))) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td><?php echo $this->tag->hiddenField("RecId") ?></td>
+        <td><?php echo $this->tag->submitButton("Simpan") ?></td>
+    </tr>
+</table>
+
+</form>
+
+<?php foreach ($scheduledetail as $detail) { ?>
+    <div><?php echo $detail->KodeSchedulDetail ?></div>
+<?php } ?>

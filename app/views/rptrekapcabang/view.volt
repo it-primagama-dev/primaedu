@@ -1,0 +1,162 @@
+
+{{ content() }}
+
+{% set sumD1 = 0 %}{% set sumD2 = 0 %}{% set sumD3 = 0 %}
+{% set sumB1 = 0 %}{% set sumB2 = 0 %}{% set sumB3 = 0 %}
+{% set sumS1 = 0 %}{% set sumS2 = 0 %}{% set sumS3 = 0 %}
+{% set subD1 = 0 %}{% set subD2 = 0 %}{% set subD3 = 0 %}
+{% set subB1 = 0 %}{% set subB2 = 0 %}{% set subB3 = 0 %}
+{% set subS1 = 0 %}{% set subS2 = 0 %}{% set subS3 = 0 %}
+{% set lastarea = '' %}{% set currarea = '' %}
+
+<style type="text/css">
+    @media print{@page {size: A4 landscape}}
+</style>
+<table class="tablePrint" style="width:100%;">
+    <tr>
+        <td colspan="7">
+            <table style="width:100%;">
+                <tr>
+                    <td align="center"><img src="{{ url('img/logo_new_web.png') }}" width="220"></td>
+                    <td align="center" width="75%">
+                        <h2><u>{{ rpt_title }}</u></h2>
+                    </td>
+                    <td width="20%" align="right">
+                        <a href="#" id="downloadBtn" class="btn btn-primary pull-right">Download</a>
+                        <a href="javascript::void();" onclick="window.print();" id="printLink" class="btn btn-success pull-right">Print</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <h3 class="text-right" style="margin:4px 0">Area : {{ area }}, Periode : {{ periode }}</h3>
+                    </td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7"><hr color="#000000"/></td>
+    </tr>
+</table>
+<table class="table bordered hovered table2excel" style="table-layout: fixed; border-collapse: collapse">
+    <thead>
+        <tr>
+            <th width="40px" rowspan="2">#</th>
+            <th width="120px" rowspan="2">Nama Area</th>
+            <th width="260px" rowspan="2">Kode / Nama Cabang</th>
+            <th width="300px" colspan="3">Biaya Pendaftaran</th>
+            <th width="300px" colspan="3">Biaya Bimbingan</th>
+            <th width="300px" colspan="3">Jumlah Siswa</th>
+        </tr>
+        <tr>
+            <th width="100px">Periode Lalu</th>
+            <th width="100px">Periode Laporan</th>
+            <th width="100px">Total</th>
+            <th width="100px">Periode Lalu</th>
+            <th width="100px">Periode Laporan</th>
+            <th width="100px">Total</th>
+            <th width="100px">Periode Lalu</th>
+            <th width="100px">Periode Laporan</th>
+            <th width="100px">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if result is not empty %}
+            {% for list in result %}
+                {% set sumD1 += list.PendaftaranLalu %}{% set sumD2 += list.Pendaftaran %}
+                {% set sumD3 += list.PendaftaranLalu+list.Pendaftaran %}
+                {% set sumB1 += list.BimbinganLalu %}{% set sumB2 += list.Bimbingan %}
+                {% set sumB3 += list.BimbinganLalu+list.Bimbingan %}
+                {% set sumS1 += list.JumlahSiswaLalu %}{% set sumS2 += list.JumlahSiswa %}
+                {% set sumS3 += list.JumlahSiswaLalu+list.JumlahSiswa %}
+                {% set currarea = list.NamaArea %}
+            {% if currarea != lastarea and not loop.first %}
+                <tr style="background: #f5f5f5;">
+                    <th colspan="3" class="text-right">Sub Total {{ lastarea }}</th>
+                    <th class="text-right">{{ subD1|number_format(0,',','.') }}</th>
+                    <th class="text-right">{{ subD2|number_format(0,',','.') }}</th>
+                    <th class="text-right">{{ subD3|number_format(0,',','.') }}</th>
+                    <th class="text-right">{{ subB1|number_format(0,',','.') }}</th>
+                    <th class="text-right">{{ subB2|number_format(0,',','.') }}</th>
+                    <th class="text-right">{{ subB3|number_format(0,',','.') }}</th>
+                    <th class="text-center">{{ subS1|number_format(0,',','.') }}</th>
+                    <th class="text-center">{{ subS2|number_format(0,',','.') }}</th>
+                    <th class="text-center">{{ subS3|number_format(0,',','.') }}</th>
+                </tr>
+                {% set subD1 = 0 %}{% set subD2 = 0 %}{% set subD3 = 0 %}
+                {% set subB1 = 0 %}{% set subB2 = 0 %}{% set subB3 = 0 %}
+                {% set subS1 = 0 %}{% set subS2 = 0 %}{% set subS3 = 0 %}
+            {% endif %}
+                {% set subD1 += list.PendaftaranLalu %}{% set subD2 += list.Pendaftaran %}
+                {% set subD3 += list.PendaftaranLalu+list.Pendaftaran %}
+                {% set subB1 += list.BimbinganLalu %}{% set subB2 += list.Bimbingan %}
+                {% set subB3 += list.BimbinganLalu+list.Bimbingan %}
+                {% set subS1 += list.JumlahSiswaLalu %}{% set subS2 += list.JumlahSiswa %}
+                {% set subS3 += list.JumlahSiswaLalu+list.JumlahSiswa %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ list.NamaArea }}</td>
+                    <td>{{ list.KodeCabang|trim~' / '~list.NamaCabang }}</td>
+                    <td class="text-right">{{ list.PendaftaranLalu|number_format(0,',','.') }}</td>
+                    <td class="text-right">{{ list.Pendaftaran|number_format(0,',','.') }}</td>
+                    <td class="text-right">{{ (list.PendaftaranLalu+list.Pendaftaran)|number_format(0,',','.') }}</td>
+                    <td class="text-right">{{ list.BimbinganLalu|number_format(0,',','.') }}</td>
+                    <td class="text-right">{{ list.Bimbingan|number_format(0,',','.') }}</td>
+                    <td class="text-right">{{ (list.BimbinganLalu+list.Bimbingan)|number_format(0,',','.') }}</td>
+                    <td class="text-center">{{ list.JumlahSiswaLalu|number_format(0,',','.') }}</td>
+                    <td class="text-center">{{ list.JumlahSiswa|number_format(0,',','.') }}</td>
+                    <td class="text-center">{{ (list.JumlahSiswaLalu+list.JumlahSiswa)|number_format(0,',','.') }}</td>
+                </tr>
+                {% set lastarea = currarea %}
+            {% endfor %}
+            <tr style="background: #f5f5f5;">
+                <th colspan="3" class="text-right">Sub Total {{ lastarea }}</th>
+                <th class="text-right">{{ subD1|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ subD2|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ subD3|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ subB1|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ subB2|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ subB3|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ subS1|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ subS2|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ subS3|number_format(0,',','.') }}</th>
+            </tr>
+            <tr style="background: #f5f5f5;">
+                <th colspan="3" class="text-right">Grand Total</th>
+                <th class="text-right">{{ sumD1|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ sumD2|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ sumD3|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ sumB1|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ sumB2|number_format(0,',','.') }}</th>
+                <th class="text-right">{{ sumB3|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ sumS1|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ sumS2|number_format(0,',','.') }}</th>
+                <th class="text-center">{{ sumS3|number_format(0,',','.') }}</th>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12" align="center">- Tidak Ada Data -</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{#
+{% if page.total_pages > 1 %}
+<div class="place-left">{{ "halaman "~page.current~" dari "~page.total_pages }}</div>
+<div class="place-right">
+    {{ link_to("rptrekapcabang/view", "First", 'class':'button') }}
+    {{ link_to("rptrekapcabang/view?page="~page.before, "Previous", 'class':'button') }}
+    {{ link_to("rptrekapcabang/view?page="~page.next, "Next", 'class':'button') }}
+    {{ link_to("rptrekapcabang/view?page="~page.last, "Last", 'class':'button') }}
+</div>
+{% endif %}
+#}
+<script>
+    $('#downloadBtn').on('click', function () {
+        $(".table2excel").table2excel({
+            exclude: ".noExl",
+            name: "Primaedu",
+            filename: "{{ rpt_title }}.xls"
+        });
+    });
+</script>

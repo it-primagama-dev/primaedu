@@ -1,0 +1,132 @@
+<?php
+
+ use Phalcon\Tag; 
+ echo $this->getContent();
+
+ ?>
+
+<h1 style="padding-left:2%;">
+    Outstanding
+	
+	<small class="place-right">
+        <?php echo $this->tag->linkTo(array("outstanding/new", 'Tambah<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+
+
+
+
+<script language="javascript">
+    
+    function onApproved(g){
+        var RecId = g.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan '+g.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            g.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+			 g.elements.namedItem("Remarks").value = Remarks;
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<script language="javascript">
+    
+    function onReject(f){
+        var RecId = f.elements.namedItem("RecId").value;
+
+        var Remarks = window.prompt('Keterangan reject '+f.elements.namedItem("PurchReqName").value+' :');
+
+        if(Remarks != null){
+            f.elements.namedItem("Remarks").value = Remarks;
+            return true;
+        } 
+        else {
+            $(".loader").hide();
+            return false;
+        }
+    }
+
+    
+</script>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+			 <th>Cabang</th>
+			  <th>Nama Area Cabang</th>
+            <th>Area</th>
+            <th>Nominal</th>
+            <th colspan="4">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $Konfirmasipembayaran) { 	
+				  if(!isset($NoPR)){
+   
+						
+																
+                
+               ?>
+				
+			
+            <tr>
+			
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+				 <td><?php echo $Konfirmasipembayaran->KodeCabang?></td>
+				  <td><?php echo $Konfirmasipembayaran->NamaAreaCabang?></td>
+				 <td><?php echo $Konfirmasipembayaran->Area?></td>
+                <td><?php echo $Konfirmasipembayaran->jml?></td>
+				
+
+                <?php echo $this->tag->form(array("outstanding/delete", "autocomplete" => "off", "onsubmit" => "return onApproved(this);")) ?>
+                <input type="hidden" name="KodeCabang" value="<?=$Konfirmasipembayaran->KodeCabang?>" />
+                <td><?php echo $this->tag->submitButton("Delete") ?></td>
+                </form>
+
+               
+				
+              
+            </tr>
+				  <?php }} 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("outstanding/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("outstanding/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("outstanding/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("outstanding/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>
+
+

@@ -1,0 +1,56 @@
+
+<?php echo $this->getContent() ?>
+
+<?php echo $this->tag->form(array("pengeluaranbiaya/search", "autocomplete" => "off")) ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("cashinout/tambah/", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<div align="left">
+    <h1>Cari Pengeluaran Biaya</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="Pengeluaran">Tipe Pengeluaran</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("Pengeluaran", $pengeluaran, "using" => array("RecId", "Description"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <label for="TahunAjaran">Tahun Ajaran</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("TahunAjaran", $tahunajaran, "using" => array("RecID", "Description"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>     
+
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <label for="Tanggal">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("Tanggal", "size" => 30)) ?>
+            </div>
+
+            <label for="Jumlah">Jumlah</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Jumlah", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

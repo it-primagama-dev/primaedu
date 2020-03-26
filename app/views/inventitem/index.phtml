@@ -1,0 +1,34 @@
+
+<?php echo $this->getContent() ?>
+
+<?php echo $this->tag->form(array("inventitem/search", "autocomplete" => "off")) ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("inventitem/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<div align="left">
+    <h1>Cari Item</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+            
+            <label for="KodeItem">Kode Item</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeItem", "size" => 30)) ?>
+            </div>
+            <label for="NamaItem">Nama Item</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("NamaItem", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

@@ -1,0 +1,197 @@
+
+<?php echo $this->getContent() ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("nilai/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Nilai
+
+    <small class="on-right">Import nilai siswa</small>
+
+    <small class="place-right">
+        <?php //echo $this->tag->linkTo(array("/public/files/template_file/template_nilai.xlsx", 'Unduh file excel<i class="icon-plus on-right smaller"></i>')); ?>    
+        <?php 
+			//echo '<a href="../files/template_file/template_nilai.xlsx">Unduh file excel<i class="icon-plus on-right smaller"></i></a>'; 
+			echo $this->tag->linkTo(array("nilai/download", 'Unduh file excel<i class="icon-plus on-right smaller"></i>','id' => 'linkDownload')); 
+		?>
+    </small>
+</h1>
+
+<?php echo $this->tag->form(array("nilai/new", "autocomplete" => "off", "enctype" => "multipart/form-data")) ?>
+
+<div class="grid fluid">
+<!--
+    <div class="row">
+        <div class="span6">
+            <label for="ProgramSiswaRecId">Program Siswa</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                    echo $this->tag->select(
+                        array(
+                            "ProgramSiswaRecId",
+                            $program,
+                            "using" => array("RecID", "NamaProgram")//,//"NamaProgram"),
+                        )
+                    );
+                ?>
+            </div>
+        </div>
+    </div>
+-->
+    <div class="row">
+        <div class="span6">
+            <label for="ProgramSiswaRecId">Program</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                    echo $this->tag->select(
+                        array(
+                            "Program",
+                            $program,
+                            "using" => array("RecID", "NamaProgram")
+							,'onchange' => 'changeLinkDownload()'
+                        )
+                    );
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label for="ProgramSiswaRecId">Jadwal</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                    echo $this->tag->select(
+                        array(
+                            "Schedule",
+                            $schedule,
+                            "using" => array("RecId", "NamaJadwal")
+							,'onchange' => 'changeLinkDownload()'
+                        )
+                    );
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label for="excel">File Excel</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->fileField(array("excel", "type" => "number")) ?>
+            </div>
+            <?php echo $this->tag->submitButton("Import") ?>
+        </div>
+    </div>
+
+</div>
+
+</form>
+
+
+<!-- Review Table -->
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Program</th>
+            <th>Kode Jadwal</th>
+            <th>Kode Kelas</th>
+            <th>Kode Siswa</th>
+            <th>Nama Siswa</th>
+            <th>Bidang Studi</th>
+            <th>Nilai 1</th>
+            <th>Nilai 2</th>
+            <th>Nilai 3</th>
+            <th>Nilai 4</th>
+            <th>Nilai 5</th>
+            <th>Nilai 6</th>
+            <th>Nilai 7</th>
+            <th>Nilai 8</th>
+            <th>Nilai 9</th>
+            <th>Nilai 10</th>
+            <th colspan="4">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+    if(isset($page)){
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+        foreach ($page->items as $jadwal) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $jadwal->NamaProgram; ?></td>
+                <td><?php echo $jadwal->KodeJadwal; ?></td>
+                <td><?php echo $jadwal->KodeScheduleDetail ?></td>
+                <td><?php echo $jadwal->VirtualAccount ?></td>
+                <td><?php echo $jadwal->NamaSiswa ?></td>
+                <td><?php echo $jadwal->BidangStudi ?></td>
+                <td><?php echo $jadwal->Nilai1 ?></td>
+                <td><?php echo $jadwal->Nilai2 ?></td>
+                <td><?php echo $jadwal->Nilai3 ?></td>
+                <td><?php echo $jadwal->Nilai4 ?></td>
+                <td><?php echo $jadwal->Nilai5 ?></td>
+                <td><?php echo $jadwal->Nilai6 ?></td>
+                <td><?php echo $jadwal->Nilai7 ?></td>
+                <td><?php echo $jadwal->Nilai8 ?></td>
+                <td><?php echo $jadwal->Nilai9 ?></td>
+                <td><?php echo $jadwal->Nilai10 ?></td>
+
+                <td><?php echo $this->tag->linkTo(array("nilai/edit/" . $jadwal->RecId, "Edit")); ?></td>
+
+
+                
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="18">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("nilai/search", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("nilai/search?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("nilai/search?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("nilai/search?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>
+<?php }?>
+
+<script type="text/javascript">
+	function changeLinkDownload()
+	{
+		sel1=document.getElementById("Program");
+		sel2=document.getElementById("Schedule");
+		
+		link=document.getElementById("linkDownload");
+		
+		id1=sel1.options[sel1.selectedIndex].value;
+		id2=sel2.options[sel2.selectedIndex].value;
+		
+		//hrefSrc=
+		if(link.href.substring(link.href.length-8)=="download")
+		{
+			link.href+="/"+id1+"/"+id2;
+		}
+		else
+		{
+			link.href=link.href.substring(0,link.href.indexOf("download")+8)+"/"+id1+"/"+id2;
+		}
+	}
+	changeLinkDownload();
+</script>

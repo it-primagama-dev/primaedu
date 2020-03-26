@@ -1,0 +1,47 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Tipe Pengeluaran
+
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("pengeluarantipe/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<table class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th>Kode Pengeluaran</th>
+            <th>Grup Pengeluaran</th>
+            <th>Deskripsi</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($page->items as $pengeluarantipe) { ?>
+            <tr>
+                <td><?php echo $pengeluarantipe->KodePengeluaran ?></td>
+                <td><?php echo $pengeluarantipe->Pengeluaranbiayagroup->NamaBiayaGroup ?></td>
+                <td><?php echo $pengeluarantipe->Description ?></td>
+                <td width="7%"><?php echo $this->tag->linkTo(array("pengeluarantipe/edit/" . $pengeluarantipe->RecId, "Edit")); ?></td>
+                <td width="7%"><?php echo $this->tag->linkTo(array("pengeluarantipe/delete/" . $pengeluarantipe->RecId, "Delete")); ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+
+<div class="place-left"><?php echo 'halaman ' . $page->current, " dari ", $page->total_pages ?></div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/search", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/search?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/search?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluarantipe/search?page=" . $page->last, "Last", "class" => "button")) ?>
+</div>
+

@@ -1,0 +1,71 @@
+
+<?php echo $this->getContent() ?>
+
+<div align="right">
+    <?php echo $this->tag->linkTo(array("scheduledetail/new/".$scheduleRecId, "Tambah Detail Jadwal")) ?>
+</div>
+
+<?php echo $this->tag->form(array("scheduledetail/search/".$scheduleRecId, "autocomplete" => "off")) ?>
+
+<div align="center">
+    <h1>Cari Detil Jadwal</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="RecId">RecId</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("RecId", "type" => "number")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="KodeSchedulDetail">KodeSchedulDetail</label>
+        </td>
+        <td align="left">
+                <?php echo $this->tag->textField(array("KodeSchedulDetail")) ?>
+        </td>
+    </tr>
+   
+    <tr>
+        <td align="right">
+            <label for="Tanggal">Tanggal</label>
+        </td>
+        <td align="left">
+                <?php echo $this->tag->textField(array("Tanggal", "type" => "date")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Jam">Jam</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("Jam", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Ruangan">Ruangan</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->select(array("Ruangan", $ruangan, "using" => array("RecID", "NamaRuangan"))); ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Guru">Guru</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->select(array("Guru", $guru, "using" => array("RecID", "NamaISmart"))); ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td><?php echo $this->tag->hiddenField(array("Schedule", "value" => $scheduleRecId))?></td>
+        <td><?php echo $this->tag->submitButton("Cari") ?></td>
+    </tr>
+</table>
+
+</form>

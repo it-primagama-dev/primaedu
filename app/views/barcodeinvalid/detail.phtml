@@ -1,0 +1,68 @@
+
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h3 align="center">
+<strong>Barcode : <?php echo $bc ?> ||   
+<?php foreach ($result2 as $row2) { ?>
+
+<?php echo $row2->NamaItem; ?>
+
+<?php } ?>
+</strong>
+</h3>
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Cabang</th>
+            <th>PR</th>
+            <th>User</th>
+            <th>Tanggal Input</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody  align="center">
+        <?php 
+        if($result != null){
+            $i=1;
+            foreach ($result as $row) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $row->KodeAreaCabang .'-'. $row->NamaAreaCabang ?></td>
+                <td><?php echo $row->PurchReqId ?></td>
+                <td><?php echo $row->CreatedBy ?></td>
+                <td><?php echo $row->CreatedAt ?></td>
+                <td><?php if ($row->Status=='0') { ?>
+                     <font color="red">Belum digunakan</font>
+                     <?php } else { ?>
+                     <font color="green">Sudah digunakan</font>
+                     <?php } ?>
+                </td>
+                <td>
+                <?php echo $this->tag->linkTo(array("barcodeinvalid/update/" . $row->RecID, "Update")); ?>
+                         || 
+                <?php echo $this->tag->linkTo(array("barcodeinvalid/delete/" . $row->RecID, "Delete")); ?>
+                    
+                </td>
+                </form>
+				
+				
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>

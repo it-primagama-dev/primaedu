@@ -1,0 +1,127 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("purchreqheader/save") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("purchreqheader", "Back")) ?></td>
+        <td align="right"><?php echo $this->tag->submitButton("Simpan") ?></td>
+    </tr>
+</table>
+
+<div align="center">
+    <h1>Ubah Pembelian</h1>
+</div>
+
+<table class="table bordered striped hovered">
+    <tr>
+        <td align="right">
+            <label for="PurchReqId">ID Barang</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("PurchReqId", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="PurchReqName">Nama Barang</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="Requester">Kuantitas</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("Requester", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="PurchReqDate">Date</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->datefield(array("PurchReqDate", "type" => "date")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="PurchReqDate">Date</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->datefield(array("PurchReqDate", "type" => "date")) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td><?php echo $this->tag->hiddenField("RecId") ?></td>
+        <td><?php echo $this->tag->submitButton("Simpan") ?></td>
+    </tr>
+</table>
+
+</form>
+
+<?php echo $this->tag->hiddenfield('dataTableUrl'); ?>
+
+<h2>
+    <small class="padding10">
+        <a href="#" id="createPurchReqLine">Tambah Detail <i class="icon-plus on-right smaller"></i></a>
+    </small>
+</h2>
+<table id="dataTable" class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Item Id</th>
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!--
+<script>
+/*
+    $("#createPurchReqLine").on("click", function(){
+        $.Dialog({
+            overlay: false,
+            shadow: true,
+            draggable: true,
+            width: 480,
+            height: 360,
+            title: 'Tambah Detail Item',
+            content: '',
+            onShow: function(_dialog){
+                var content = _dialog.children('.content');
+                $.get( <?php $this->url('/purchreqline/new/' . $this->tag->hiddenField("RecId")) ?>, function(data){
+                    content.html(data);
+                });
+            }
+        });
+    });
+    $("#dataTable tbody").on("click", "#editBtn", function(){
+        var detailId = $(this).attr("data-value");
+        $.Dialog({
+            overlay: false,
+            shadow: true,
+            draggable: true,
+            width: 480,
+            height: 360,
+            title: 'Edit Detail Item',
+            content: '',
+            onShow: function(_dialog){
+                $.get(<?php echo $url->get('purchreqline/edit/' . detailId) ?>, function(data){
+                    $.Dialog.content(data) 
+                });
+            }
+        });
+    });
+*/
+</script>
+-->
+<?php //echo $this->tag->javascriptInclude('js/purchreqline.js') ?>

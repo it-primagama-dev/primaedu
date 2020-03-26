@@ -1,0 +1,129 @@
+
+
+<h1>
+    <?php echo $this->tag->linkTo(array("deliveryreqheader/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+
+     Pengiriman Buku
+  
+</h1>
+
+
+<?php echo $this->getContent(); ?>
+
+
+<?php echo $this->tag->form(array("deliveryreqheader/editQty", "autocomplete" => "off")) ?>
+
+<script type="text/javascript">
+    function deleteList(id){
+        document.getElementById("item"+id).innerHTML="";
+    }
+</script>
+
+  <?php echo $this->tag->hiddenField(array("Purchrecheader","size" => 30)) ?>
+  <?php echo $this->tag->hiddenField(array("PurchReqId", "size" => 30)) ?>
+  
+    <?php echo $this->tag->hiddenField(array("PurchReqId", "size" => 30)) ?>
+
+
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No. Item</th>
+			<th>Nama Barang</th>
+            <th>Qty Pembelian</th>
+            <th>Qty SB</th>
+            <th>Qty SE 1</th>
+            <th>Qty SE 2</th>
+            <th>Action</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php 
+        $i=0;
+        foreach ($page->items as $inventreceipt) { 
+    ?>
+        <tr>
+            <tr id="item<?=$i?>">
+            <td><?php echo $inventreceipt->ItemId; ?>
+			<?php echo $this->tag->hiddenField(array("ItemId[]","value"=>$inventreceipt->ItemId, "size" => 30)) ?>
+			<?php echo $this->tag->hiddenField(array("Deliveryreqheaderid[]","value"=>$inventreceipt->Deliveryreqheaderid, "size" => 30)) ?>
+			<?php echo $this->tag->hiddenField(array("Purchreqline[]","value"=>$inventreceipt->RecId, "size" => 30)) ?></td>
+            <td><?php echo $inventreceipt->ItemName; ?>
+			<?php echo $this->tag->hiddenField(array("ItemName[]","value"=>$inventreceipt->ItemName, "size" => 30)) ?>
+			</td>
+            <td><?php echo $inventreceipt->Qty|number_format(0,',','.'); ?>
+			<?php echo $this->tag->hiddenField(array("qty[]","value"=>$inventreceipt->Qty, "size" => 30)) ?>
+			</td>
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+			<?php echo $this->tag->numericField(array("qtyupdate[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000)) ?>
+                </div>
+				</td>
+
+            <?php if($inventreceipt->ItemId == 'PB 12 SMK ' || stristr($inventreceipt->ItemName, 'PIKSUN') || stristr($inventreceipt->ItemName, 'PIKSE') || stristr($inventreceipt->ItemName, 'PIKSTAN')) { ?>  
+
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese1[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000, "hidden"=>"hidden")) ?>
+                </div>
+            </td>
+            <td align="center">
+               <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese2[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000, "hidden"=>"hidden")) ?>
+                </div>
+            </td>                       
+            
+            <?php } else if($inventreceipt->ItemId == 'PB 7 SMP KURNAS'|| $inventreceipt->ItemId == 'PB 8 SMP KURNAS' || $inventreceipt->ItemId == 'PB 9 SMP KURNAS') { ?>  
+
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese1[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000)) ?>
+                </div>
+            </td>
+            <td align="center">
+               <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese2[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000, "hidden"=>"hidden")) ?>
+                </div>
+            </td>   
+            <?php } else { ?>
+
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese1[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000)) ?>
+                </div>
+                </td>
+            <td style="text-align:center;">
+                <div class="input-control text" data-role="input-control">
+            <?php echo $this->tag->numericField(array("qtyupdatese2[]","value"=>"","size" => 30, "type" => "number", "min" => 0, "max" => 100000)) ?>
+                </div>
+                </td>
+
+            <?php } ?>
+            <td style="text-align:center;"><input type="button" value="Delete" onclick="deleteList(<?=$i?>)"></td>
+        </tr>
+    <?php 
+            $i++;
+        }
+    ?>
+            <tr style="text-align:right;background:#FFF;">
+                <td colspan="7"><?php echo $this->tag->submitButton("Simpan") ?></td>
+            </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("deliveryreqheader/viewdetail/$inventreceipt->Purchreqheader/search", "First") ?></td>
+    <td><?php echo $this->tag->linkTo("deliveryreqheader/viewdetail/$inventreceipt->Purchreqheader/search?page=" . $page->before, "Previous") ?></td>
+    <td><?php echo $this->tag->linkTo("deliveryreqheader/viewdetail/$inventreceipt->Purchreqheader/search?page=" . $page->next, "Next") ?></td>
+    <td><?php echo $this->tag->linkTo("deliveryreqheader/viewdetail/$inventreceipt->Purchreqheader/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</form>

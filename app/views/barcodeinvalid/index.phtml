@@ -1,0 +1,92 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+    <legend><h1 style="padding-left:2%;"><p class="place-right">
+<?php echo $this->tag->linkTo("barcodeinvalid/invalid/", "Daftar Barcode Bermasalah") ?>
+</p>
+Barcode Bermasalah</h1></legend>
+
+<strong>*Double</strong><br></br>
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Barcode</th>
+            <th>Nama Buku</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody  align="center">
+        <?php 
+        if($result != null){
+            $i=1;
+            foreach ($result as $row) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $row->barcode ?></td>
+                <td><?php echo $row->buku ?></td>
+                <td>
+                    <?php if ($leveluser != '30') { ?>
+
+                    <?php } else { ?>
+                    <?php echo $this->tag->linkTo(array("barcodeinvalid/detail/" . $row->barcode, "Detail", "target" => "_blank")); ?>
+                    <?php } ?>
+                    </td>
+                </form>
+				
+				
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<strong>*Lain-Lain</strong><br></br>
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Barcode</th>
+            <th>Nama Buku</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody  align="center">
+        <?php 
+        if($result2 != null){
+            $i=1;
+            foreach ($result2 as $row2) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $row2->barcode ?></td>
+                <td><?php echo $row2->buku ?></td>
+                <td><?php echo $this->tag->linkTo(array("barcodeinvalid/detail/" . $row2->barcode, "Detail", "target" => "_blank")); ?></td>
+                </form>
+                
+                
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>

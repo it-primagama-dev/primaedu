@@ -1,0 +1,89 @@
+<?php
+
+class RptOperasionalController extends ReportBase
+{
+    protected $sql = <<<SQL
+select NamaAreaCabang, RecIDcbg,KodeAreaCabang,NamaCabang, 
+        (select count(siswa.RecID) from siswa 
+            join programsiswa on siswa.RecID = programsiswa.Siswa
+            join program on programsiswa.Program=program.RecID
+            where siswa.Cabang=cte.RecIDcbg and program.tahunajaran = '3' ) as JumlahSiswa,
+        (select ISNULL(sum(b.Qty),0) as Jumlah from purchreqheader a 
+            join purchreqline b on a.RecId=b.Purchreqheader
+            join (SELECT PurchReqId from Konfirmasipembayaran Group BY PurchReqId) c on a.PurchReqId=c.PurchReqId
+            where a.Cabang=cte.RecIDcbg and a.ApprovalDate >= '2017-07-01') AS JumlahBuku,
+        (SELECT isnull(sum(JumlahTotal),0) from
+            (select siswa.VirtualAccount,Siswa.RecId,Siswa.MD,areacabang.RecID as RecIDCabang,areacabang.kodeareacabang,
+                areacabang.NamaAreaCabang as NamaCabang,a.NamaAreaCabang, siswa.NamaSiswa,siswa.cabang,
+                (pembayaran.JumlahTotal-pembayarandetail.Jumlah) as
+                JumlahTotal, program.NamaProgram From areacabang
+                Join siswa ON siswa.cabang = areacabang.RecID
+                join areacabang a ON areacabang.Area = a.KodeAreaCabang
+                Join programsiswa ON siswa.RecID = programsiswa.siswa
+                Join program ON program.RecID = programsiswa.program
+                Join tahunajaran ON tahunajaran.RecID = program.tahunajaran
+                Join pembayaran ON pembayaran.ProgramSiswa = programsiswa.RecID
+                join pembayarandetail on pembayaran.RecID=pembayarandetail.Pembayaran
+                Where program.tahunajaran = '3' and siswa.cabang != '1259' and a.NamaAreaCabang like '%%'
+                and pembayarandetail.pembayaranuntuk='Pendaftaran'
+                group by siswa.VirtualAccount,Siswa.MD,pembayaran.JumlahTotal, siswa.NamaSiswa, program.NamaProgram, siswa.cabang, 
+                siswa.RecID, tahunajaran.Description,pembayarandetail.Jumlah,areacabang.RecID,areacabang.kodeareacabang,
+                a.NamaAreaCabang,areacabang.NamaAreaCabang) as cte2 where cte2.KodeAreaCabang=cte.KodeAreaCabang)  as JumlahBiayaBimbingan,
+        (select isnull(sum(transaksibank.Nominal),0) as Uang_masuk from transaksibank
+            join siswa on transaksibank.Siswa=siswa.RecID
+            join programsiswa on siswa.RecID = programsiswa.Siswa
+            join program on programsiswa.Program=program.RecID 
+            where program.tahunajaran='3' and transaksibank.tahunajaran='3' 
+            and KodeCabang=cte.KodeAreaCabang and transaksibank.Siswa is not null) as JumlahUangMasuk
+                from
+        (select areacabang.RecID as RecIDcbg, areacabang.kodeareacabang,areacabang.NamaAreaCabang as NamaCabang,a.NamaAreaCabang From areacabang
+                join areacabang a ON areacabang.Area = a.KodeAreaCabang
+                group by areacabang.RecID, areacabang.kodeareacabang,
+                a.NamaAreaCabang,areacabang.NamaAreaCabang) as cte
+                where KodeAreaCabang != '9999' and ((select ISNULL(sum(b.Qty),0) as Jumlah from purchreqheader a 
+            join purchreqline b on a.RecId=b.Purchreqheader
+            join (SELECT PurchReqId from Konfirmasipembayaran Group BY PurchReqId) c on a.PurchReqId=c.PurchReqId
+            where a.Cabang=cte.RecIDcbg and a.ApprovalDate >= '2017-07-01')+ 
+            (select count(siswa.RecID) from siswa 
+                join programsiswa on siswa.RecID = programsiswa.Siswa
+                join program on programsiswa.Program=program.RecID
+                where siswa.Cabang=cte.RecIDcbg and program.tahunajaran = '3')) != 0 and NamaAreaCabang like '%%'
+                group by RecIDcbg,kodeareacabang,NamaAreaCabang,NamaCabang
+                order by NamaAreaCabang,KodeAreaCabang
+SQL;
+
+    public function initialize() {
+        $this->tag->setTitle('Laporan Data Operasional Cabang');
+        parent::initialize();
+    }
+
+    public function indexAction() {
+        $this->view->rpt_title = 'Laporan Data Operasional Cabang Per-Area TA 2017/2018';
+        $this->view->area = Areacabang::find(["Area IS NULL", "order" => "NamaAreaCabang"]);
+        $this->tag->setDefault('AreaID', $this->auth['areacabang']);
+        $this->view->rpt_auth = $this->auth;
+    }
+
+    public function viewAction()
+    {
+        if (!$this->request->isPost()) {
+            return $this->forward('RptOperasional/index');
+        }
+       
+        $this->view->rpt_title = 'Laporan Data Operasional Cabang Per-Area TA 2017/2018';
+        $areaid = $this->request->getPost('AreaID');
+        $area = Areacabang::findFirstByRecID($areaid);
+        $areakd = $area->NamaAreaCabang;
+		
+        $sql = str_replace(['%%'],[$areakd], $this->sql);
+        $query = $this->getDI()->getShared('db')->query($sql);
+        $query->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+        $this->view->setLayout('report');
+        $this->view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+        $this->view->result = $query->fetchAll($query);
+        $this->view->rpt_area = $areaid ? $area->NamaAreaCabang : 'All';
+        $this->view->today = date('Y-m-d');
+    }
+	
+}

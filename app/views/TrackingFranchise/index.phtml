@@ -1,0 +1,45 @@
+
+<?php echo $this->tag->form("trackingFranchise/trak") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("trackingFranchise/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Silahkan pilih Kode Pemesanan Anda
+    <small class="on-right"></small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+         <div class="span2">
+            <label for="RecId">Nomor Pembelian</label>
+            <div class="input-control select" data-role="input-control" >
+                <?php 
+
+                if(!isset($NoPR)){
+                    $test = $this->modelsManager->createBuilder()
+                        ->columns(["konfirmasipembayaran2.RecID", "konfirmasipembayaran2.ConfirmId"])
+                        ->from("konfirmasipembayaran2")
+                        ->where("konfirmasipembayaran2.Cabang = :cabang: AND p.Qty > 0 ")
+                        ->getQuery()
+                        ->execute(["cabang" => $areacabang])
+                        ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+
+                        echo $this->tag->select(["ConfirmId", $test, "using" => ["ConfirmId", "ConfirmId"]]);
+                }
+                else {echo $this->tag->select(["ConfirmId", $NoPR, "using" => ["ConfirmId", "ConfirmId"]]); }
+				
+				
+				?>
+
+			</div>
+       
+
+           
+
+            <?php echo $this->tag->submitButton("Check") ?>
+        </div>
+    </div>
+</div>
+
+</form>

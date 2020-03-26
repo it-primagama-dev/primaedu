@@ -1,0 +1,375 @@
+<?php
+
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Paginator\Adapter\Model as Paginator;
+
+class PembagiandanaController extends ControllerBase {
+
+    public function initialize() {
+        $this->tag->setTitle("Pembagian Dana");
+        parent::initialize();
+    }
+
+    /**
+     * Index action
+     */
+    public function indexAction() {
+        $numberPage = $this->request->getQuery("page", "int");
+        $numberPage = isset($numberPage) ? $numberPage : 1;
+
+            $date = $this->request->getPost('Tanggal' ,'int');
+            $bank = $this->request->getPost('Bank');
+            $this->tag->setDefault('Bank', $bank);
+            $this->view->date = isset($date) ? $date : date('Y-m-d');
+
+        if ($this->request->isPost()) {
+            $resultset = $this->getTransaksi($date, $bank);
+
+            if ($resultset->count() == 0) {
+                $this->flash->notice("Tidak ada transaksi dari bank " . $bank . " pada tanggal " . $date);
+                return;
+            }
+            $this->flash->success("Summary transaksi dari bank " . $bank . " pada tanggal " . $date);
+            $this->view->trans = $resultset;
+            $this->view->link89 = $this->url->get("pembagiandana/download90/" . $bank . "/" . date("Ymd", strtotime($date)));
+            $this->view->link89nonbca = $this->url->get("pembagiandana/download90nonbca/" . $bank . "/" . date("Ymd", strtotime($date)));
+            $this->view->link11 = $this->url->get("pembagiandana/download10/" . $bank . "/" . date("Ymd", strtotime($date)));
+        }
+    }
+
+    //$tgl formatnya yyyymmdd
+    public function download90nonbcaAction($bank, $tgl) {
+        $this->view->disable();
+        $contentType = $bank == "BCA" ? "text/plain" : "text/csv";
+        $fileName = $bank == "BCA" ? "BCA_90_" . $tgl . "_NONBCA.txt" : "MANDIRI_90_" . $tgl . ".csv";
+        $rekeningDebet = $bank == "BCA" ? $this->getRekeningOperasional("BCA") : $this->getRekeningOperasional("MANDIRI");
+        $prefix = $bank == "BCA" ? $this->getPrefix("BCA") : $this->getPrefix("MANDIRI");
+
+        $contentFile = "";
+        $resultset = $this->getTransaksi(date("Y-m-d", strtotime($tgl)), $bank, 2);
+
+        if ($bank == "BCA") {
+            $total = 0;
+            foreach ($resultset as $rec) {
+                $total += $rec->jumlah89;
+            }
+            $total = number_format($total, 2, '.', ''); //buat selalu 2 angka dibelakang koma
+            //generate header
+            $contentFile = "0SP" .
+                    $tgl . // tgl format yyyymmdd
+                    str_pad($rekeningDebet, 10, " ") . // rekening yg akan didebet (data darimana???)
+                    " " .
+                    str_pad($prefix, 8, " ") . // kode perusahaan (data darimana???)
+                    "               " . // emang spasi 15 karakter
+                    "0000" . // emang formatnya 4 angka nol
+                    str_pad(substr($total, 0, strlen($total) - 3), 13, "0", STR_PAD_LEFT) . // total dana yang akan ditransfer (tanpa nilai pecahan)
+                    "." .
+                    substr($total, strlen($total) - 2, 2) . // total dana yang akan ditransfer (2 digit belakang koma aja)
+                    str_pad($resultset->count(), 5, "0", STR_PAD_LEFT) . // jumlah record yang akan ditransfer
+                    "LLG" . // Jenis transfer, BCA jika sesama BCA (benar nggak ???)
+                    "               " . //emang diisi spasi 15 karakter
+                    "                  " . //isi berita 1 sebanyak 18 karakter
+                    "                  " . //isi berita 2 sebanyak 18 karakter
+                    str_pad("", 77, " ") . //emang diisi spasi sebanyak 77 karakter
+                    PHP_EOL;
+
+            foreach ($resultset as $trans) {
+                $nominal = number_format($trans->jumlah89, 2, '.', '');
+
+                $contentFile.="1" .
+                        str_pad($trans->reknonbca, 16, " ") . // rekening yg akan dikredit
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "0000" . // emang formatnya 4 angka nol
+                        str_pad(substr($nominal, 0, strlen($nominal) - 3), 13, "0", STR_PAD_LEFT) . // jumlah dana yang akan ditransfer (tanpa nilai pecahan)
+                        "." .
+                        substr($nominal, strlen($nominal) - 2, 2) . // jumlah dana yang akan ditransfer (2 digit belakang koma aja)
+                        substr(str_pad($trans->namanonbca, 35, " "),0,35) . //nama rekening penerima sebanyak 35 karakter (dapat darimana????)
+                        "       " . //emang diisi spasi sebanyak 7 karakter
+                        substr(str_pad($trans->kodebank, 7, " "),0,7) . //sandi BI bank yang dituju sebanyak 7 karakter, spasi jika sesama BCA (bener nggak???)
+                        "    " . //emang diisi spasi sebanyak 4 karakter
+                        substr(str_pad($trans->namabank, 18, " "),0,18) . //nama bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+                        "                  " . //nama cabang bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+                        "                  " . //isi berita 1 sebanyak 18 karakter
+                        "                  " . //isi berita 2 sebanyak 18 karakter
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "888" . //diisi 014 jika sesama BCA, diisi 888 jika ke bank lain (bener nggak???)
+                        PHP_EOL;
+            }
+        }
+        $this->response->setHeader("Content-Type", $contentType);
+        $this->response->setHeader("Content-Disposition", 'attachment; filename="' . $fileName . '"');
+        $this->response->setContent($contentFile);
+        return $this->response;
+    }
+    //$tgl formatnya yyyymmdd
+    public function download90Action($bank, $tgl) {
+        $this->view->disable();
+        $contentType = $bank == "BCA" ? "text/plain" : "text/csv";
+        $fileName = $bank == "BCA" ? "BCA_90_" . $tgl . ".txt" : "MANDIRI_90_" . $tgl . ".csv";
+        $rekeningDebet = $bank == "BCA" ? $this->getRekeningOperasional("BCA") : $this->getRekeningOperasional("MANDIRI");
+        $prefix = $bank == "BCA" ? $this->getPrefix("BCA") : $this->getPrefix("MANDIRI");
+
+        $contentFile = "";
+        $resultset = $this->getTransaksi(date("Y-m-d", strtotime($tgl)), $bank, 1);
+
+        if ($bank == "BCA") {
+            $total = 0;
+            foreach ($resultset as $rec) {
+                $total += $rec->jumlah89;
+            }
+            $total = number_format($total, 2, '.', ''); //buat selalu 2 angka dibelakang koma
+            //generate header
+            $contentFile = "0SP" .
+                    $tgl . // tgl format yyyymmdd
+                    str_pad($rekeningDebet, 10, " ") . // rekening yg akan didebet (data darimana???)
+                    " " .
+                    str_pad($prefix, 8, " ") . // kode perusahaan (data darimana???)
+                    "               " . // emang spasi 15 karakter
+                    "0000" . // emang formatnya 4 angka nol
+                    str_pad(substr($total, 0, strlen($total) - 3), 13, "0", STR_PAD_LEFT) . // total dana yang akan ditransfer (tanpa nilai pecahan)
+                    "." .
+                    substr($total, strlen($total) - 2, 2) . // total dana yang akan ditransfer (2 digit belakang koma aja)
+                    str_pad($resultset->count(), 5, "0", STR_PAD_LEFT) . // jumlah record yang akan ditransfer
+                    "BCA" . // Jenis transfer, BCA jika sesama BCA (benar nggak ???)
+                    "               " . //emang diisi spasi 15 karakter
+                    "                  " . //isi berita 1 sebanyak 18 karakter
+                    "                  " . //isi berita 2 sebanyak 18 karakter
+                    str_pad("", 77, " ") . //emang diisi spasi sebanyak 77 karakter
+                    PHP_EOL;
+
+            foreach ($resultset as $trans) {
+                $nominal = number_format($trans->jumlah89, 2, '.', '');
+
+                $contentFile.="1" .
+                        str_pad($trans->rekbca, 16, " ") . // rekening yg akan dikredit
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "0000" . // emang formatnya 4 angka nol
+                        str_pad(substr($nominal, 0, strlen($nominal) - 3), 13, "0", STR_PAD_LEFT) . // jumlah dana yang akan ditransfer (tanpa nilai pecahan)
+                        "." .
+                        substr($nominal, strlen($nominal) - 2, 2) . // jumlah dana yang akan ditransfer (2 digit belakang koma aja)
+                        substr(str_pad($trans->namabca, 35, " "),0,35) . //nama rekening penerima sebanyak 35 karakter (dapat darimana????)
+                        "       " . //emang diisi spasi sebanyak 7 karakter
+                        "       " . //sandi BI bank yang dituju sebanyak 7 karakter, spasi jika sesama BCA (bener nggak???)
+                        "    " . //emang diisi spasi sebanyak 4 karakter
+                        "                  " . //nama bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+                        "                  " . //nama cabang bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+                        "                  " . //isi berita 1 sebanyak 18 karakter
+                        "                  " . //isi berita 2 sebanyak 18 karakter
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "014" . //diisi 014 jika sesama BCA, diisi 888 jika ke bank lain (bener nggak???)
+                        PHP_EOL;
+            }
+        }
+        $this->response->setHeader("Content-Type", $contentType);
+        $this->response->setHeader("Content-Disposition", 'attachment; filename="' . $fileName . '"');
+        $this->response->setContent($contentFile);
+        return $this->response;
+    }
+
+    //$tgl formatnya yyyymmdd
+    public function download10Action($bank, $tgl) {
+        $this->view->disable();
+        $contentType = $bank == "BCA" ? "text/plain" : "text/csv";
+        $fileName = $bank == "BCA" ? "BCA_10_" . $tgl . ".txt" : "MANDIRI_10_" . $tgl . ".csv";
+
+        $rekeningDebet = $bank == "BCA" ? $this->getRekeningOperasional("BCA") : $this->getRekeningOperasional("MANDIRI");
+        $rekeningPusat = $bank == "BCA" ? $this->getRekeningPusat("BCA") : $this->getRekeningPusat("MANDIRI");
+        // TOC-RB
+        $namaRekPusat = $bank == "BCA" ? $this->getNamaRekeningPusat("BCA") : $this->getNamaRekeningPusat("MANDIRI");
+        $prefix = $bank == "BCA" ? $this->getPrefix("BCA") : $this->getPrefix("MANDIRI");
+
+        $contentFile = "";
+
+        $resultset = $this->modelsManager->createBuilder()
+                ->columns(array('Transaksibank.KodeCabang', 'SUM(Transaksibank.Nominal) AS jumlah', 'c.NoRekMandiri AS rekmandiri', 'c.NoRekBCA AS rekbca'))
+                ->from('Transaksibank')
+                ->where('TanggalImport = :import:', array('import' => date("Y-m-d", strtotime($tgl))))
+                ->andWhere('NamaBank = :bank:', array('bank' => $bank))
+                ->leftJoin('Areacabang', 'Transaksibank.KodeCabang = c.KodeAreaCabang', 'c')
+                ->orderBy('Transaksibank.KodeCabang')
+                ->groupBy('Transaksibank.KodeCabang,c.NoRekMandiri,c.NoRekBCA')
+                ->getQuery()
+                ->execute();
+
+        $transaksi = array();
+        $i = 0;
+
+        $total = 0;
+
+        foreach ($resultset->toArray() as $row) {
+            $transaksi[$i]['KodeCabang'] = $row['KodeCabang'];
+            $transaksi[$i]['NoRekeningMandiri'] = $row['rekmandiri'];
+            $transaksi[$i]['NoRekeningBCA'] = $row['rekbca'];
+            $transaksi[$i]['Total'] = $row['jumlah'];
+            $transaksi[$i]['Dana90'] = $row['jumlah'] * 0.89;
+            $transaksi[$i]['Dana10'] = $row['jumlah'] * 0.11;
+
+            $total+=$transaksi[$i]['Dana10'];
+
+            $i++;
+        }
+
+
+
+        if ($bank == "BCA") {
+            $total = number_format($total, 2, '.', ''); //buat selalu 2 angka dibelakang koma
+            //generate header
+            $contentFile = "0SP" .
+                    $tgl . // tgl format yyyymmdd
+                    str_pad($rekeningDebet, 10, " ") . // rekening yg akan didebet (data darimana???)
+                    " " .
+                    str_pad($prefix, 8, " ") . // kode perusahaan (data darimana???)
+                    "               " . // emang spasi 15 karakter
+                    "0000" . // emang formatnya 4 angka nol
+                    str_pad(substr($total, 0, strlen($total) - 3), 13, "0", STR_PAD_LEFT) . // total dana yang akan ditransfer (tanpa nilai pecahan)
+                    "." .
+                    substr($total, strlen($total) - 2, 2) . // total dana yang akan ditransfer (2 digit belakang koma aja)
+                    str_pad($i, 5, "0", STR_PAD_LEFT) . // jumlah record yang akan ditransfer
+                    "BCA" . // Jenis transfer, BCA jika sesama BCA (benar nggak ???)
+                    "               " . //emang diisi spasi 15 karakter
+                    "                  " . //isi berita 1 sebanyak 18 karakter
+                    "                  " . //isi berita 2 sebanyak 18 karakter
+                    str_pad("", 77, " ") . //emang diisi spasi sebanyak 77 karakter
+                    PHP_EOL;
+
+            foreach ($transaksi as $trans) {
+                $nominal = number_format($trans['Dana10'], 2, '.', '');
+
+                $contentFile.="1" .
+                        str_pad($rekeningPusat, 16, " ") . // rekening yg akan dikredit (rekening pusat darimana???)
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "0000" . // emang formatnya 4 angka nol
+                        str_pad(substr($nominal, 0, strlen($nominal) - 3), 13, "0", STR_PAD_LEFT) . // jumlah dana yang akan ditransfer (tanpa nilai pecahan)
+                        "." .
+                        substr($nominal, strlen($nominal) - 2, 2) . // jumlah dana yang akan ditransfer (2 digit belakang koma aja)
+                        str_pad($namaRekPusat, 35, " ") . //nama rekening penerima sebanyak 35 karakter (dapat darimana????)
+                        "       " . //emang diisi spasi sebanyak 7 karakter
+                        "       " . //sandi BI bank yang dituju sebanyak 7 karakter, spasi jika sesama BCA (bener nggak???)
+                        "    " . //emang diisi spasi sebanyak 4 karakter
+                        "                  " . //nama bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+                        "                  " . //nama cabang bank yang dituju sebanyak 18 karakter, spasi jika sesama BCA (bener nggak???)
+//  TOC-RB : 02 Jun 2015
+//                    "                  " . //isi berita 1 sebanyak 18 karakter
+                        str_pad($trans['KodeCabang'], 18, " ") . //isi berita 1 sebanyak 18 karakter
+                        "                  " . //isi berita 2 sebanyak 18 karakter
+                        "                  " . //emang diisi spasi sebanyak 18 karakter
+                        "014" . //diisi 014 jika sesama BCA, diisi 888 jika ke bank lain (bener nggak???)
+                        PHP_EOL;
+            }
+        }
+
+        $this->response->setHeader("Content-Type", $contentType);
+        $this->response->setHeader("Content-Disposition", 'attachment; filename="' . $fileName . '"');
+
+// TOC-RB
+//        echo $contentFile;
+        $this->response->setContent($contentFile);
+        return $this->response;
+
+    }
+
+    public function getRekeningOperasional($namaBank) {
+        $resultset = $this->modelsManager->createBuilder()
+                ->columns(array('NoRekOperasional'))
+                ->from('Sysparameter')
+                ->where('NamaBank = "' . $namaBank . '"')
+                ->getQuery()
+                ->execute();
+
+        $rows = $resultset->toArray();
+        
+        return count($rows) == 0 ? "" : $rows[0]['NoRekOperasional'];
+    }
+
+    public function getRekeningPusat($namaBank) {
+        $resultset = $this->modelsManager->createBuilder()
+                ->columns(array('NoRekPusat'))
+                ->from('Sysparameter')
+                ->where('NamaBank = "' . $namaBank . '"')
+                ->getQuery()
+                ->execute();
+
+        $rows = $resultset->toArray();
+
+        return count($rows) == 0 ? "" : $rows[0]['NoRekPusat'];
+    }
+
+    public function getNamaRekeningPusat($namaBank) {
+        $resultset = $this->modelsManager->createBuilder()
+                ->columns(array('NamaRekPusat'))
+                ->from('Sysparameter')
+                ->where('NamaBank = "' . $namaBank . '"')
+                ->getQuery()
+                ->execute();
+
+        $rows = $resultset->toArray();
+
+        if (count($rows) == 0)
+            return "";
+        else
+            return $rows[0]['NamaRekPusat'];
+    }
+
+    public function getPrefix($namaBank) {
+        $resultset = $this->modelsManager->createBuilder()
+// TOC-RB
+//                ->columns(array('Prefix'))
+                ->columns(array('KodePerusahaan'))
+                ->from('Sysparameter')
+                ->where('NamaBank = "' . $namaBank . '"')
+                ->getQuery()
+                ->execute();
+
+        $rows = $resultset->toArray();
+
+        if (count($rows) == 0)
+            return "";
+        else
+            return $rows[0]['KodePerusahaan'];
+    }
+
+    private function getTransaksi($date = NULL, $bank = NULL, $filter = 0) {
+        $qb = $this->modelsManager->createBuilder()
+                ->columns([
+                    'c.KodeAreaCabang + " / " + c.NamaAreaCabang AS cabang'
+                    , 'SUM(tx.Nominal) AS jumlahtotal'
+                    , 'CAST(SUM(tx.Nominal) * 0.89 AS money) AS jumlah89'
+                    , 'CAST(SUM(tx.Nominal) * 0.11 AS money) AS jumlah11'
+                    , 'c.NoRekBCA AS rekbca'
+                    , 'c.NamaRekBCA AS namabca'
+                    , 'c.NoRekNonBCA AS reknonbca'
+                    , 'c.NamaRekNonBCA AS namanonbca'
+                    , 'c.KodeBankNonBCA AS kodebank'
+                    , 'b.Nama AS namabank'
+                ])
+                ->addFrom('Transaksibank', 'tx')
+                ->join('Areacabang', 'tx.KodeCabang = c.KodeAreaCabang', 'c')
+                ->leftJoin('Bank', 'c.KodeBankNonBCA = b.Kode', 'b')
+                ->where('tx.TanggalImport = :date: AND tx.NamaBank = :bank:')
+                ->groupBy([
+                    'c.KodeAreaCabang'
+                    , 'c.NamaAreaCabang'
+                    , 'c.NoRekBCA'
+                    , 'c.NamaRekBCA'
+                    , 'c.NoRekNonBCA'
+                    , 'c.NamaRekNonBCA'
+                    , 'c.KodeBankNonBCA'
+                    , 'b.Nama'
+                ])
+                ->orderBy('c.KodeAreaCabang');
+        switch ($filter){
+            case 1 :
+                $qb->andWhere("c.NoRekBCA IS NOT NULL AND c.NoRekBCA != ''");
+                break;
+            case 2 :
+                $qb->andWhere("c.NoRekBCA IS NULL OR c.NoRekBCA = ''");
+                break;
+            default :
+                break;
+        }
+        return $qb->getQuery()
+                ->execute(['date' => $date, 'bank' => $bank])
+                ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_OBJECTS);
+    }
+
+}

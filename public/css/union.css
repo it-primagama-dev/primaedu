@@ -1,0 +1,327 @@
+.modal-open {
+  overflow: hidden
+}
+
+.modal {
+  display: none;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0
+}
+
+.modal.fade .modal-dialog {
+  -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
+  -o-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out
+}
+
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0)
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  outline: 0
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+  filter: alpha(opacity=0)
+}
+
+.modal-backdrop.in {
+  opacity: .5;
+  filter: alpha(opacity=50)
+}
+
+.modal-header {
+  padding: 10px;
+  border-bottom: 1px solid #e5e5e5;
+  min-height: 11.42857143px
+}
+
+.modal-header .close {
+  margin-top: -2px
+}
+
+.modal-title {
+  margin: 0;
+  line-height: 1.42857143
+}
+
+.modal-body {
+  position: relative;
+  padding: 10px
+}
+
+.modal-footer {
+  padding: 10px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5
+}
+
+.modal-footer .btn+.btn {
+  margin-left: 5px;
+  margin-bottom: 0
+}
+
+.modal-footer .btn-group .btn+.btn {
+  margin-left: -1px
+}
+
+.modal-footer .btn-block+.btn-block {
+  margin-left: 0
+}
+
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll
+}
+
+@media (min-width:768px) {
+  .modal-dialog {
+    width: 600px;
+    margin: 30px auto
+  }
+  .modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)
+  }
+  .modal-sm {
+    width: 300px
+  }
+}
+
+@media (min-width:992px) {
+  .modal-lg {
+    width: 900px
+  }
+}
+
+.calendar {
+  width: 250px;
+  border: 1px #eeeeee solid;
+  font-size: 10pt;
+}
+.calendar table {
+  border-collapse: collapse;
+  background:#fff;
+}
+.calendar td,
+.calendar th {
+  padding: 0;
+}
+.calendar td {
+  border: 1px  solid;
+  border-color: #e6f5fc;
+}
+.calendar td:first-child {
+  border-left: 0;
+}
+.calendar td:last-child {
+  border-right: 0;
+}
+.calendar tr:last-child td {
+  border-bottom: 0;
+}
+.calendar .day-of-week {
+  padding: 5px;
+  cursor: default;
+}
+.calendar a {
+  display: block;
+  padding: 5px;
+}
+.calendar a:hover {
+  background-color: #eeeeee;
+  color: #1d1d1d;
+}
+.calendar .calendar-header {
+  background-color: #1ba1e2;
+  color: #ffffff;
+}
+.calendar .calendar-header td,
+.calendar .calendar-header th {
+  border: 0 !important;
+}
+.calendar .calendar-header td a,
+.calendar .calendar-header th a {
+  color: #ffffff;
+}
+.calendar .calendar-header td a:hover,
+.calendar .calendar-header th a:hover {
+  background-color: #1ba1e2;
+  color: #ffffff;
+}
+.calendar .calendar-actions td,
+.calendar .calendar-actions th {
+  padding: 10px;
+}
+.calendar .today a {
+  background-color: #a0e857;
+  color: #1d1d1d;
+}
+.calendar .today a:hover {
+  background-color: #128023;
+  color: #ffffff;
+}
+.calendar .day a {
+  display: block;
+  position: relative;
+  border: 2px transparent solid;
+}
+.calendar .day a.selected {
+  border: 4px #4390df solid;
+  border-width: 1px;
+}
+.calendar .day a.selected:after {
+  position: absolute;
+  display: block;
+  border-top: 28px solid #4390df;
+  border-left: 28px solid transparent;
+  right: 0;
+  content: "";
+  top: 0;
+  z-index: 101;
+}
+.calendar .day a.selected:before {
+  position: absolute;
+  display: block;
+  content: "\e003";
+  color: #fff;
+  right: 0;
+  font-family: 'metroSysIcons';
+  font-size: 9pt;
+  font-weight: normal;
+  z-index: 102;
+  top: 0;
+}
+.calendar .day a.selected:after {
+  border-top-width: 12px;
+  border-left-width: 12px;
+}
+.calendar .day a.selected:before {
+  font-size: 4pt;
+}
+.calendar .month a,
+.calendar .year a {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.calendar .other-day {
+  display: block;
+  text-align: center;
+  color: #999999;
+}
+.calendar-dropdown {
+  border: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+.grid.fluid .row [class*="span"] {
+    margin-left: 2.127659%;
+}
+.grid.fluid .row .span11 {
+    width: 91.489348%!important;
+}
+.grid .row [class*="span"] {
+    float: left;
+    min-height: 1px;
+    margin-left: 20px;
+}
+.input-control.text input,
+.input-control.password input,
+.input-control.file input,
+.input-control.email input,
+.input-control.tel input,
+.input-control.number input {
+  border: 1px #d9d9d9 solid;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  z-index: 1;
+  -webkit-appearance: none;
+}
+.input-control.text,
+.input-control.password,
+.input-control.file,
+.input-control.email,
+.input-control.tel,
+.input-control.number {
+  background-color: transparent;
+}
+.input-control.text,
+.input-control.password,
+.input-control.file,
+.input-control.email,
+.input-control.tel,
+.input-control.number {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+  outline: 0;
+  height: 34px;
+  width: 100%;
+}
+
+metro-bootstrap.min.css:5 .input-control.checkbox,
+.input-control.radio,
+.input-control.switch,
+.input-control.text,
+.input-control.password,
+.input-control.select,
+.input-control.textarea {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 7pt;
+}
+label {
+    display: block;
+    margin: 5px 0;
+}

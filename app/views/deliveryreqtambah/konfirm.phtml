@@ -1,0 +1,41 @@
+
+<?php echo $this->tag->form("purchreqheader/create") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("purchreqheader/konfirm", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Konfirmasi
+    <small class="on-right">Input detail pembelian</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="PurchReqName">Deskripsi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+            </div>
+
+            <label for="Requester">jumlah yang di bayarkan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Requester", "size" => 30)) ?>
+            </div>
+			
+			 <label for="kodecabang">jumlah yang di bayarkan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Requester", "size" => 30)) ?>
+            </div>
+
+            <label for="PurchReqDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("PurchReqDate", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

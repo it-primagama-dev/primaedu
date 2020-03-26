@@ -1,0 +1,301 @@
+<?php
+
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Paginator\Adapter\Model as Paginator;
+
+class PurchreqheaderController extends ControllerBase {
+
+    protected $auth;
+
+    public function initialize() {
+        $this->tag->setTitle("Permintaan Pembelian");
+        parent::initialize();
+        if($this->session->has("auth")) {
+            $this->auth = $this->session->get("auth");
+        }
+    }
+
+    /**
+     * Index action
+     */
+    public function indexAction() {
+        $this->persistent->parameters = null;
+    }
+
+    /**
+     * Searches for purchreqheader
+     */
+    public function searchAction() {
+
+        $numberPage = 1;
+        if ($this->request->isPost()) {
+            $query = Criteria::fromInput($this->di, "Purchreqheader", $_POST);
+            $query->andWhere("Cabang = :cabang:", ["cabang" => $this->auth['areacabang']]);
+            $this->persistent->parameters = $query->getParams();
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+
+        $parameters = $this->persistent->parameters;
+        if (!is_array($parameters)) {
+            $parameters = array();
+        }
+        $parameters["order"] = "RecId";
+
+        $purchreqheader = Purchreqheader::find($parameters);
+        if (count($purchreqheader) == 0) {
+            $this->flash->notice("The search did not find any purchreqheader");
+
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "index"
+                    ));
+        }
+
+        $paginator = new Paginator(array(
+                    "data" => $purchreqheader,
+                    "limit" => 10,
+                    "page" => $numberPage
+                ));
+
+        $this->view->page = $paginator->getPaginate();
+    }
+
+    /**
+     * Displays the creation form
+     */
+    public function newAction() {
+        
+    }
+
+    /**
+     * Edits a purchreqheader
+     *
+     * @param string $RecId
+     */
+    public function editAction($RecId) {
+
+        if (!$this->request->isPost()) {
+
+            $purchreqheader = Purchreqheader::findFirstByRecId($RecId);
+            if (!$purchreqheader) {
+                $this->flash->error("purchreqheader was not found");
+
+                return $this->dispatcher->forward(array(
+                            "controller" => "purchreqheader",
+                            "action" => "index"
+                        ));
+            }
+
+            $this->view->RecId = $purchreqheader->RecId;
+
+            $this->tag->setDefault("RecId", $purchreqheader->RecId);
+            $this->tag->setDefault("PurchReqId", $purchreqheader->PurchReqId);
+            $this->tag->setDefault("PurchReqName", $purchreqheader->PurchReqName);
+            $this->tag->setDefault("Requester", $purchreqheader->Requester);
+            $this->tag->setDefault("PurchReqDate", $purchreqheader->PurchReqDate);
+            $this->tag->setDefault("Status", $purchreqheader->Status);
+            $this->tag->setDefault("Remarks", $purchreqheader->Remarks);
+            $this->tag->setDefault("CreatedBy", $purchreqheader->CreatedBy);
+            $this->tag->setDefault("CreatedDateTime", $purchreqheader->CreatedDateTime);
+            $this->tag->setDefault("dataTableUrl", $this->url->get("purchreqheader/details/{$purchreqheader->RecId}"));
+        }
+    }
+
+    /**
+     * Creates a new purchreqheader
+     */
+    public function createAction() {
+
+        if (!$this->request->isPost()) {
+            return $this->forward('purchreqheader/index');
+        }
+
+        $purchreqheader = new Purchreqheader();
+
+        //TOC-RB 4 Mei 2015
+        //$prcabang = sprintf("%04d", $this->session->auth['areacabang']);
+        //TOC-RB 2 Juli 2015
+        //$prcabangnum = sprintf("%02d", $purchreqheader->totalRecord() + 1);
+        //$purchreqheader->PurchReqId = 'PR' . date('Y') . '-' . trim($this->auth['kodeareacabang']) . '-' . $prcabangnum;
+        $purchreqheader->PurchReqId = $this->getNumberSequence('PR', $this->auth['kodeareacabang']);
+        $purchreqheader->PurchReqName = $this->request->getPost("PurchReqName");
+        $purchreqheader->Requester = $this->request->getPost("Requester");
+        $purchreqheader->PurchReqDate = $this->request->getPost("PurchReqDate");
+        $purchreqheader->Status = 'Draft';
+        $purchreqheader->CreatedBy = $this->auth['username'];
+        $purchreqheader->CreatedDateTime = date('Y-m-d H:i:s');
+        $purchreqheader->Cabang = $this->auth['areacabang'];
+
+        if (!$purchreqheader->save()) {
+            foreach ($purchreqheader->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+
+            return $this->forward('purchreqheader/new');
+        }
+
+        $this->flash->success("purchreqheader was created successfully");
+        return $this->forward('purchreqheader/index');
+    }
+
+    /**
+     * Saves a purchreqheader edited
+     *
+     */
+    public function saveAction() {
+
+        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "index"
+                    ));
+        }
+
+        $RecId = $this->request->getPost("RecId");
+
+        $purchreqheader = Purchreqheader::findFirstByRecId($RecId);
+        if (!$purchreqheader) {
+            $this->flash->error("purchreqheader does not exist " . $RecId);
+
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "index"
+                    ));
+        }
+
+        if ($purchreqheader->Status != "Draft" && $purchreqheader->Status != "Rejected"){
+            $this->flash->error("Permintaan Pembelian Tidak Dapat Diubah");
+            return $this->forward("purchreqheader/index");
+        }
+
+        $purchreqheader->PurchReqId = $this->request->getPost("PurchReqId");
+        $purchreqheader->PurchReqName = $this->request->getPost("PurchReqName");
+        $purchreqheader->Requester = $this->request->getPost("Requester");
+        $purchreqheader->PurchReqDate = $this->request->getPost("PurchReqDate");
+		// TOC-RB
+        //$purchreqheader->Status = $this->request->getPost("Status");
+
+        if (!$purchreqheader->save()) {
+
+            foreach ($purchreqheader->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "edit",
+                        "params" => array($purchreqheader->RecId)
+                    ));
+        }
+
+        $this->flash->success("purchreqheader was updated successfully");
+
+        return $this->dispatcher->forward(array(
+                    "controller" => "purchreqheader",
+                    "action" => "index"
+                ));
+    }
+
+    /**
+     * Deletes a purchreqheader
+     *
+     * @param string $RecId
+     */
+    public function deleteAction($RecId) {
+
+        $purchreqheader = Purchreqheader::findFirstByRecId($RecId);
+        if (!$purchreqheader) {
+            $this->flash->error("purchreqheader was not found");
+
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "index"
+                    ));
+        }
+
+        if (!$purchreqheader->delete()) {
+
+            foreach ($purchreqheader->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+
+            return $this->dispatcher->forward(array(
+                        "controller" => "purchreqheader",
+                        "action" => "search"
+                    ));
+        }
+
+        $this->flash->success("purchreqheader was deleted successfully");
+
+        return $this->dispatcher->forward(array(
+                    "controller" => "purchreqheader",
+                    "action" => "search"
+                ));
+    }
+/*
+	TOC-RB : Added Submit Action (change status to inreview)
+*/
+
+	public function submitAction($RecId) {
+		if(!$this->request->isPost()) {
+            $purchreqheader = Purchreqheader::findFirstByRecId($RecId);
+            if (!$purchreqheader) {
+                $this->flash->error("purchreqheader was not found");
+
+                return $this->dispatcher->forward(array(
+                            "controller" => "purchreqheader",
+                            "action" => "index"
+                        ));
+            }
+			$purchreqheader->status = "Inreview";
+			
+			$phql = "UPDATE purchreqheader SET Status = '{$purchreqheader->status}' WHERE RecId = {$RecId}";
+
+			$ret = $this->db->query($phql);
+
+//        	if (!$usergroup->save()) {
+			if (!$ret) {
+				foreach ($purchreqheader->getMessages() as $message) {
+					$this->flash->error($message);
+				}
+
+				return $this->dispatcher->forward(array(
+							"controller" => "purchreqheader",
+							"action" => "index"
+						));
+			}
+			$this->flash->success("purchreqheader was updated successfully");
+
+			return $this->response->redirect("purchreqheader/search");
+		}
+	}
+    public function detailsAction($id) {
+        $this->view->disable();
+        $response = new Phalcon\Http\Response();
+        $response->setContentType('application/json');
+        $details = array();
+
+        $purchreqline = Purchreqline::findByPurchreqheader($id);
+
+        if (!count($purchreqline)) {
+            $response->setJsonContent(array('status' => 'Not Found'));
+        } else {
+            foreach ($purchreqline as $detail) {
+                $details [] = array(
+                    'id' => $detail->RecId,
+                    'ItemId' => $detail->ItemId,
+                    'ItemName' => $detail->ItemName,
+                    'Qty' => $detail->Qty
+                );
+            }
+            $response->setJsonContent(array(
+                'status' => 'OK',
+                'deleteUrl' => $this->url->get("purchreqline/delete"),
+                'listData' => $details
+                    ), JSON_NUMERIC_CHECK);
+        }
+        return $response;
+    }
+
+}

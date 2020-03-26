@@ -1,0 +1,88 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1 style="padding-left:2%;">
+    Data Barcode Siswa
+</h1>
+<?php echo $this->tag->form("barcodebuku/cari") ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span4">
+            <label for="kd">NoVA / Barcode / Nama Siswa</label>
+            <div class="input-control text">
+                <?php echo $this->tag->textField("KodeCabang") ?>
+            </div>
+            <button type="submit">Cari</button>
+        </div>
+        <div class="span8">
+        <font color="red"><b>Catatan :</b></font><br>
+        <font color="red">1. Jika terjadi kesalahan input barcode silahkan untuk di informasikan ke helpdesk ->> helpdesk@primagama.co.id.</font><br>
+        <font color="red">2. Jika pada kolom barcode masih kosong silahkan untuk melakukan input barcode, di menu <b>Siswa</b> --> <b>Penyerahan Buku</b>. </font>
+
+        </div>
+    </div>
+</div>
+</form>
+
+<table class="table bordered striped hovered" align="center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>No VA</th>
+            <th>Nama Siswa</th>
+            <th>Program</th>
+            <th>Barcode</th>
+            <th>Status Aktivasi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+            foreach ($page->items as $row) { ?>
+            <tr>
+                <td><?php echo $i.'.';?></td><?php $i++;?>
+                <td><?php echo $row->NoVA ?></td>
+                <td><?php echo $row->nama ?></td>
+                <td><?php echo $row->program ?></td>
+                <td><?php echo $row->barcode ?></td> 
+                <td align="center"><?php 
+                if ($row->aktivasi == 1){
+                    echo "<font color=green>Sudah</font>";
+                }
+                else {
+                    echo "<font color=red>Belum</font>";
+                    } ?></td>
+            </tr>
+        <?php } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="7">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("barcodebuku/index", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodebuku/index?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodebuku/index?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("barcodebuku/index?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>

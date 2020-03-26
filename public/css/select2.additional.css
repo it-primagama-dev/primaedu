@@ -1,0 +1,60 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 13, 2018, 3:53:26 PM
+    Author     : Moh Eric <moh.eric@primagama.co.id>
+*/
+
+.select2-result-repository{
+    padding-top:4px;
+    padding-bottom:3px
+}
+.select2-result-repository__avatar{
+    float:left;
+    width:60px;
+    margin-right:10px
+}
+.select2-result-repository__avatar img{
+    width:100%;
+    height:auto;
+    border-radius:2px
+}
+.select2-result-repository__meta{
+    margin-left:0px
+}
+.select2-result-repository__title{
+    color:black;
+    font-weight:700;
+    word-wrap:break-word;
+    line-height:1.1;
+    margin-bottom:4px
+}
+.select2-result-repository__details{
+    margin-right:1em
+}
+.select2-result-repository__details{
+    display:inline-block;
+    color:#aaa;
+    font-size:14px
+}
+.select2-result-repository__description{
+    font-size:16px;
+    color:#777;
+    margin-top:4px
+}
+.select2-result-repository__footer{
+    
+}
+.select2-results__option--highlighted .select2-result-repository__title{
+    color:white
+}
+.select2-results__option--highlighted .select2-result-repository__details,.select2-results__option--highlighted .select2-result-repository__description{
+    color:#c6dcef
+}
+.select2-results__options{
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+}

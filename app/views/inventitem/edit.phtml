@@ -1,0 +1,32 @@
+
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("inventitem/save") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("inventitem/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Item
+    <small class="on-right">Ubah Item</small>
+</h1>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="KodeItem">Kode Item</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeItem", "disabled" => "disabled")) ?>
+            </div>
+
+            <label for="NamaItem">Nama Item</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("NamaItem", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->hiddenField("KodeItem") ?>
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>

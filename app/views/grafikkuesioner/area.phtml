@@ -1,0 +1,64 @@
+<html>
+<body>
+<?php
+    foreach($result as $list){
+        $KodeCabang[] = $list->KodeCabang;
+        $NamaCabang[] = $list->NamaCabang;
+        $Bobot[] = (float) $list->TotalBobot;
+    }
+     
+?>
+
+<?php
+    foreach($result2 as $list2){
+        $KodeCabang2[] = $list2->KodeCabang;
+        $Bobot2[] = (float) $list2->TotalBobot;
+    }
+     
+?>
+
+
+<br>
+
+<div class="grid fluid">
+<div id="container3"></div>
+</div>
+
+<script type="text/javascript">
+$(function () { 
+    var data = {"name":"Angket 1","data":<?php echo json_encode($Bobot);?>};
+    var data2 = {"name":"Angket 2","data":<?php echo json_encode($Bobot2);?>};
+    var categories = <?php echo json_encode($KodeCabang);?>;
+    var categories2 = <?php echo json_encode($KodeCabang2);?>;
+    chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container3',
+            type: 'column'
+        },
+        title: {
+            text: 'Angket AM Per-Area'
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            title: {
+                text: 'Point'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+             }]
+        },
+        tooltip: {
+             formatter: function() {
+                 return 'The value for <b>' + this.x + '</b> is <b>' + Highcharts.numberFormat(this.y,0) + '</b>, in '+ this.series.name;
+             }
+          },
+        series: [data,data2]
+    });
+});
+        </script>
+  </body>
+</html>

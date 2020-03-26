@@ -1,0 +1,32 @@
+<?php echo $this->getContent() ?>
+
+<?php echo $this->tag->form(array("inventstock/search", "autocomplete" => "off")) ?>
+
+<div align="left">
+    <h1>Cari Stok Barang</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+            <label for="ItemId">Nama Barang</label>
+            <div class="input-control select" data-role="input-control">
+                <?php echo $this->tag->select(array("ItemId", $itemid, "using" => array("KodeItem", "NamaItem"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+            <label for="FromDate">Dari Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-date="<?php echo date('Y-m-d'); ?>" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("FromDate")) ?>
+            </div>
+            <label for="ToDate">Sampai Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-date="<?php echo date('Y-m-d'); ?>" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("ToDate")) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

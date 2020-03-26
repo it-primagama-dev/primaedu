@@ -1,0 +1,172 @@
+
+<?php echo $this->getContent(); ?> 
+
+<h1>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/invalid", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Data Pengiriman Tidak Valid
+    <small class="on-right">Detail Pengiriman</small>
+</h1>
+
+<?php echo $this->tag->form(array("deliveryreqless/editQty", "autocomplete" => "off")) ?>
+
+<script type="text/javascript">
+    function deleteList(id){
+        document.getElementById("item"+id).innerHTML="";
+    }
+</script>
+ 
+<table class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Kode Barang</th>
+            <th>Total Order</th>
+            <th>Sisa Kirim SB</th>
+            <th>Sisa Kirim SE1</th>
+            <th>Sisa Kirim SE2</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+    if(isset($page)){
+        if($page->items != null){
+            $i=1;
+            if(isset($_GET['page'])){
+                if(intval($_GET['page']) > 1) $i += (intval($_GET['page'])-1)*10;
+            }
+        foreach ($page->items as $purchreqline) {
+                    ?>
+        <tr>
+            <td align="right">
+                <label for="PurchReqId"><?php echo $i.".";?></label><?php $i++;?>
+            </td>
+            <td align="left">
+            <?php echo $purchreqline->ItemId; ?>
+			<?php echo $this->tag->hiddenField(array("ItemId[$i]","value"=>$purchreqline->ItemId, "size" => 30)) ?>
+			<?php echo $this->tag->hiddenField(array("Deliveryreqheaderid[]","value"=>$purchreqline->Deliveryreqheader, "size" => 30)) ?>
+			<?php echo $this->tag->hiddenField(array("Purchreqline[]","value"=>$purchreqline->RecId, "size" => 30)) ?></td>
+		
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->Qty|number_format(0,',','.'); ?>
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->Qty-$purchreqline->QtyRemaining; ?>
+                <input type="text" id="qtysb[]"  value="<?php echo $purchreqline->Qty-$purchreqline->QtyRemaining; ?>" hidden/>
+            </td>
+
+
+            <?php if($purchreqline->ItemId == 'PB 12 SMK ') { ?>
+            <td align="left">
+            -
+            </td>
+            <td align="left">
+            -
+            </td>
+<!-- || $purchreqline->ItemId != 'PB 8 SMP KURNAS' || $purchreqline->ItemId != 'PB 9 SMP KURNAS'-->
+            <?php } else if($purchreqline->ItemId == 'PB 7 SMP KURNAS'|| $purchreqline->ItemId == 'PB 8 SMP KURNAS' || $purchreqline->ItemId == 'PB 9 SMP KURNAS') { ?>
+
+            <td align="left">
+                <?php echo $purchreqline->Qty-$purchreqline->QtySE1; ?>
+                <input type="text" id="qtyse1"  value="<?php echo $purchreqline->Qty-$purchreqline->QtySE1; ?>" hidden/>
+            </td>
+            <td align="left">
+            -
+            </td>
+
+            <?php } else { ?>
+
+            <td align="left">
+                <?php echo $purchreqline->Qty-$purchreqline->QtySE1; ?>
+                <input type="text" id="qtyse1"  value="<?php echo $purchreqline->Qty-$purchreqline->QtySE1; ?>" hidden/>
+            </td>
+            <td align="left">
+                <?php echo $purchreqline->Qty-$purchreqline->QtySE2; ?>
+                <input type="text" id="qtyse2"  value="<?php echo $purchreqline->Qty-$purchreqline->QtySE2; ?>" hidden/>
+            </td>
+
+            <?php } ?>
+ 
+           <?php 
+           if ($purchreqline->Qty-$purchreqline->QtyRemaining <= 0 ){
+                $readonly="readonly";
+                }
+                else{
+                $readonly="";
+                } 
+                ?>
+           <?php 
+           if ($purchreqline->Qty-$purchreqline->QtySE1 <= 0 || $purchreqline->ItemId == 'PB 12 SMK ' ){
+                $readonly1="readonly";
+                }
+                else{
+                $readonly1="";
+                } 
+                ?>
+           <?php 
+           if ($purchreqline->Qty-$purchreqline->QtySE2 <= 0 || $purchreqline->ItemId == 'PB 12 SMK ' ){
+                $readonly2="readonly";
+                }
+                else{
+                $readonly2="";
+                } 
+                ?>
+
+
+            
+	
+        </tr>
+        <?php }
+        } 
+        }
+        else 
+        {
+        ?>
+            <tr style="text-align:center;">
+                <td colspan="4">- No Data -</td>
+            </tr>
+        <?php
+        }
+        ?>
+    <tr style="text-align:right;background:#FFF;">
+                <td colspan="10"><?php echo $this->tag->submitButton("Post") ?></td>
+            </tr>
+    </tbody>
+</table>
+
+<div class="place-left">
+    <?php echo 'halaman ' . $page->current . " dari " . $page->total_pages ?>
+</div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("deliveryreqless/edit/$purchreqlineRecId", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/edit/".$purchreqlineRecId."?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/edit/".$purchreqlineRecId."?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("deliveryreqless/edit/".$purchreqlineRecId."?page=" . $page->last, "Last", "class" => "button")) ?>
+
+</div>
+</form> 
+<script type="text/javascript">
+       /**function qty(a) { 
+            //var myValues = new Array();
+            var qtysb2 = document.getElementById('qtysb[]');
+            var qtysb = $("input[name='qtysb[]']")
+              .map(function(){return $(this).val();}).get();
+       //     var array_keys = new Array();
+        //    var array_values = new Array();
+
+        //    for (var key in qtysb) {
+        //        array_keys.push(key);
+         //       array_values.push(qtysb[key]);
+        //    }
+
+            alert(qtysb.value);
+            if (a.value > qtysb.value ){
+            alert("Jumlah buku yang diinput melebihi sisa order !!!");
+            }
+            else{
+
+            }
+
+        }
+</script>

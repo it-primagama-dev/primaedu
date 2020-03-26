@@ -1,0 +1,43 @@
+
+        <?php foreach ($page->items as $order) { ?>
+                <?php if ($order->TotalOrder >= 6) { ?>
+    <marquee scrollamount="15"><h3><left><font color="red">Jumlah order anda sudah <?php echo $order->TotalOrder ?> kali untuk Tahun Ajaran 2017/2018, untuk order selanjutnya akan dikenakan biaya ongkos kirim. Terima kasih </font></left></h3></marquee>
+                <?php } else {?>
+    <marquee scrollamount="15"><h3><left><font color="red">Ini adalah Order Ke 
+    - <?php echo $order->TotalOrder + 1 ?> untuk Tahun Ajaran 2017/2018. </font></left></h3></marquee>
+        <?php }} ?>
+<?php echo $this->tag->form("purchreqheader/create") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("purchreqheader/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Pembelian
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="PurchReqName">Deskripsi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+            </div>
+
+            <label for="Requester">Requester</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Requester", "size" => 30)) ?>
+            </div>
+
+            <label for="PurchReqDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("PurchReqDate", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+<font color="red"><strong>*Pastikan data alamat cabang di PrimaEdu sudah ter-update, untuk menghindari resiko salah kirim.</strong></font>
+</form>

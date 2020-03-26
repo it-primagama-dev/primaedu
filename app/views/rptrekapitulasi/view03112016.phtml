@@ -1,0 +1,181 @@
+<?php
+ use Phalcon\Tag; ?>
+ <?php echo $this->getContent(); ?>
+
+<style type="text/css">
+    @media print{@page {size: A4 landscape}}
+</style>
+<table class="tablePrint" style="width:100%;">
+    <tr>
+        <td colspan="7">
+            <table style="width:100%;">
+                <tr>
+                     <td align="center"><?php echo $rpt_img;?></td>
+                    <td align="center" width="75%">
+                        <h2><u><?php echo $rpt_title; ?></u></h2>
+						
+                    </td>
+                    <td width="20%" align="right">
+                        <a href="#" id="downloadBtn" class="btn btn-primary pull-right">Download</a>
+                       <a href="javascript::void();" onclick="window.print();" id="printLink" class="btn btn-success pull-right">Print</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h3 style="margin: 4px 0">Area : <?php echo $rpt_area;?>, Cabang : <?php echo $rpt_cabang; ?></h3>
+                    </td>
+                    <td>
+                        <h3 class="text-right" style="margin:4px 0">&nbsp;</h3>
+                    </td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7"><hr color="#000000"/></td>
+    </tr>
+</table>
+<table class="table bordered hovered table2excel" style="table-layout: fixed; border-collapse: collapse">
+    <thead>
+        <tr>
+            <th width="40px">#</th>
+			<th width='95'>Kode Area</th>
+            <th width='125'>Nama Area</th>
+		    <th width='95'>Total Cabang</th>
+		    <th width='98'>Cabang Aktif</th>
+		    <th width='95'>Cabang Non</th>
+		    <th width='120'>Cabang Order Buku</th>
+		    <th width='95'>Total Siswa</th>
+            <th width='120'>Total Biaya Bimbingan</th>
+		    <th width='120'>Piutang Siswa</th>
+		    <th width='120'>Pembayaran BCA</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($result as $list) { 
+
+        $datefrom = $this->request->getPost('DateFrom', 'int') ? : date('Y-m-d');
+        $dateto   = $this->request->getPost('DateTo', 'int') ? : date('Y-m-d');
+		
+	 $date = $this->request->getPost('Date', 'int') ? : date('Y-m-d');
+
+?>
+            <tr>
+	    	     <td></td>
+	    	     <td align='center'><?php echo $list->KodeAreaCabang; ?></td>
+	    	     <td align='center'><?php echo $list->NamaAreaCabang; ?></td>
+	    	     <td align='center'>
+		 		<?php	
+					$sqlcab = "SELECT count(RecID) as total FROM areacabang WHERE Area='$list->KodeAreaCabang'";
+					$cab 	=  $this->db->query($sqlcab);
+				  while($rcab=$cab->fetchArray()){
+					  echo $rcab['total'];
+				  	}		
+				 ?>
+
+				 </td>
+	    	    <td align='center'>
+				<?php	
+					$sqlcabakt = "SELECT count(RecID) as total FROM areacabang WHERE Aktif = 1 AND Area='$list->KodeAreaCabang'";
+					$cabakt 	=  $this->db->query($sqlcabakt);
+				  while($rcabakt=$cabakt->fetchArray()){
+					  echo $rcabakt['total'];
+				  	}		
+				 ?>
+				 </td>
+	    	    <td align='center'>
+				<?php	
+					$sqlcabnon  = "SELECT count(RecID) as total FROM areacabang WHERE Aktif <> 1 AND Area='$list->KodeAreaCabang'";
+					$cabnon 	=  $this->db->query($sqlcabnon);
+				  while($rcabnon=$cabnon->fetchArray()){
+					  echo $rcabnon['total'];
+				  	}		
+				 ?>
+				 </td>
+	    	        <td align='center'>
+		 		<?php	
+				   $sqlorder = "SELECT COUNT(*) as totalbuku FROM (SELECT a.KodeAreaCabang FROM purchreqheader ph
+								JOIN areacabang a on ph.Cabang = a.RecID
+								JOIN areacabang c on c.KodeAreaCabang = a.Area
+								where c.KodeAreaCabang ='$list->KodeAreaCabang'
+								group by a.KodeAreaCabang) AS Total";
+					$order 	=  $this->db->query($sqlorder);
+				  while($rorder=$order->fetchArray()){
+					  echo $rorder['totalbuku'];
+				  	}		
+				 ?>
+
+				 </td>
+	    	    <td align='center'>
+				<?php	
+		$sqlsiswa  = "select count(c.Area) as totalsiswa from siswa s join areacabang c on c.RecID = s.Cabang 
+					  where c.Area ='$list->KodeAreaCabang'";
+					$siswa 	=  $this->db->query($sqlsiswa);
+				  while($rsiswa=$siswa->fetchArray()){
+					  echo $rsiswa['totalsiswa'];
+				  	}		
+				 ?>
+				 </td>
+	    	    <td align='right'>
+						<?php	
+				 $sqlbimbingan = "SELECT  a.KodeAreaCabang,a.NamaAreaCabang
+								,SUM(CASE WHEN pd.PembayaranUntuk = 'Bimbingan' THEN CAST(pd.Jumlah as money) END) AS Bimbingan
+								FROM areacabang a
+								JOIN areacabang c ON a.KodeAreaCabang = c.Area
+								JOIN siswa s ON c.RecID = s.Cabang
+								JOIN programsiswa ps ON s.RecID = ps.Siswa
+								JOIN pembayaran pb ON ps.RecID = pb.ProgramSiswa
+								JOIN pembayarandetail pd ON pb.RecID = pd.Pembayaran
+								Where a.KodeAreaCabang='$list->KodeAreaCabang'
+								Group BY a.KodeAreaCabang,a.NamaAreaCabang";
+					 $bimbingan   = $this->db->query($sqlbimbingan);
+				  while($rbimbingan=$bimbingan->fetchArray()){
+					  echo $rbimbingan['Bimbingan'];
+				  	}		
+				 ?>
+
+				 </td>
+
+	    	       <td align='right'>
+			<?php	
+				 $sqlpiutang = "SELECT SUM(pb.JumlahTotal-pd.Jumlah)-SUM(tx.Nominal) as piutang  FROM pembayarandetail pd
+								JOIN pembayaran pb ON pb.RecID = pd.Pembayaran
+								JOIN  transaksibank tx ON tx.NoReferensi = pd.NoReferensi
+								join areacabang a on a.KodeAreaCabang = tx.KodeCabang
+								join areacabang c on c.KodeAreaCabang = a.Area
+								where c.KodeAreaCabang='$list->KodeAreaCabang'";
+					 $piutang   = $this->db->query($sqlpiutang);
+				  while($rpiutang=$piutang->fetchArray()){
+					  echo $rpiutang['piutang'];
+				  	}		
+				 ?>
+
+				 </td>
+	    	       <td align='right'>
+				<?php	
+					$sqlbca  = "select sum(tb.Nominal) as total from transaksibank tb
+								join areacabang a on a.KodeAreaCabang = tb.KodeCabang
+								join areacabang c on c.KodeAreaCabang = a.Area
+								where c.KodeAreaCabang='$list->KodeAreaCabang'";
+					 $bca   = $this->db->query($sqlbca);
+				  while($rbca=$bca->fetchArray()){
+					  echo $rbca['total'];
+				  	}
+							
+				 ?>
+				 </td>
+            </tr>
+<?php } ?>
+    </tbody>
+</table>
+
+
+<script>
+    $('#downloadBtn').on('click', function () {
+        $(".table2excel").table2excel({
+            exclude: ".noExl",
+            name: "Primaedu",
+            filename: "<?php echo $rpt_title;?>"
+        });
+    });
+</script>

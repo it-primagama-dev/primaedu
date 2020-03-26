@@ -1,0 +1,43 @@
+
+<?php echo $this->tag->form(array("scheduleheader/create", "enctype" => "multipart/form-data")) ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("/public/files/template_file/template_jadwal.xlsx", 'Unduh File Excel<i class="icon-plus on-right smaller"></i>')); ?>
+    </small>
+
+    <?php echo $this->tag->linkTo(array("scheduleheader", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Jadwal
+    <small class="on-right">Tambah Baru</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <label for="Program">Program</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("Program", $program, "using" => array("RecID", "NamaProgram"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <label for="excel">File Excel</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->fileField(array("excel")) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form> 

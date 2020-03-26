@@ -1,0 +1,59 @@
+<?php
+
+ use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Pengeluaran Biaya
+
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("cashinout/tambah/", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<table class="table bordered striped hovered" >
+    <thead>
+        <tr>
+            <th>Grup Pengeluaran</th>
+            <th>Tipe Pengeluaran</th>
+            <th>Description</th>
+            <th>Tanggal</th>
+            <th>Jumlah</th>
+            <th>Tahun Ajaran</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($page->items as $pengeluaranbiaya) { ?>
+            <tr>
+                <td><?php echo $pengeluaranbiaya->getGrupPengeluaran(); ?></td>
+                <td><?php echo $pengeluaranbiaya->getTipePengeluaran() ?></td>
+                <td><?php echo $pengeluaranbiaya->Description ?></td>
+                <td><?php echo $pengeluaranbiaya->Tanggal ?></td>
+                <td class="idrCurrency"><?php echo $pengeluaranbiaya->Jumlah ?></td>
+                <?php if($pengeluaranbiaya->TahunAjaran == 1) { ?>
+                <td> 2015 / 2016 </td>
+                 <?php } else if ($pengeluaranbiaya->TahunAjaran == 2){ ?>
+                <td> 2016 / 2017</td>
+                 <?php } else if ($pengeluaranbiaya->TahunAjaran == 3){ ?>
+                <td> 2017 / 2018</td>
+                <?php } else {?>
+                <td> - </td>
+                <?php } ?>
+           
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+
+<div class="place-left"><?php echo 'halaman ' . $page->current, " dari ", $page->total_pages ?></div>
+
+<div class="place-right">
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/search", "First", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/search?page=" . $page->before, "Previous", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/search?page=" . $page->next, "Next", "class" => "button")) ?>
+    <?php echo $this->tag->linkTo(array("pengeluaranbiaya/search?page=" . $page->last, "Last", "class" => "button")) ?>
+</div>

@@ -1,0 +1,59 @@
+
+{{ content() }}
+
+<h1>
+    {{ link_to("quetioner/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>') }}
+    Stok Barang
+    <small>Pencarian</small>
+	<small class="on-right">{{ areacabang.KodeAreaCabang }}</small>
+</h1>
+</br>
+<h1><small>Quetioner</small></h1>
+<table class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th width="5%">#</th>
+            <th width="15%">Pertanyaan</th>
+			<th width="15%">Jawaban</th>
+			<th width="5%">Bobot</th>
+ 
+         </tr>
+    </thead>
+    <tbody>
+     {% if hasil is not empty %}
+	 {% for list1 in hasil %}
+		<tr>
+			<td align="right">{{ loop.index }}</td>
+			<td align="left">{{ list1.pertanyaan }}</td>
+			<td align="left">{{ list1.Pilihan }}</td>
+			<td align="left">{{ list1.Bobot }} </td>
+		{% endfor %}
+		{% endif %}
+		</tr>
+						
+    </tbody>
+</table>
+
+<h1><small>Essay</small></h1>
+<table class="table bordered striped hovered">
+    <thead>
+        <tr>
+            <th width="5%">#</th>
+            <th width="15%">Pertanyaan</th>
+			<th width="15%">Jawaban</th>
+ 
+         </tr>
+    </thead>
+    <tbody>
+     {% if result is not empty %}
+	 {% for list in result %}
+		<tr>
+			<td align="right">{{ loop.index }}</td>
+			<td align="left">{{ list.pertanyaan }}</td>
+			<td align="left">{{list.jawaban}} </td>
+		{% endfor %}
+		{% endif %}
+		</tr>   
+						
+    </tbody>
+</table>

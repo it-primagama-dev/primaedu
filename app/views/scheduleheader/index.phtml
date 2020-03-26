@@ -1,0 +1,43 @@
+
+<?php echo $this->getContent() ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("scheduleheader/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<?php echo $this->tag->form(array("scheduleheader/search", "autocomplete" => "off")) ?>
+
+<div align="left">
+    <h1>Cari Jadwal</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="KodeJadwal">Kode Jadwal</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeJadwal", "size" => 30)) ?>
+            </div>
+
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <label for="Program">Program</label>
+            <div class="input-control select" data-role="input-control">
+                <?php
+                echo $this->tag->select(array("Program", $program, "using" => array("RecID", "NamaProgram"),
+                    'useEmpty' => true, 'emptyText' => '---', 'emptyValue' => ''))
+                ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

@@ -1,0 +1,17 @@
+1RETENSI         : RA.1B/6B/10T                LAPORAN TRANSAKSI VIA E-BANKING & COUNTER                         FREKWENSI :   HARIAN
+ LAPORAN         : R-5401                             UNTUK PERUSAHAAN KERJASAMA                                 TANGGAL   : 21/04/15
+ CABANG          : 0000458-KCP BURSA EFEK JKT                                                                    HALAMAN   :        5
+ NAMA PERUSAHAAN : 01782-PT PRIMA EDU PENDAMPING BELAJA                                                                              
+ ====================================================================================================================================
+ NO.   NO.PELANGGAN/NO.TXN   NAMA PELANGGAN         NILAI TRANSAKSI      TGL. TXN    WAKTU   LOKASI     KETERANGAN1     KETERANGAN2  
+ ====================================================================================================================================
+                                                                                                                                     
+ SUB-COMP 00000                                                                                                                      
+     1  01970000005         PRIMAGAMA         IDR            225,000.00  21/04/15  12:39:06  24921  CCA    00000000  00000000000000  
+      SUB TOTAL TRANSAKSI    IDR        :       1                                                                                    
+      SUB TOTAL NILAI TRANSAKSI         :  IDR          225,000.00                                                                   
+                                                                                                                                     
+      TOTAL TRANSAKSI        IDR        :       1                                                                                    
+      TOTAL NILAI TRANSAKSI             :  IDR          225,000.00                                                                   
+                                                                                                                                     
+

@@ -1,0 +1,34 @@
+
+<?php echo $this->getContent() ?>
+
+<?php echo $this->tag->form(array("pengeluarantipe/search", "autocomplete" => "off")) ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("pengeluarantipe/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<div align="left">
+    <h1>Cari Tipe Pengeluaran</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="KodePengeluaran">Kode Pengeluaran</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodePengeluaran", "size" => 30)) ?>
+            </div>
+            <label for="Description">Description</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Description", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

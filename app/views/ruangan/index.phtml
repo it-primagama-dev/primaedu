@@ -1,0 +1,40 @@
+
+<?php echo $this->getContent() ?>
+
+<?php echo $this->tag->form(array("ruangan/search", "autocomplete" => "off")) ?>
+
+<h1>
+    <small class="place-right">
+        <?php echo $this->tag->linkTo(array("ruangan/new", 'Tambah Baru<i class="icon-plus on-right smaller"></i>')); ?>    
+    </small>
+</h1>
+
+<div align="left">
+    <h1>Cari Ruangan</h1>
+</div>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+            
+            <label for="KodeRuangan">Kode Ruangan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("KodeRuangan", "size" => 30)) ?>
+            </div>
+            
+            <label for="NamaRuangan">Nama Ruangan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("NamaRuangan", "size" => 30)) ?>
+            </div>
+            
+            <label for="Kapasitas">Kapasitas</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Kapasitas", "size" => 30)) ?>
+            </div>
+
+            <?php echo $this->tag->submitButton("Cari") ?>
+        </div>
+    </div>
+</div>
+
+</form>

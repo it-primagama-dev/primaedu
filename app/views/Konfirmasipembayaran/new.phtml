@@ -1,0 +1,109 @@
+
+<?php echo $this->tag->form("Konfirmasipembayaran/create") ?>
+
+<h1>
+    <?php echo $this->tag->linkTo(array("Konfirmasipembayaran/index", '<i class="icon-arrow-left-3 fg-darker smaller"></i>')); ?>
+    Konfirmasi Pembayaran
+    <small class="on-right">Input detail pembayaran</small>
+</h1>
+
+<?php echo $this->getContent(); ?>
+
+<div class="grid fluid">
+    <div class="row">
+        <div class="span6">
+
+            <label for="PurchReqName">Deskripsi</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("PurchReqName", "size" => 30)) ?>
+            </div>
+			<?php
+			$test = $this->modelsManager->createBuilder()
+                        ->columns("PurchReqId")
+                        ->from("Konfirmasipembayaran")
+                        ->where("Status='Approved'")
+                        ->getQuery()
+                        ->execute()
+                        ->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+						
+						
+			?>
+            
+            <label for="RecId">Nomor Pembelian</label><fonth size="2">*pastikan sesuai dengan nomor pemesanan*</font></label>
+              <div class="input-control text" data-role="input-control">
+                   <select name="PurchReqId" id="PurchReqId" >
+					 <?php 
+							foreach ($NoPR as $coba=>$val){
+								$pr=$val[PurchReqId];
+									$test = $this->modelsManager->createBuilder()
+									->columns("PurchReqId")
+									->from("Konfirmasipembayaran")
+									->where("Status='Approved' AND PurchReqId='$pr'")
+									->getQuery()
+									->execute()
+									->setHydrateMode(\Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS);
+									if (count($test)==null){
+										?>
+													
+										
+											<option value="<?php echo $pr; ?>"> <?php echo $pr ; ?></option>
+										
+								
+									<?php	}}?>
+											
+												
+									
+								
+					</select>
+				 </div>
+
+		
+			<table  width="400px">
+			<tr><td >
+			 <label for="Bank">Nama Bank
+            <div class="input-control text" data-role="input-control">
+                <select name="bank" id="Bank" onchange="myFunction()">
+					<option value="BCA"> BCA</option>
+					<option value="Mandiri"> MANDIRI</option>
+					<option value="">-other-</option>
+					
+				</select>
+            </div>
+			</td>
+			<td id="demo" hidden> 
+			
+				<label for="Bank">Input Nama Bank</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Bank", "size" => 30)) ?>
+            </div>
+			
+			</td></tr>
+			</table>
+			
+                   <label for="PurchReqDate">Tanggal</label>
+            <div class="input-control text" data-role="datepicker" data-effect="slide" data-format="yyyy-mm-dd">
+                <?php echo $this->tag->textField(array("PurchReqDate", "size" => 30)) ?>
+            </div>
+
+
+            <label for="Nominal">Jumlah yang di bayarkan</label>
+            <div class="input-control text" data-role="input-control">
+                <?php echo $this->tag->textField(array("Nominal", "size" => 30,"class" => "idrCurrency")) ?>
+            </div>
+
+
+            <?php echo $this->tag->submitButton("Simpan") ?>
+        </div>
+    </div>
+</div>
+
+</form>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("Bank").value;
+	if(x==""){
+		 document.getElementById("demo").style.display = "block";
+	}
+}
+</script>
