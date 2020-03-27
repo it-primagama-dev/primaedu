@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li style="padding-left:25px;color:#FFFFFF;padding-top: 17px;"><p>Form Data Tentor / iSmart / IBM</p></li>
+					<li style="padding-left:25px;color:#FFFFFF;padding-top: 17px;"><p>Form Isian Data iSmart</p></li>
 				</ul>
 
 			</div><!--/.nav-collapse -->
