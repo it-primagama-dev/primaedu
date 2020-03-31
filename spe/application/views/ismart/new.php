@@ -178,12 +178,6 @@ defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 								                <input type="text" id="Jurusan" name="Jurusan" class="form-control" placeholder="Wajib di isi">
 								            </div>
 							            </div>
-							            <div class="form-group">
-							                <label class="col-md-4">Jurusan 2</label>
-								            <div class="col-lg-8">
-								                <input type="text" id="Jurusan" name="Jurusan" class="form-control" placeholder="Wajib di isi">
-								            </div>
-							            </div>
 							        </div>
 							        <div class="col-lg-4">
 							            <div class="form-group">
@@ -206,12 +200,6 @@ defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 							            </div>
 							            <div class="form-group">
 							                <label class="col-md-4">Bidang Studi Tambahan</label>
-								            <div class="col-lg-8">
-								                <textarea rows="3" class="form-control" id="BidangStudi2" name="BidangStudi2" placeholder="Isi jika Anda memiliki lebih dari 1 Bidang Studi. (Cth : Matematika, Fisika, dll)"></textarea>
-								            </div>
-							            </div>
-							            <div class="form-group">
-							                <label class="col-md-4">Bidang Studi Tambahan Baru</label>
 								            <div class="col-lg-8">
 								                <textarea rows="3" class="form-control" id="BidangStudi2" name="BidangStudi2" placeholder="Isi jika Anda memiliki lebih dari 1 Bidang Studi. (Cth : Matematika, Fisika, dll)"></textarea>
 								            </div>
