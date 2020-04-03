@@ -24,14 +24,18 @@
       footer {
         font-family: 'Viga';
       }
+
+      .btn {
+        background-image: url('<?php echo base_url(); ?>assets/images/img/btn.jpg');
+      }
     </style>
-    <title>Primagama Online Course</title>
+    <title>Primagama</title>
   </head>
   <body class="mt-5">
     <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
     <div class="container">
-      <a class="navbar-brand" href="#">Primagama Online Course</a>
+      <a class="navbar-brand" href="#">Primagama - Terdepan Dalam Prestasi</a>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button> -->
@@ -47,24 +51,52 @@
     </nav>
 
     <!-- Jumbotron -->
-    <div class="jumbotron jumbotron-fluid" style="background-image: url('<?php echo base_url(); ?>assets/images/img/BG.jpg')">
+    <!-- <div class="jumbotron jumbotron-fluid" style="background-image: url('<?php echo base_url(); ?>assets/images/img/BG.jpg')">
       <div class="container text-center">
         <img src="<?php echo base_url(); ?>assets/images/img/Logo.jpg" class="rounded-circle img-thumbnail" width="35%" >
-        <!-- <h1 class="display-4">Primagama Online Course</h1> -->
-        <!-- <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+        <h1 class="display-4">Primagama Online Course</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
       </div>
+    </div> -->
+    <section id="slider" class="slider mb-4">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide">
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/2.jpg" alt="Second slide">
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/3.jpg" alt="Third slide">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
+    </section>
 
     <section id="about" class="about">
     <div class="container">
       <div class="row mb-4">
         <div class="col text-center">
-          <h2>Apa itu Primagama Online Course ?</h2>
+          <h2>Belajar Tetap Efektif di tengah Pandemic Covid-19</h2>
         </div>
       </div>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mb-4">
         <div class="col-md-5 text-justify">
-          <p>Bimbingan belajar online Primagama. dst</p>
+          <p>Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. </p>
         </div>
         <div class="col-md-5 text-justify">
           <p>
@@ -96,16 +128,16 @@
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/1.png" alt="Card image cap">
             <div class="card-body text-center">
-              <h5 class="card-title text-left">SD - Private</h5>
+              <h5 class="card-title text-left">Privat One On One</h5>
               <p class="card-text">
                 <ul>
-                  <li class="text-left">Rp 500.000,00</li>
+                  <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
                   <li class="text-left">Tematik</li>
                   <li class="text-left">Kelas Private (1 Siswa)</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
+              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
             </div>
           </div>
         </div>
@@ -113,16 +145,16 @@
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/2.png" alt="Card image cap">
             <div class="card-body text-center">
-              <h5 class="card-title text-left">SD - Kelompok 3</h5>
+              <h5 class="card-title text-left">Kelompok 2 Siswa</h5>
               <p class="card-text">
                 <ul>
-                  <li class="text-left">Rp 400.000,00</li>
+                  <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
                   <li class="text-left">Tematik</li>
                   <li class="text-left">Kelompok 3 Siswa</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
+              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
             </div>
           </div>
         </div>
@@ -130,175 +162,16 @@
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/3.png" alt="Card image cap">
             <div class="card-body text-center">
-              <h5 class="card-title text-left">SD - Kelompok 5</h5>
+              <h5 class="card-title text-left">Kelompok 3 Siswa</h5>
               <p class="card-text">
                 <ul>
-                  <li class="text-left">Rp 350.000,00</li>
+                  <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
                   <li class="text-left">Tematik</li>
                   <li class="text-left">Kelompok 5 Siswa</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-4">
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/4.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMP - Private</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 550.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelas Private (1 Siswa)</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/5.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMP - Kelompok 3</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 450.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 3 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/6.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMP Kelompok 5</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 400.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 5 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-4">
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/4.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPA - Private</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 600.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelas Private (1 Siswa)</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/5.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPA - Kelompok 3</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 500.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 3 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/6.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPA Kelompok 5</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 450.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 5 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-4">
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/4.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPS - Private</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 600.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelas Private (1 Siswa)</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/5.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPS - Kelompok 3</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 500.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 3 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/6.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">SMA IPS Kelompok 5</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">Rp 450.000,00</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">1 Paket 1 Mapel</li>
-                  <li class="text-left">Kelompok 5 Siswa</li>
-                </ul>
-              </p>
-              <a href="#" class="btn btn-primary">Beli Paket Ini</a>
+              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
             </div>
           </div>
         </div>
@@ -310,23 +183,23 @@
       <div class="container">
         <div class="row pt-4 mb-4">
           <div class="col text-center">
-            <h2>Hubungi Kami</h2>
+            <h2>Dapatkan Ebook Primagama</h2>
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-lg-4">
+          <div class="col-lg-5">
             <div class="card text-white bg-primary mb-3">
-              <div class="card-body">
-                <h5 class="card-title text-center">Kontak Kami</h5>
-                <p class="card-text text-justify">Jika ada hal yang ingin ditanyakan bisa hubungi kontak dibawah ini atau kirim pesan dari form yang tersedia.</p>
+              <div class="card-body" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
+                <h5 class="card-title text-center">Ebook Primagama</h5>
+                <p class="card-text text-justify">Dapatkan Ebook Primagama dengan cara isi form disamping dan Ebook akan dikirim ke Email.</p>
               </div>
             </div>
             <ul class="list-group">
-              <li class="list-group-item"><h3>Lokasi</h3></li>
-              <li class="list-group-item">PT Prima Edu Pendamping Belajar</li>
-              <li class="list-group-item">Distrik 8 Jakarta Selatan</li>
-              <li class="list-group-item">Telp. : 021 362817 ext : 786</li>
-              <li class="list-group-item">Email : helpdesk@primagama.co.id</li>
+              <li class="list-group-item text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')"><h3>Apa aja manfaatnya ?</h3></li>
+              <li class="list-group-item">Panduan belajar online dirumah</li>
+              <li class="list-group-item">Tetap produktif selama pandemic covid-19</li>
+              <li class="list-group-item">Pencegahan covid-19</li>
+              <li class="list-group-item">etc Video materi belajar (youtube channel Primagama)</li>
             </ul>
           </div>
           <div class="col-lg-6">
@@ -348,7 +221,7 @@
                 <textarea class="form-control" name="pesan" id="pesan" rows="3"></textarea>
               </div>
               <div class="form-group">
-                <button type="button" class="btn btn-primary">Kirim Pesan</button>
+                <button type="button" class="btn btn-primary" disabled="disabled">Kirim Ebook Ke Email</button>
               </div>
             </form>
           </div>
@@ -356,11 +229,11 @@
       </div>
     </section>
 
-    <footer class="bg-primary text-white">
+    <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
         <div class="row text-center pt-3">
           <div class="col">
-            <p>Copyright 2020 - Primagama</p>
+            <p>Copyright &copy; 2020 - Primagama</p>
           </div>
         </div>
       </div>
