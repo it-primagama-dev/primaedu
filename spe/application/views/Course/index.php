@@ -58,8 +58,8 @@
         <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
       </div>
     </div> -->
-    <section id="slider" class="slider mb-4">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <!-- <section id="slider" class="slider mb-4"> -->
+    <div id="carouselExampleIndicators" class="carousel slide mb-4" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -85,7 +85,7 @@
         <span class="sr-only">Next</span>
       </a>
     </div>
-    </section>
+   <!--  </section> -->
 
     <section id="about" class="about">
     <div class="container">
@@ -124,7 +124,7 @@
         </div>
       </div>
       <div class="row mb-4">
-        <div class="col-md">
+        <div class="col-md mb-3">
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/1.png" alt="Card image cap">
             <div class="card-body text-center">
@@ -141,7 +141,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md">
+        <div class="col-md mb-3">
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/2.png" alt="Card image cap">
             <div class="card-body text-center">
@@ -158,7 +158,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md">
+        <div class="col-md mb-3">
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/3.png" alt="Card image cap">
             <div class="card-body text-center">
@@ -187,7 +187,7 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-lg-5">
+          <div class="col-lg-5 mb-3">
             <div class="card text-white bg-primary mb-3">
               <div class="card-body" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
                 <h5 class="card-title text-center">Ebook Primagama</h5>
