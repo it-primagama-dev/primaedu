@@ -9,20 +9,22 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- fONTS -->
     <link href="https://fonts.googleapis.com/css2?family=Viga&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
     <!-- CSS-KU -->
     <style type="text/css">
       section {
         min-height: 300px;
-        font-family: 'Viga';
+        font-family: 'Raleway';
       }
 
       .navbar-brand {
-        font-family: 'Viga';
+        font-family: 'Raleway';
         font-size: 22px;
       }
 
       footer {
-        font-family: 'Viga';
+        font-family: 'Raleway';
       }
 
       .btn {
@@ -89,7 +91,7 @@
 
     <section id="about" class="about">
     <div class="container">
-      <div class="row mb-4">
+      <div class="row mb-4 pt-3">
         <div class="col text-center">
           <h2>Belajar Tetap Efektif di tengah Pandemic Covid-19</h2>
         </div>
@@ -99,8 +101,8 @@
           <p>Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. </p>
         </div>
         <div class="col-md-5 text-justify">
+          <p style="font-size: 19px;" class="text-center"><b><u>Dapat fasilitas apa aja ?</u></b></p>
           <p>
-            <b><u>Dapat fasilitas apa aja ?</u></b> <br>
             - Tanya jawab PR & tugas <br>
             - Pembahasan topik yang belum dikuasai <br>
             - Rangkuman hasil belajar  <br>
@@ -123,7 +125,7 @@
           <h2>Paket Program</h2>
         </div>
       </div>
-      <div class="row mb-4">
+      <div class="row">
         <div class="col-md mb-3">
           <div class="card">
             <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/1.png" alt="Card image cap">
@@ -133,7 +135,6 @@
                 <ul>
                   <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Tematik</li>
                   <li class="text-left">Kelas Private (1 Siswa)</li>
                 </ul>
               </p>
@@ -150,8 +151,7 @@
                 <ul>
                   <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Tematik</li>
-                  <li class="text-left">Kelompok 3 Siswa</li>
+                  <li class="text-left">Kelompok 2 Siswa</li>
                 </ul>
               </p>
               <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
@@ -167,8 +167,7 @@
                 <ul>
                   <li class="text-left">SD - SMP - SMA</li>
                   <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Tematik</li>
-                  <li class="text-left">Kelompok 5 Siswa</li>
+                  <li class="text-left">Kelompok 3 Siswa</li>
                 </ul>
               </p>
               <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
@@ -190,12 +189,12 @@
           <div class="col-lg-5 mb-3">
             <div class="card text-white bg-primary mb-3">
               <div class="card-body" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
-                <h5 class="card-title text-center">Ebook Primagama</h5>
+                <h4 class="card-title text-center">Ebook Primagama</h4>
                 <p class="card-text text-justify">Dapatkan Ebook Primagama dengan cara isi form disamping dan Ebook akan dikirim ke Email.</p>
               </div>
             </div>
             <ul class="list-group">
-              <li class="list-group-item text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')"><h3>Apa aja manfaatnya ?</h3></li>
+              <li class="list-group-item text-white text-center" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')"><h4>Apa aja manfaatnya ?</h4></li>
               <li class="list-group-item">Panduan belajar online dirumah</li>
               <li class="list-group-item">Tetap produktif selama pandemic covid-19</li>
               <li class="list-group-item">Pencegahan covid-19</li>
