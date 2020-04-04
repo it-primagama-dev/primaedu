@@ -61,17 +61,17 @@
       </div>
     </div> -->
     <!-- <section id="slider" class="slider mb-4"> -->
-    <div id="carouselExampleIndicators" class="carousel slide mb-5 pt-2" data-ride="carousel">
+    <div id="slide" class="carousel slide mb-4 pt-2" data-ride="carousel">
       <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#slide" data-slide-to="0" class="active"></li>
+        <li data-target="#slide" data-slide-to="1"></li>
+        <li data-target="#slide" data-slide-to="2"></li>
       </ol>
       <div class="carousel-inner">
-        <div class="carousel-item active"><!-- 
-          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide"> -->
-          <iframe width="560" height="469" class="d-block w-100" src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-          </iframe>
+        <div class="carousel-item active">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide">
+          <!-- <iframe width="560" height="469" class="d-block w-100" src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+          </iframe> -->
         </div>
         <div class="carousel-item">
           <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/2.jpg" alt="Second slide">
@@ -80,11 +80,11 @@
           <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/3.jpg" alt="Third slide">
         </div>
       </div>
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <a class="carousel-control-prev" href="#slide" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <a class="carousel-control-next" href="#slide" role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
@@ -100,10 +100,10 @@
       </div>
       <div class="row justify-content-center mb-4">
         <div class="col-md-5 text-justify">
-          <p>Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. </p>
+          <p>Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. </p>
         </div>
         <div class="col-md-5 text-justify">
-          <p style="font-size: 19px;" class="text-center"><b><u>Dapat fasilitas apa aja ?</u></b></p>
+          <p style="font-size: 19px;" class="text-left"><b><u>Dapat fasilitas apa aja ?</u></b></p>
           <p>
             - Tanya jawab PR & tugas <br>
             - Pembahasan topik yang belum dikuasai <br>
@@ -140,7 +140,7 @@
                   <li class="text-left">Kelas Private (1 Siswa)</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
+              <button class="btn btn-primary" onclick="detail(1)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@
                   <li class="text-left">Kelompok 2 Siswa</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
+              <button class="btn btn-primary" onclick="detail(2)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@
                   <li class="text-left">Kelompok 3 Siswa</li>
                 </ul>
               </p>
-              <a href="#" class="btn btn-primary">Lihat Paket Ini</a>
+              <button class="btn btn-primary" onclick="detail(3)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -210,19 +210,19 @@
       </div>
     </section>
 
-    <section id="kontak" class="kontak bg-light mb-5">
+    <section id="kontak" class="kontak bg-light">
       <div class="container">
         <div class="row pt-4 mb-4">
           <div class="col text-center">
             <h2>Dapatkan Ebook Primagama</h2>
           </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center pb-4">
           <div class="col-lg-5 mb-3">
             <div class="card text-white bg-primary mb-3">
               <div class="card-body" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
                 <h4 class="card-title text-center">Ebook Primagama</h4>
-                <p class="card-text text-justify">Dapatkan Ebook Primagama dengan cara isi form disamping dan Ebook akan dikirim ke Email.</p>
+                <p class="card-text text-justify">Dapatkan Ebook Primagama dengan cara isi form berikut dan Ebook akan dikirim ke Email.</p>
               </div>
             </div>
             <ul class="list-group">
@@ -247,12 +247,12 @@
                 <label for="telepon">Telepon</label>
                 <input type="text" class="form-control" id="telepon">
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="pesan">Pesan</label>
                 <textarea class="form-control" name="pesan" id="pesan" rows="3"></textarea>
-              </div>
+              </div> -->
               <div class="form-group">
-                <button type="button" class="btn btn-primary" disabled="disabled">Kirim Ebook Ke Email</button>
+                <button type="button" class="btn btn-primary" disabled="disabled">Dapatkan Ebook</button>
               </div>
             </form>
           </div>
@@ -264,7 +264,7 @@
       <div class="container">
         <div class="row text-center pt-3">
           <div class="col">
-            <p>Copyright &copy; 2020 - Primagama</p>
+            <p>Copyright &copy; 2020. PRIMAGAMA</p>
           </div>
         </div>
       </div>
