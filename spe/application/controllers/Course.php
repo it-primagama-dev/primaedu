@@ -17,5 +17,10 @@ class Course extends CI_Controller {
 	{
 		$this->load->view('Course/detail');
 	}
+	
+	public function checkout()
+	{
+		$this->load->view('Course/checkout');
+	}
 
 }
