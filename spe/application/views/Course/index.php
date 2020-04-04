@@ -289,13 +289,13 @@
                       <div class="card-body">
                         <p class="card-text mb-1">
                           <ul style="margin-left: -20px;">
-                            <li class="text-left">Kelas 4, 5, dan 6</li>
+                            <li class="text-left">Kelas 3, 4, 5, dan 6</li>
                             <li class="text-left">4x60 Menit</li>
                             <li class="text-left">Tematik</li>
                           </ul>
                         </p>
                         <h6 class="card-subtitle mb-3 text-muted">Rp. 500.000,00</h6>
-                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
                       </div>
                     </div>
                   </div>
@@ -312,7 +312,7 @@
                             <li class="text-left">Pilihan Mapel : Matematika, IPA, B.Indonesia</li>
                           </ul>
                         <h6 class="card-subtitle mb-3 text-muted">Rp. 550.000,00</h6>
-                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
                       </div>
                     </div>
                   </div>
@@ -329,7 +329,7 @@
                             <li class="text-left">Pilihan Mapel : Matematika, Kimia, Fisika, Biologi</li>
                           </ul>
                         <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
-                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
                       </div>
                     </div>
                   </div>
@@ -346,7 +346,7 @@
                             <li class="text-left">Pilihan Mapel : Matematika, Geografi, Ekonomi, Sosiologi</li>
                           </ul>
                         <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
-                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
                       </div>
                     </div>
                   </div>
@@ -379,7 +379,7 @@
     window.base_url = <?php echo json_encode(base_url()); ?>;
 </script>
 <script type="text/javascript">
-/*function redirectPost(url, data) {
+function redirectPost(url, data) {
     var form = document.createElement('form');
     document.body.appendChild(form);
     form.method = 'post';
@@ -394,9 +394,9 @@
     form.submit();
 }
 
-function detail(id) {
-  redirectPost(base_url+"Course/detail", {id:window.btoa(id),token:window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=")});
-}*/
+function checkout() {
+  redirectPost(base_url+"Course/checkout", {/*id:window.btoa(id),*/token:window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=")});
+}
 
 function detail(id) {
 
