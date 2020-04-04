@@ -61,15 +61,17 @@
       </div>
     </div> -->
     <!-- <section id="slider" class="slider mb-4"> -->
-    <div id="carouselExampleIndicators" class="carousel slide mb-4" data-ride="carousel">
+    <div id="carouselExampleIndicators" class="carousel slide mb-5 pt-2" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
       </ol>
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide">
+        <div class="carousel-item active"><!-- 
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide"> -->
+          <iframe width="560" height="469" class="d-block w-100" src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+          </iframe>
         </div>
         <div class="carousel-item">
           <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/2.jpg" alt="Second slide">
@@ -178,7 +180,37 @@
     </div>
     </section>
 
-    <section id="kontak" class="kontak mb-5">
+    <section class="youtube" id="youtube">
+      <div class="container">
+        <div class="row mb-4 pt-4">
+          <div class="col text-center"><h2>Dapatkan Video Pembelajaran Gratis</h2></div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-3 mb-4">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe src="https://www.youtube.com/embed/4cirA5X3BRE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe src="https://www.youtube.com/embed/2KBpGoC_EzM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe src="https://www.youtube.com/embed/VIhn2Bt630E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontak" class="kontak bg-light mb-5">
       <div class="container">
         <div class="row pt-4 mb-4">
           <div class="col text-center">
