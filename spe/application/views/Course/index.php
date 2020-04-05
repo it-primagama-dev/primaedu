@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Viga&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <script src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
     <!-- CSS-KU -->
     <style type="text/css">
       section {
@@ -27,8 +28,16 @@
         font-family: 'Raleway';
       }
 
-      .btn {
+      .btnbg {
         background-image: url('<?php echo base_url(); ?>assets/images/img/btn.jpg');
+      }
+
+      @media (min-width: 768px) {
+      .modal-xl {
+        width: 100%;
+        max-width:1200px;
+        padding-left: 85px;
+        padding-right: auto;
       }
     </style>
     <title>Primagama</title>
@@ -37,7 +46,7 @@
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
     <div class="container">
-      <a class="navbar-brand" href="#">Primagama - Terdepan Dalam Prestasi</a>
+      <a class="navbar-brand" href="javascript:void(0)">Primagama - Terdepan Dalam Prestasi</a>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button> -->
@@ -140,7 +149,7 @@
                   <li class="text-left">Kelas Private (1 Siswa)</li>
                 </ul>
               </p>
-              <button class="btn btn-primary" onclick="detail(1)">Lihat Paket Ini</button>
+              <button class="btn btn-primary btnbg" onClick="detail(1)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -156,7 +165,7 @@
                   <li class="text-left">Kelompok 2 Siswa</li>
                 </ul>
               </p>
-              <button class="btn btn-primary" onclick="detail(2)">Lihat Paket Ini</button>
+              <button class="btn btn-primary btnbg" onClick="detail(2)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -172,7 +181,7 @@
                   <li class="text-left">Kelompok 3 Siswa</li>
                 </ul>
               </p>
-              <button class="btn btn-primary" onclick="detail(3)">Lihat Paket Ini</button>
+              <button class="btn btn-primary btnbg" onClick="detail(3)">Lihat Paket Ini</button>
             </div>
           </div>
         </div>
@@ -252,13 +261,103 @@
                 <textarea class="form-control" name="pesan" id="pesan" rows="3"></textarea>
               </div> -->
               <div class="form-group">
-                <button type="button" class="btn btn-primary" disabled="disabled">Dapatkan Ebook</button>
+                <button type="button" class="btn btn-primary btnbg" disabled="disabled">Dapatkan Ebook</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade modal-xl" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg.jpg')">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+                <div class="row">
+                  <div class="col-md mb-3">
+                    <div class="card">
+                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-red.jpg')">
+                        <h5 class="card-title">Jenjang SD</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="card-text mb-1">
+                          <ul style="margin-left: -20px;">
+                            <li class="text-left">Kelas 4, 5, dan 6</li>
+                            <li class="text-left">4x60 Menit</li>
+                            <li class="text-left">Tematik</li>
+                          </ul>
+                        </p>
+                        <h6 class="card-subtitle mb-3 text-muted">Rp. 500.000,00</h6>
+                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md mb-3">
+                    <div class="card">
+                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-blue.jpg')">
+                        <h5 class="card-title">Jenjang SMP</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="card-text mb-1">
+                          <ul style="margin-left: -20px;">
+                            <li class="text-left">Kelas 7, 8, dan 9</li>
+                            <li class="text-left">4x60 Menit</li>
+                            <li class="text-left">Pilihan Mapel : Matematika, IPA, B.Indonesia</li>
+                          </ul>
+                        <h6 class="card-subtitle mb-3 text-muted">Rp. 550.000,00</h6>
+                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md mb-3">
+                    <div class="card">
+                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-grey.jpg')">
+                        <h5 class="card-title">Jenjang SMA IPA</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="card-text mb-1">
+                          <ul style="margin-left: -20px;">
+                            <li class="text-left">Kelas 10, 11, dan 12</li>
+                            <li class="text-left">4x60 Menit</li>
+                            <li class="text-left">Pilihan Mapel : Matematika, Kimia, Fisika, Biologi</li>
+                          </ul>
+                        <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
+                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md mb-3">
+                    <div class="card">
+                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-grey.jpg')">
+                        <h5 class="card-title">Jenjang SMA IPS</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="card-text mb-1">
+                          <ul style="margin-left: -20px;">
+                            <li class="text-left">Kelas 10, 11, dan 12</li>
+                            <li class="text-left">4x60 Menit</li>
+                            <li class="text-left">Pilihan Mapel : Matematika, Geografi, Ekonomi, Sosiologi</li>
+                          </ul>
+                        <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
+                        <button class="btn btn-primary btnbg">Beli Paket</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
@@ -276,3 +375,37 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
+<script type="text/javascript">
+    window.base_url = <?php echo json_encode(base_url()); ?>;
+</script>
+<script type="text/javascript">
+/*function redirectPost(url, data) {
+    var form = document.createElement('form');
+    document.body.appendChild(form);
+    form.method = 'post';
+    form.action = url;
+    for (var name in data) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = data[name];
+        form.appendChild(input);
+    }
+    form.submit();
+}
+
+function detail(id) {
+  redirectPost(base_url+"Course/detail", {id:window.btoa(id),token:window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=")});
+}*/
+
+function detail(id) {
+
+  var title = 'Privat One On One - 1 Siswa';
+  $('#myModal').modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false
+    });
+    $('.modal-title').text(title);
+}
+</script>
