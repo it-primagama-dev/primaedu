@@ -40,6 +40,20 @@
         padding-right: auto;
       }
     </style>
+    <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/js/sha-1.js"></script>
+    <!-- <script language="javascript" type="text/javascript">
+      function randomString(STRlen) {
+          var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+          var string_length = STRlen;
+          var randomstring = '';
+          for (var i=0; i<string_length; i++) {
+              var rnum = Math.floor(Math.random() * chars.length);
+              randomstring += chars.substring(rnum,rnum+1);
+          }
+
+          return randomstring;
+      }
+    </script> -->
     <title>Primagama</title>
   </head>
   <body class="mt-5">
@@ -136,55 +150,7 @@
           <h2>Paket Program</h2>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md mb-3">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/1.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">Privat One On One</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">SD - SMP - SMA</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Kelas Private (1 Siswa)</li>
-                </ul>
-              </p>
-              <button class="btn btn-primary btnbg" onClick="detail(1)">Lihat Paket Ini</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md mb-3">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/2.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">Kelompok 2 Siswa</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">SD - SMP - SMA</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Kelompok 2 Siswa</li>
-                </ul>
-              </p>
-              <button class="btn btn-primary btnbg" onClick="detail(2)">Lihat Paket Ini</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md mb-3">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/thumbs/3.png" alt="Card image cap">
-            <div class="card-body text-center">
-              <h5 class="card-title text-left">Kelompok 3 Siswa</h5>
-              <p class="card-text">
-                <ul>
-                  <li class="text-left">SD - SMP - SMA</li>
-                  <li class="text-left">4 Pertemuan 60 Menit</li>
-                  <li class="text-left">Kelompok 3 Siswa</li>
-                </ul>
-              </p>
-              <button class="btn btn-primary btnbg" onClick="detail(3)">Lihat Paket Ini</button>
-            </div>
-          </div>
-        </div>
+      <div class="row" id="divpaket">
       </div>
     </div>
     </section>
@@ -280,76 +246,8 @@
             </button>
           </div>
           <div class="modal-body">
-                <div class="row">
-                  <div class="col-md mb-3">
-                    <div class="card">
-                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-red.jpg')">
-                        <h5 class="card-title">Jenjang SD</h5>
-                      </div>
-                      <div class="card-body">
-                        <p class="card-text mb-1">
-                          <ul style="margin-left: -20px;">
-                            <li class="text-left">Kelas 3, 4, 5, dan 6</li>
-                            <li class="text-left">4x60 Menit</li>
-                            <li class="text-left">Tematik</li>
-                          </ul>
-                        </p>
-                        <h6 class="card-subtitle mb-3 text-muted">Rp. 500.000,00</h6>
-                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md mb-3">
-                    <div class="card">
-                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-blue.jpg')">
-                        <h5 class="card-title">Jenjang SMP</h5>
-                      </div>
-                      <div class="card-body">
-                        <p class="card-text mb-1">
-                          <ul style="margin-left: -20px;">
-                            <li class="text-left">Kelas 7, 8, dan 9</li>
-                            <li class="text-left">4x60 Menit</li>
-                            <li class="text-left">Pilihan Mapel : Matematika, IPA, B.Indonesia</li>
-                          </ul>
-                        <h6 class="card-subtitle mb-3 text-muted">Rp. 550.000,00</h6>
-                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md mb-3">
-                    <div class="card">
-                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-grey.jpg')">
-                        <h5 class="card-title">Jenjang SMA IPA</h5>
-                      </div>
-                      <div class="card-body">
-                        <p class="card-text mb-1">
-                          <ul style="margin-left: -20px;">
-                            <li class="text-left">Kelas 10, 11, dan 12</li>
-                            <li class="text-left">4x60 Menit</li>
-                            <li class="text-left">Pilihan Mapel : Matematika, Kimia, Fisika, Biologi</li>
-                          </ul>
-                        <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
-                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md mb-3">
-                    <div class="card">
-                      <div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-grey.jpg')">
-                        <h5 class="card-title">Jenjang SMA IPS</h5>
-                      </div>
-                      <div class="card-body">
-                        <p class="card-text mb-1">
-                          <ul style="margin-left: -20px;">
-                            <li class="text-left">Kelas 10, 11, dan 12</li>
-                            <li class="text-left">4x60 Menit</li>
-                            <li class="text-left">Pilihan Mapel : Matematika, Geografi, Ekonomi, Sosiologi</li>
-                          </ul>
-                        <h6 class="card-subtitle mb-3 text-muted">Rp. 600.000,00</h6>
-                        <button class="btn btn-primary btnbg" onClick="checkout()">Beli Paket</button>
-                      </div>
-                    </div>
-                  </div>
+                <div class="row" id="divpaket2">
+
                 </div>
           </div>
           <div class="modal-footer">
@@ -372,13 +270,26 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom Js -->
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/custom-scripts.js"></script>
   </body>
 </html>
 <script type="text/javascript">
     window.base_url = <?php echo json_encode(base_url()); ?>;
 </script>
 <script type="text/javascript">
+$(document).ready(function(){
+    load_cat();
+});
+
+/*var my_session=randomString(20);
+$.cookie('session_id',my_session);
+var my_session = $.cookie('session_id');
+document.getElementById("session").innerHTML = my_session;
+*/
+
 function redirectPost(url, data) {
     var form = document.createElement('form');
     document.body.appendChild(form);
@@ -394,18 +305,64 @@ function redirectPost(url, data) {
     form.submit();
 }
 
-function checkout() {
-  redirectPost(base_url+"Course/checkout", {/*id:window.btoa(id),*/token:window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=")});
+function checkout(id) {
+  redirectPost(base_url+"Course/checkout", {id:window.btoa(id),token:window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=")});
+}
+
+function load_cat() {
+  $.ajax({
+      url: base_url+"course/get_category",
+      type: "POST",
+      dataType: 'JSON',
+      success:function(data){
+        $.each(data.rows, function(i, item) {
+          var div = `<img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/category/`+item.Photo+`" alt="Photo Pack">
+                        <div class="card-body">
+                          <h5 class="card-title text-left">`+item.CatName+`</h5>
+                          <p class="card-text">
+                            `+item.Description+`
+                          </p>
+                          <button class="btn btn-primary btnbg btn-block" onClick="detail(`+item.RecID+`)">Lihat Paket Ini</button>
+                        </div>`;
+          var $tr = $('<div class="col-md mb-3">').append(
+              $('<div class="card">').html(div),
+          ).appendTo('#divpaket');
+        });
+      }
+  });
 }
 
 function detail(id) {
-
-  var title = 'Privat One On One - 1 Siswa';
-  $('#myModal').modal({
+  $("#divpaket2").empty();
+  $.ajax({
+      url: base_url+"course/get_pack",
+      type: "POST",
+      data: ({id:window.btoa(id)}),
+      dataType: 'JSON',
+      success:function(data){
+        $.each(data.rows, function(i, item) {
+          var div = `<div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/`+item.bgimage+`')">
+                        <h5 class="card-title">`+item.PackName+`</h5>
+                      </div>
+                      <div class="card-body">
+                          `+item.Description+`
+                        <h6 class="card-subtitle mb-3 text-muted">`+convertToRupiah(item.Price)+`</h6>
+                        <button class="btn btn-primary btnbg btn-block" onClick="checkout(`+item.RecID+`)">Beli Paket</button>
+                      </div>`;
+          var $tr = $('<div class="col-md mb-3">').append(
+              $('<div class="card">').html(div),
+          ).appendTo('#divpaket2');
+          Cat = item.CatName;
+          Tot = item.Tot;
+        });
+          var title = Cat/*+'-'+randomString(20)*/;
+            $('#myModal').modal({
                 show: true,
                 backdrop: 'static',
                 keyboard: false
-    });
-    $('.modal-title').text(title);
+            });
+            $('.modal-title').text(title);
+      }
+  });
 }
 </script>
