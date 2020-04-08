@@ -44,7 +44,7 @@
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
-      <a class="navbar-brand" href="javascript:void(0)">Primagama - Terdepan Dalam Prestasi</a>
+      <a class="navbar-brand" href="javascript:void(0)">Form Pembelian Paket - <?= $PackName ?></a>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav ml-auto">
             <img src="<?php echo base_url(); ?>assets/images/img/LogoPrima.png" width="75%">
@@ -57,9 +57,9 @@
       <div class="container">
         <div class="row">
           <div class="col">       
-              <nav class="navbar mt-5" style="background-image: linear-gradient(white, blue 200%);">
+              <!-- <nav class="navbar mt-5" style="background-image: linear-gradient(white, blue 200%);">
                 <font style="font-size: 20px;">Form Pembelian Paket - <?= $PackName ?> </font>  
-              </nav>
+              </nav> -->
               <input type="hidden" id="packid" class="form-control" value="<?= $id ?>">
               <input type="hidden" id="sesid" class="form-control">
               <input type="hidden" id="price" class="form-control" value="<?= $price ?>">
@@ -92,7 +92,7 @@
                       <tfoot id="foottot">
                       </tfoot>
                     </table>
-                    <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-green.jpg')" id="btnbyr" disabled="disabled" onClick="pay()">Bayar</button>
+                    <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" disabled="disabled" onClick="pay()">Lanjut Ke Pembayaran</button>
               </div>
         </div>
 
@@ -103,7 +103,7 @@
       </div>
     </section>
 
-    <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
+<!--     <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
         <div class="row text-center pt-3">
           <div class="col">
@@ -111,7 +111,7 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer> -->
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -305,7 +305,7 @@ function get_mapel() {
             var $tr = $("<tr>").append(
                 $('<td width="10%">').html(`<label class="labelcheck"><input type="checkbox" name="idmapel[`+item.RecID+`]"><span class="checkmark" ></span></label>`),
                 $('<td style="text-align:left;">').text(item.SubName),
-                $('<td style="text-align:center;">').html(`<button class="btn btn-primary btn-sm btnbg" onClick="jadwal();" name="btnmapel[`+item.RecID+`]" disabled='disabled'>Jadwal Tersedia</button>`),
+                $('<td style="text-align:center;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel[`+item.RecID+`]" disabled='disabled'>Jadwal Tersedia</button>`),
             ).appendTo('#dt_mapel');
             $(document.getElementsByName('idmapel['+item.RecID+']')).click(function(){
               if($(this).prop("checked") == true){
@@ -346,7 +346,7 @@ function get_mapel() {
             kelas = ``;
           }
           var div = `<div class="card mb-4">
-                  <div class="card-header judul">
+                  <div class="card-header text-white judul">
                       <b>Form Data Siswa `+i+`</b> 
                   </div>
                   <div class="card-body">
