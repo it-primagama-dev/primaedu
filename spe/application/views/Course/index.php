@@ -32,59 +32,53 @@
         background-image: url('<?php echo base_url(); ?>assets/images/img/btn.jpg');
       }
 
+      .bg-section1 {
+        background-image: url('<?php echo base_url(); ?>assets/images/img/bg-section1.jpg');
+        background-size: cover;
+      }
+
+      .bg-section3 {
+        background-image: url('<?php echo base_url(); ?>assets/images/img/bg-section1.jpg');
+        background-size: cover;
+      }
+
+      .bg-section2 {
+        background-image: url('<?php echo base_url(); ?>assets/images/img/bg-section2.jpg');
+        background-size: cover;
+      }
+
       @media (min-width: 768px) {
       .modal-xl {
         width: 100%;
         max-width:1200px;
-        padding-left: 85px;
-        padding-right: auto;
+        margin: 30px auto;
+      }
+      
+      img {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        user-drag: none;
+        -webkit-touch-callout: none;
+      }
+
+      .card-bd {
+        border-color: #230346;
+        border-width: 2px;
+        /*border-radius: 8px;*/
+      }
+
+      .btn {
+        border-radius: 20px;
       }
     </style>
     <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/js/sha-1.js"></script>
-    <!-- <script language="javascript" type="text/javascript">
-      function randomString(STRlen) {
-          var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-          var string_length = STRlen;
-          var randomstring = '';
-          for (var i=0; i<string_length; i++) {
-              var rnum = Math.floor(Math.random() * chars.length);
-              randomstring += chars.substring(rnum,rnum+1);
-          }
-
-          return randomstring;
-      }
-    </script> -->
     <title>Primagama</title>
   </head>
-  <body class="mt-5">
-    <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
-    <div class="container">
-      <a class="navbar-brand" href="javascript:void(0)">Primagama - Terdepan Dalam Prestasi</a>
-      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav ml-auto">
-            <!-- <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Paket Program</a>
-            <a class="nav-item nav-link" href="#">Contact</a> -->
-            <img src="<?php echo base_url(); ?>assets/images/img/LogoPrima.png" width="75%">
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Jumbotron -->
-    <!-- <div class="jumbotron jumbotron-fluid" style="background-image: url('<?php echo base_url(); ?>assets/images/img/BG.jpg')">
-      <div class="container text-center">
-        <img src="<?php echo base_url(); ?>assets/images/img/Logo.jpg" class="rounded-circle img-thumbnail" width="35%" >
-        <h1 class="display-4">Primagama Online Course</h1>
-        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-      </div>
-    </div> -->
-    <!-- <section id="slider" class="slider mb-4"> -->
-    <div id="slide" class="carousel slide mb-4 pt-2" data-ride="carousel">
+  <body>
+    <div id="slide" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#slide" data-slide-to="0" class="active"></li>
         <li data-target="#slide" data-slide-to="1"></li>
@@ -92,15 +86,13 @@
       </ol>
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/1.jpg" alt="First slide">
-          <!-- <iframe width="560" height="469" class="d-block w-100" src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-          </iframe> -->
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/sd1.jpg" alt="First slide">
         </div>
         <div class="carousel-item">
-          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/2.jpg" alt="Second slide">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/sd2.jpg" alt="Second slide">
         </div>
         <div class="carousel-item">
-          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/3.jpg" alt="Third slide">
+          <img class="d-block w-100" src="<?php echo base_url(); ?>assets/images/img/sd3.jpg" alt="Third slide">
         </div>
       </div>
       <a class="carousel-control-prev" href="#slide" role="button" data-slide="prev">
@@ -114,40 +106,11 @@
     </div>
    <!--  </section> -->
 
-    <section id="about" class="about">
+    <section id="paket" class="paket bg-section1 pb-4">
     <div class="container">
-      <div class="row mb-4 pt-3">
+      <div class="row mb-4 pt-5">
         <div class="col text-center">
-          <h2>Belajar Tetap Efektif di tengah Pandemic Covid-19</h2>
-        </div>
-      </div>
-      <div class="row justify-content-center mb-4">
-        <div class="col-md-5 text-justify">
-          <p>Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. Belajar Tetap Efektif di tengah Pandemic Covid-19. </p>
-        </div>
-        <div class="col-md-5 text-justify">
-          <p style="font-size: 19px;" class="text-left"><b><u>Dapat fasilitas apa aja ?</u></b></p>
-          <p>
-            - Tanya jawab PR & tugas <br>
-            - Pembahasan topik yang belum dikuasai <br>
-            - Rangkuman hasil belajar  <br>
-            - Laporan perkembangan belajar siswa  <br>
-            - Ebook  <br>
-            &nbsp;&nbsp; ✓ Panduan belajar online dirumah  <br>
-            &nbsp;&nbsp; ✓ Tetap produktif selama pandemic covid-19  <br>
-            &nbsp;&nbsp; ✓ Pencegahan covid-19  <br>
-            &nbsp;&nbsp; ✓ etc Video materi belajar (youtube channel Primagama) <br>
-        </div>
-      </div>
-    </div>
-    </section>
-
-
-    <section id="paket" class="paket bg-light pb-4">
-    <div class="container">
-      <div class="row mb-4 pt-4">
-        <div class="col text-center">
-          <h2>Paket Program</h2>
+          <b style="color: #230346; font-size: 45px; font-weight: 700;">PAKET PROGRAM</b>
         </div>
       </div>
       <div class="row" id="divpaket">
@@ -155,84 +118,86 @@
     </div>
     </section>
 
-    <section class="youtube" id="youtube">
+    <section class="youtube bg-section2" id="youtube">
       <div class="container">
         <div class="row mb-4 pt-4">
-          <div class="col text-center"><h2>Dapatkan Video Pembelajaran Gratis</h2></div>
+          <div class="col text-white"><h2 style="color: #61E6EF;">Dapatkan Video Pembelajaran Gratis</h2></div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-md-3 mb-4">
+          <div class="col-md-9 mb-4">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe src="https://www.youtube.com/embed/bWcYkOfWhQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </div>
           <div class="col-md-3 mb-4">
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe src="https://www.youtube.com/embed/4cirA5X3BRE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-          </div>
-          <div class="col-md-3 mb-4">
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe src="https://www.youtube.com/embed/2KBpGoC_EzM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-          </div>
-          <div class="col-md-3 mb-4">
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe src="https://www.youtube.com/embed/VIhn2Bt630E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+              <div class="embed-responsive mb-3 embed-responsive-16by9">
+                <iframe width="400" height="215" src="https://www.youtube.com/embed/4cirA5X3BRE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              <div class="embed-responsive mb-3 embed-responsive-16by9">
+                <iframe width="400" height="215" src="https://www.youtube.com/embed/2KBpGoC_EzM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              <div class="embed-responsive mb-3 embed-responsive-16by9">
+              <iframe width="400" height="215" src="https://www.youtube.com/embed/VIhn2Bt630E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="kontak" class="kontak bg-light">
+    <section id="kontak" class="kontak bg-section3">
       <div class="container">
-        <div class="row pt-4 mb-4">
-          <div class="col text-center">
-            <h2>Dapatkan Ebook Primagama</h2>
-          </div>
-        </div>
-        <div class="row justify-content-center pb-4">
-          <div class="col-lg-5 mb-3">
-            <div class="card text-white bg-primary mb-3">
-              <div class="card-body" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
-                <h4 class="card-title text-center">Ebook Primagama</h4>
-                <p class="card-text text-justify">Dapatkan Ebook Primagama dengan cara isi form berikut dan Ebook akan dikirim ke Email.</p>
+        <div class="row justify-content-center">
+          <div class="col-lg-5" style="padding-bottom: 0px;">
+            <div class="row pt-4 mb-4">
+              <div class="col">
+                <b style="color: #230346; font-size: 35px;">Dapatkan<br> Ebook Primagama</b>
               </div>
             </div>
-            <ul class="list-group">
-              <li class="list-group-item text-white text-center" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')"><h4>Apa aja manfaatnya ?</h4></li>
-              <li class="list-group-item">Panduan belajar online dirumah</li>
-              <li class="list-group-item">Tetap produktif selama pandemic covid-19</li>
-              <li class="list-group-item">Pencegahan covid-19</li>
-              <li class="list-group-item">etc Video materi belajar (youtube channel Primagama)</li>
-            </ul>
+            <div class="card">
+              <div class="card-body">
+                <form>
+                  <div class="form-group">
+                  <font style="font-size: 23spx;"> isi form berikut <br> dan Ebook akan dikirim ke email </font>
+                  </div>
+                  <div class="form-group">
+                    <label for="nama">Nama</label>
+                    <input type="text" class="form-control" id="nama">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="telepon">Telepon</label>
+                    <input type="text" class="form-control" id="telepon">
+                  </div>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-dark btnbg">Dapatkan Ebook</button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="col-lg-6">
-            <form>
-              <div class="form-group">
-                <label for="nama">Nama</label>
-                <input type="text" class="form-control" id="nama">
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" id="email">
-              </div>
-              <div class="form-group">
-                <label for="telepon">Telepon</label>
-                <input type="text" class="form-control" id="telepon">
-              </div>
-              <!-- <div class="form-group">
-                <label for="pesan">Pesan</label>
-                <textarea class="form-control" name="pesan" id="pesan" rows="3"></textarea>
-              </div> -->
-              <div class="form-group">
-                <button type="button" class="btn btn-primary btnbg" disabled="disabled">Dapatkan Ebook</button>
-              </div>
-            </form>
+          <div class="col-lg-6 text-center mt-5"><font style="font-size: 40px; color: #848989;">Ebook yang akan<br> Anda dapatkan</font>
+            <ul class="text-left mt-3">
+              <li class="mb-1">Panduan belajar online dirumah</li>
+              <li class="mb-1">Tetap produktif selama pandemic covid-19</li>
+              <li class="mb-1">Pencegahan covid-19</li>
+              <li class="mb-1">etc Video materi belajar (youtube channel Primagama)</li>
+            </ul>
+            <div class="text-right">
+              <img width="30%" src="<?php echo base_url(); ?>assets/images/img/talent.png">
+            </div>
           </div>
         </div>
-      </div>
+      </div><!-- 
+      <div class="container">
+        <div class="row text-center pt-3">
+          <div class="col">
+            <p>Copyright &copy; 2020. PRIMAGAMA</p>
+          </div>
+        </div>
+      </div> -->
     </section>
 
     <!-- Modal -->
@@ -240,12 +205,12 @@
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg.jpg')">
-            <h5 class="modal-title"></h5>
+            <h5 class="modal-title text-white"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body bg-section3">
                 <div class="row" id="divpaket2">
 
                 </div>
@@ -257,7 +222,7 @@
       </div>
     </div>
 
-    <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
+<!--     <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
         <div class="row text-center pt-3">
           <div class="col">
@@ -265,7 +230,8 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer> -->
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -322,10 +288,10 @@ function load_cat() {
                           <p class="card-text">
                             `+item.Description+`
                           </p>
-                          <button class="btn btn-primary btnbg btn-block" onClick="detail(`+item.RecID+`)">Lihat Paket Ini</button>
+                          <button class="btn btn-dark btnbg btn-block" onClick="detail(`+item.RecID+`)">Lihat Paket Ini</button>
                         </div>`;
           var $tr = $('<div class="col-md mb-3">').append(
-              $('<div class="card">').html(div),
+              $('<div class="card border border-secondary card-bd">').html(div),
           ).appendTo('#divpaket');
         });
       }
@@ -341,16 +307,16 @@ function detail(id) {
       dataType: 'JSON',
       success:function(data){
         $.each(data.rows, function(i, item) {
-          var div = `<div class="card-header pt-3" style="background-image: url('<?php echo base_url(); ?>assets/images/img/`+item.bgimage+`')">
-                        <h5 class="card-title">`+item.PackName+`</h5>
+          var div = `<div class="card-header pt-3 cardpack" style="background-image: url('<?php echo base_url(); ?>assets/images/img/`+item.bgimage+`'); background-size: cover;">
+                        <h5 class="card-title text-white">`+item.PackName+`</h5>
                       </div>
                       <div class="card-body">
                           `+item.Description+`
-                        <h6 class="card-subtitle mb-3 text-muted">`+convertToRupiah(item.Price)+`</h6>
-                        <button class="btn btn-primary btnbg btn-block" onClick="checkout(`+item.RecID+`)">Beli Paket</button>
+                        <button class="btn btn-dark btnbg btn-block" onClick="checkout(`+item.RecID+`)">Beli Paket</button>
                       </div>`;
-          var $tr = $('<div class="col-md mb-3">').append(
-              $('<div class="card">').html(div),
+                      //<h6 class="card-subtitle mb-3 text-muted">`+convertToRupiah(item.Price)+`</h6>
+          var $tr = $('<div class="col-lg mb-3">').append(
+              $('<div class="card border border-secondary card-bd">').html(div),
           ).appendTo('#divpaket2');
           Cat = item.CatName;
           Tot = item.Tot;
