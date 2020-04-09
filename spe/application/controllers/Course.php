@@ -168,4 +168,36 @@ class Course extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function get_sesi()
+	{
+		$packid = base64_decode($this->input->post('packid'));
+        $arr = array(
+            'from' => 'Course_PackDetail a',
+            'where' => array('a.PackID' => $packid),
+        );
+        $sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function get_packdetail()
+	{
+		$id = base64_decode($this->input->post('id'));
+        $arr = array(
+            'from' => 'Course_PackDetail a',
+            'where' => array('a.RecID' => $id),
+        );
+        $sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
 }

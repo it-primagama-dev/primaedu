@@ -36,7 +36,12 @@
       }
 
       .fa-vertical-bar-medium:after {
-        content: "\007C" };
+        content: "\007C" 
+      };
+
+      /*tr.noBorder td {
+        border: 0;
+      }*/
     </style>
     <title>Primagama</title>
   </head>
@@ -62,25 +67,40 @@
               </nav> -->
               <input type="hidden" id="packid" class="form-control" value="<?= $id ?>">
               <input type="hidden" id="sesid" class="form-control">
-              <input type="hidden" id="price" class="form-control" value="<?= $price ?>">
+              <input type="hidden" id="pricetot" class="form-control" value="<?= $pricetot ?>">
               <input type="hidden" id="totstu" class="form-control" value="<?= $totstu ?>">
           </div>
         </div>
-        <div class="row mt-4">
-              <div class="col-md-7"> 
-                    <table class="table">
-                      <thead>
-                        <tr class="text-left">
-                          <th colspan="2" scope="col">Pilih Mata Pelajaran</th>
-                          <th scope="col" width="30%" class="text-center">Pilih Jadwal</th>
-                        </tr>
-                      </thead>
-                      <tbody id="dt_mapel">
-                      </tbody>
-                    </table>
-              </div>
-              <div class="col-md-5 mb-4"> 
-                    <table class="table">
+        <div class="row mt-5">
+          <div class="col-md-4 mb-4">
+            <font style="font-size: 25px; color: #230346;"> Pilih Sesi</font>
+            <table class="table">
+              <tbody id="dt_sesi">
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-8"> 
+                <font style="font-size: 25px; color: #230346;"> Pilih Mata Pelajaran & Jadwal</font>
+                <table class="table">
+                  <tbody id="dt_meet">
+                  </tbody>
+                </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col" id="divform">
+          </div>
+        </div>
+
+        <div class="row">
+              <div class="col-md-12 mb-4"> 
+                <font style="font-size: 25px; color: #230346;"> Total Biaya :</font>
+              <nav class="navbar text-white rounded" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
+                <font style="font-size: 20px;" id="pricefix"></font>  
+                <button class="btn btn-success text-right" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" onClick="pay()">Lanjut Ke Pembayaran</button>
+              </nav>
+                    <!-- <table class="table">
                       <thead>
                         <tr>
                           <th scope="col" class="text-left">Mapel</th>
@@ -92,13 +112,8 @@
                       <tfoot id="foottot">
                       </tfoot>
                     </table>
-                    <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" disabled="disabled" onClick="pay()">Lanjut Ke Pembayaran</button>
+                    <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" disabled="disabled" onClick="pay()">Lanjut Ke Pembayaran</button> -->
               </div>
-        </div>
-
-        <div class="row">
-          <div class="col" id="divform">
-          </div>
         </div>
       </div>
     </section>
@@ -278,8 +293,64 @@ function pay(){
 
 $(document).ready(function(){
     get_mapel();
+
+    $('#pricefix').text('Belum Pilih Sesi Pertemuan');
     $('#sesid').val(randomString(20));
+    get_sesi();
+
 });
+
+function get_sesi() {
+  packid = $('#packid').val();
+  $.ajax({
+      url: base_url+"course/get_sesi",
+      type: "POST",
+      data: ({packid:window.btoa($('#packid').val())}),
+      dataType: 'JSON',
+      success:function(data){
+      $('#dt_meet').empty();
+        var $tr = $("<tr>").append(
+           $('<td colspan="3" style="text-align:center;">').text('- - Belum Pilih Sesi Pertemuan - -'),
+        ).appendTo('#dt_meet');
+        $.each(data.rows, function(i, item) {
+            var $tr = $("<tr class='noBorder'>").append(
+                $('<th height="50" style="text-align:left;" width="10%">').html(`<label class="labelradio">
+                      <input type="radio" name="sesi" value=`+item.RecID+`>
+                      <span class="checkmarkradio"></span>
+                    </label>`),
+                $('<th height="50" style="text-align:left;">').text(item.PackDetailName),
+            ).appendTo('#dt_sesi');
+        });
+        $('input:radio[name="sesi"]').change(function() {
+            var id = $(this).val();
+            $('#dt_meet').empty();
+            $.ajax({
+                url: base_url+"course/get_packdetail",
+                type: "POST",
+                data: ({id:window.btoa(id)}),
+                dataType: 'JSON',
+                success:function(data2){
+                    $.each(data2.rows, function(i2, item2) {
+                      jml = item2.TotalMeet;
+                      pricetot = item2.PriceDetail;
+                    });
+                    $('#pricefix').text(convertToRupiah(pricetot));
+                    for (i = 1; i < jml+1; ++i) {
+                      var $tr = $("<tr>").append(
+                          $('<td style="text-align:left;">').text('Pertemuan '+i),
+                          $('<td style="text-align:center;">').html(`<select id="mapel" class="form-control">
+                              <option value="">- - - Pilih Mapel - - -</option>
+                            </select>`),
+                          $('<td style="text-align:right;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel" disabled='disabled'>Jadwal Tersedia</button>`),
+                      ).appendTo('#dt_meet');
+                    }
+                }
+              })
+
+        });
+      }
+  });
+}
 
 function jadwal() {
   var title = 'Pusing Jadwal Bingung Au Ah Lieur';
@@ -303,7 +374,7 @@ function get_mapel() {
         ).appendTo('#dt_ordertmp');
         $.each(data.rows, function(i, item) {
             var $tr = $("<tr>").append(
-                $('<td width="10%">').html(`<label class="labelcheck"><input type="checkbox" name="idmapel[`+item.RecID+`]"><span class="checkmark" ></span></label>`),
+                /*$('<td width="10%">').html(`<label class="labelcheck"><input type="checkbox" name="idmapel[`+item.RecID+`]"><span class="checkmark" ></span></label>`),*/
                 $('<td style="text-align:left;">').text(item.SubName),
                 $('<td style="text-align:center;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel[`+item.RecID+`]" disabled='disabled'>Jadwal Tersedia</button>`),
             ).appendTo('#dt_mapel');
@@ -391,16 +462,16 @@ function add_mapel(id) {
   $.ajax({
       url: base_url+"course/save_ordertmp",
       type: "POST",
-      data: ({id:window.btoa(id),session:$('#sesid').val(),price:window.btoa($('#price').val())}),
+      data: ({id:window.btoa(id),session:$('#sesid').val(),pricetot:window.btoa($('#pricetot').val())}),
       dataType: 'JSON',
       success:function(data){
         $('#dt_ordertmp,#foottot').empty();
         $.each(data.rows, function(i, item) {
           var $tr = $("<tr>").append(
               $('<td style="text-align:left;">').text(item.SubName),
-              $('<td style="text-align:right;">').text(convertToRupiah(item.Price)),
+              $('<td style="text-align:right;">').text(convertToRupiah(item.Pricetot)),
           ).appendTo('#dt_ordertmp');
-          Total += parseFloat(item.Price);
+          Total += parseFloat(item.Pricetot);
           $('#btnbyr').removeAttr("disabled");
         });
           var $tr = $("<tr>").append(
@@ -426,9 +497,9 @@ function del_mapel(id) {
         $.each(data.rows, function(i, item) {
           var $tr = $("<tr>").append(
               $('<td style="text-align:left;">').text(item.SubName),
-              $('<td style="text-align:right;">').text(convertToRupiah(item.Price)),
+              $('<td style="text-align:right;">').text(convertToRupiah(item.Pricetot)),
           ).appendTo('#dt_ordertmp');
-          Total += parseFloat(item.Price);
+          Total += parseFloat(item.Pricetot);
         });
           var $tr = $("<tr>").append(
               $('<th style="text-align:left;">').text('Total'),
