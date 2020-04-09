@@ -186,7 +186,7 @@
               <li class="mb-1">etc Video materi belajar (youtube channel Primagama)</li>
             </ul>
             <div class="text-right">
-              <img width="30%" src="<?php echo base_url(); ?>assets/images/img/talent.png">
+              <img width="90%" src="<?php echo base_url(); ?>assets/images/img/talent.png">
             </div>
           </div>
         </div>
