@@ -80,32 +80,12 @@ class Course extends CI_Controller {
         );
 		$query = $this->config_model->find($arr)->row_array();
 		$data['PackName'] = $query['CatName'].' - '.$query['PackName']; 
+		$data['PackName2'] = $query['PackName'].' - '.$query['CatName']; 
 		$data['price'] = $query['Price']; 
 		$data['totstu'] = $query['TotalStudents']; 
+		$data['stagecat'] = $query['StageCat']; 
 		$data['id'] = $id;
 		$this->load->view('Course/checkout',$data);
-	}
-
-	public function get_mapel()
-	{
-		$id = base64_decode($this->input->post('id'));
-        $arr = array(
-            'from' => 'Course_Pack a',
-			'join' => array(
-				'Course_Subjects b' => array(
-					'on' => 'a.StageCat=b.StageCat',
-					'type' => 'left'
-				),
-			),
-            'where' => array('a.RecID' => $id),
-        );
-        $sql = $this->config_model->find($arr);
-		if ($sql->num_rows()>0) {
-			$data['rows'] = $sql->result_array();
-		} else {
-			$data['rows'] = 0;
-		}
-		echo json_encode($data);
 	}
 
 	public function save_ordertmp()
@@ -188,7 +168,28 @@ class Course extends CI_Controller {
 	{
 		$id = base64_decode($this->input->post('id'));
         $arr = array(
+        	'select' => array(
+        		'a.RecID',
+        		'a.PackID',
+        		'a.PackDetailName',
+        		'a.PriceDetail',
+        		'a.TotalMeet','b.PackName',
+        		'b.StageCat',
+        		'c.TotalStudents',
+        		'b.TotalSub',
+        		'b.CatID'
+        	),
             'from' => 'Course_PackDetail a',
+			'join' => array(
+				'Course_Pack b' => array(
+					'on' => 'a.PackID=b.RecID',
+					'type' => 'inner'
+				),
+				'Course_Category c' => array(
+					'on' => 'b.CatID=c.RecID',
+					'type' => 'inner'
+				),
+			),
             'where' => array('a.RecID' => $id),
         );
         $sql = $this->config_model->find($arr);
@@ -197,6 +198,29 @@ class Course extends CI_Controller {
 		} else {
 			$data['rows'] = 0;
 		}
+		echo json_encode($data);
+	}
+
+	public function get_stage($id)
+	{
+		$arr = array(
+				'from' => 'Student_Stage',
+				'where' => array('StageCat' => $id),
+			);
+
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);
+	}
+
+	public function get_mapel($StageCat)
+	{
+        $arr = array(
+            'from' => 'Course_Subjects a',
+            'where' => array('a.StageCat' => $StageCat),
+        );
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
 		echo json_encode($data);
 	}
 

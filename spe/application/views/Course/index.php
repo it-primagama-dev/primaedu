@@ -75,7 +75,7 @@
       }
     </style>
     <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/js/sha-1.js"></script>
-    <title>Primagama</title>
+    <title>Kelas Tatap Muka Online - Primagama</title>
   </head>
   <body>
     <div id="slide" class="carousel slide" data-ride="carousel">
@@ -144,7 +144,7 @@
       </div>
     </section>
 
-    <section id="kontak" class="kontak bg-section3">
+    <section id="kontak" class="kontak bg-light">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-5" style="padding-bottom: 0px;">
@@ -186,7 +186,7 @@
               <li class="mb-1">etc Video materi belajar (youtube channel Primagama)</li>
             </ul>
             <div class="text-right">
-              <img width="90%" src="<?php echo base_url(); ?>assets/images/img/talent.png">
+              <img width="50%" src="<?php echo base_url(); ?>assets/images/img/talent.png">
             </div>
           </div>
         </div>

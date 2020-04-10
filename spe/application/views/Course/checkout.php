@@ -43,13 +43,15 @@
         border: 0;
       }*/
     </style>
-    <title>Primagama</title>
+    <title>Kelas Tatap Muka Online - Primagama</title>
   </head>
   <body class="mt-5">
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
       <div class="container">
-      <a class="navbar-brand" href="javascript:void(0)">Form Pembelian Paket - <?= $PackName ?></a>
+        <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup"> -->
+          <a class="navbar-brand" href="javascript:void(0)">Form Pembelian Paket - <?= $PackName ?></a>
+        <!-- </div> -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav ml-auto">
             <img src="<?php echo base_url(); ?>assets/images/img/LogoPrima.png" width="75%">
@@ -69,19 +71,48 @@
               <input type="hidden" id="sesid" class="form-control">
               <input type="hidden" id="pricetot" class="form-control" value="<?= $pricetot ?>">
               <input type="hidden" id="totstu" class="form-control" value="<?= $totstu ?>">
+              <input type="hidden" id="stagecat" class="form-control" value="<?= $stagecat ?>">
           </div>
         </div>
-        <div class="row mt-5">
+
+        <div class="row mt-5 mb-3">
+          <div class="col" id="divform">
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-md-4 mb-4">
-            <font style="font-size: 25px; color: #230346;"> Pilih Sesi</font>
             <table class="table">
+              <thead>
+                <tr>
+                  <th colspan="2"><font style="font-size: 20px; color: #230346;"> <li>Pilih Sesi</li></font></th>
+                </tr>
+              </thead>
               <tbody id="dt_sesi">
               </tbody>
             </table>
+            <div class="card" style="background-image: url('<?php echo base_url(); ?>assets/images/img/bg-cardred.jpg');background-size: cover;">
+              <div class="card-body">
+                <h6 class="card-title"><b>Syarat & Ketentuan Berlaku :</b></h6>
+                <p class="card-text">
+                  <ul style="padding-left: 20px; font-size: 14px;">
+                    <li>Masa berlaku paket adalah 2 minggu.</li>
+                    <li>Siswa dapat memilih jadwal sesi belajar dalam 2 minggu ke depan.</li>
+                    <li>Jadwal yang sudah dipilih tidak dapat di-reschedule.</li>
+                    <li>Jika siswa tidak hadir pada jadwal yang sudah dipilih maka tidak dapat diganti menjadi jadwal lain.</li>
+                    <font id="divsk" style="display: none;"><li>Maksimal pilih <b id="jmlmapel"></b> Mapel</li></font> 
+                  </ul>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="col-md-8"> 
-                <font style="font-size: 25px; color: #230346;"> Pilih Mata Pelajaran & Jadwal</font>
+          <div class="col-md-8 mb-4"> 
                 <table class="table">
+                  <thead>
+                    <tr>
+                      <th colspan="3"><font style="font-size: 20px; color: #230346;"> <li>Pilih Mata Pelajaran & Jadwal</li></font></th>
+                    </tr>
+                  </thead>
                   <tbody id="dt_meet">
                   </tbody>
                 </table>
@@ -89,44 +120,36 @@
         </div>
 
         <div class="row">
-          <div class="col" id="divform">
-          </div>
-        </div>
-
-        <div class="row">
               <div class="col-md-12 mb-4"> 
-                <font style="font-size: 25px; color: #230346;"> Total Biaya :</font>
-              <nav class="navbar text-white rounded" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th colspan="3"><font style="font-size: 20px; color: #230346;"> <li>Total Biaya - <?= $PackName2 ?> :</li></font></th>
+                    </tr>
+                  </thead>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Total Siswa</th>
+                      <th class="text-center">Total Pertemuan</th>
+                      <th class="text-right">Harga Per Siswa</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dt_pricefix">
+                  </tbody>
+                  <tfoot id="dt_pricefixtot">
+                  </tfoot>
+                </table>
+              <!-- <nav class="navbar text-white rounded" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
                 <font style="font-size: 20px;" id="pricefix"></font>  
                 <button class="btn btn-success text-right" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" onClick="pay()">Lanjut Ke Pembayaran</button>
-              </nav>
-                    <!-- <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col" class="text-left">Mapel</th>
-                          <th scope="col" class="text-center" width="45%">Harga</th>
-                        </tr>
-                      </thead>
-                      <tbody id="dt_ordertmp">
-                      </tbody>
-                      <tfoot id="foottot">
-                      </tfoot>
-                    </table>
-                    <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" disabled="disabled" onClick="pay()">Lanjut Ke Pembayaran</button> -->
+              </nav> -->
+
+                  <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" onClick="pay()">Lanjut Ke Pembayaran</button>
+                   
               </div>
         </div>
       </div>
-    </section>
-
-<!--     <footer class="bg-primary text-white" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
-      <div class="container">
-        <div class="row text-center pt-3">
-          <div class="col">
-            <p>Copyright &copy; 2020. PRIMAGAMA</p>
-          </div>
-        </div>
-      </div>
-    </footer> -->
+    </section> 
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -292,11 +315,11 @@ function pay(){
 }
 
 $(document).ready(function(){
-    get_mapel();
-
-    $('#pricefix').text('Belum Pilih Sesi Pertemuan');
-    $('#sesid').val(randomString(20));
     get_sesi();
+    $('#sesid').val(randomString(20));
+    var $tr = $("<tr>").append(
+       $('<td colspan="3" style="text-align:center;">').text('- - - Belum Pilih Sesi Pertemuan - - -'),
+    ).appendTo('#dt_pricefix');
 
 });
 
@@ -307,6 +330,12 @@ function get_sesi() {
       type: "POST",
       data: ({packid:window.btoa($('#packid').val())}),
       dataType: 'JSON',
+      beforeSend: function(){
+          $("#ajax-loader").show();
+      },
+      complete: function() {
+          $("#ajax-loader").hide();
+      },
       success:function(data){
       $('#dt_meet').empty();
         var $tr = $("<tr>").append(
@@ -321,6 +350,62 @@ function get_sesi() {
                 $('<th height="50" style="text-align:left;">').text(item.PackDetailName),
             ).appendTo('#dt_sesi');
         });
+
+        var TotStudent = parseInt($('#totstu').val());
+          //$i = 0;
+        for (i = 1; i < TotStudent+1; ++i) {
+          if(i===1){
+            kelas = `<div class="form-group">
+                            <label for="Kelas">Kelas</label>
+                            <select id="Kelas" class="form-control">
+                              <option value="">- - - wajib diisi - - -</option>
+                            </select>
+                          </div>`;
+              referal = `
+                        <div class="form-group">
+                          <label for="Referal">Kode Referal</label>
+                          <input type="email" name="Referal" class="form-control" placeholder="wajib diisi . . .">
+                        </div>`;
+          } else {
+            kelas = ``;
+            referal = ``;
+          }
+          var div = `<div class="card mb-4">
+                  <div class="card-header text-white judul">
+                      <b>Form Data Siswa `+i+`</b> 
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="Nama">Nama</label>
+                          <input type="text" name="Nama" class="form-control" placeholder="wajib diisi . . .">
+                        </div>
+                        <div class="form-group">
+                          <label for="AsalSekolah">Asal Sekolah</label>
+                          <input type="text" name="AsalSekolah" class="form-control" placeholder="wajib diisi . . .">
+                        </div>
+                        `+kelas+`
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="NoHp">No. Handphone</label>
+                          <input type="text" name="NoHp" class="form-control" placeholder="wajib diisi . . .">
+                        </div>
+                        <div class="form-group">
+                          <label for="Email">Email</label>
+                          <input type="email" name="Email" class="form-control" placeholder="wajib diisi . . .">
+                        </div>
+                        `+referal+`
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
+          var $tr2 = $('<div class="row">').append(
+              $('<div class="col">').html(div),
+          ).appendTo('#divform');
+        }
+        get_stage();
         $('input:radio[name="sesi"]').change(function() {
             var id = $(this).val();
             $('#dt_meet').empty();
@@ -331,19 +416,48 @@ function get_sesi() {
                 dataType: 'JSON',
                 success:function(data2){
                     $.each(data2.rows, function(i2, item2) {
-                      jml = item2.TotalMeet;
+                      jmlsesi = item2.TotalMeet;
                       pricetot = item2.PriceDetail;
+                      jmlsiswa = item2.TotalStudents;
+                      totalmapel = item2.TotalSub;
+                      catid = item2.CatID;
                     });
-                    $('#pricefix').text(convertToRupiah(pricetot));
-                    for (i = 1; i < jml+1; ++i) {
-                      var $tr = $("<tr>").append(
-                          $('<td style="text-align:left;">').text('Pertemuan '+i),
-                          $('<td style="text-align:center;">').html(`<select id="mapel" class="form-control">
-                              <option value="">- - - Pilih Mapel - - -</option>
-                            </select>`),
-                          $('<td style="text-align:right;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel" disabled='disabled'>Jadwal Tersedia</button>`),
-                      ).appendTo('#dt_meet');
+                    $('#dt_pricefix,#dt_pricefixtot').empty();
+                    var $tr = $("<tr>").append(
+                       $('<td style="text-align:left;" width="25%">').text(jmlsiswa),
+                       $('<td style="text-align:center;">').text(jmlsesi),
+                       $('<td style="text-align:right;">').text(convertToRupiah(pricetot)),
+                    ).appendTo('#dt_pricefix');
+                    var $tr = $("<tr>").append(
+                       $('<th colspan="2" style="text-align:left;">').text('Jumlah Total Biaya'),
+                       $('<th style="text-align:right;">').text(convertToRupiah(pricetot*jmlsiswa)),
+                    ).appendTo('#dt_pricefixtot');
+                    // alert(catid);
+                    if(catid != 111) {
+                      $('#divsk').css('display','block');
+                      $('#jmlmapel').text(totalmapel);
                     }
+
+                          
+                      var stagecat = $('#stagecat').val();
+
+                      for (i = 1; i < jmlsesi+1; ++i) {
+                        var $tr = $("<tr>").append(
+                            $('<td style="text-align:left;">').text('Pertemuan '+i),
+                            $('<td style="text-align:center;">').html(`<select id="mapel`+i+`" class="form-control">
+                                <option value="">- - - Pilih Mapel - - -</option>
+                              </select>`),
+                            $('<td style="text-align:right;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel" disabled='disabled'>Jadwal Tersedia</button>`),
+                        ).appendTo('#dt_meet');
+                      }
+
+                      $.getJSON(base_url+"course/get_mapel/"+stagecat, function(json){
+                        for (i = 1; i < jmlsesi+1; ++i) {
+                          $.each(json, function(i2, obj2){
+                            $('#mapel'+i).append($('<option>').text(obj2.SubName).attr('value', obj2.RecID));
+                          });
+                        }
+                      });
                 }
               })
 
@@ -362,19 +476,24 @@ function jadwal() {
     $('.modal-title').text(title);
 }
 
-function get_mapel() {
+/*function get_packdetail() {
   $.ajax({
-      url: base_url+"course/get_mapel",
+      url: base_url+"course/get_packdetail",
       type: "POST",
       data: ({id:window.btoa($('#packid').val())}),
       dataType: 'JSON',
+      beforeSend: function(){
+          $("#ajax-loader").show();
+      },
+      complete: function() {
+          $("#ajax-loader").hide();
+      },
       success:function(data){
         var $tr = $("<tr>").append(
            $('<td colspan="2" style="text-align:center;">').text('- - Belum Pilih Mata Pelajaran - -'),
         ).appendTo('#dt_ordertmp');
         $.each(data.rows, function(i, item) {
             var $tr = $("<tr>").append(
-                /*$('<td width="10%">').html(`<label class="labelcheck"><input type="checkbox" name="idmapel[`+item.RecID+`]"><span class="checkmark" ></span></label>`),*/
                 $('<td style="text-align:left;">').text(item.SubName),
                 $('<td style="text-align:center;">').html(`<button class="btn btn-dark btn-sm btnbg" onClick="jadwal();" name="btnmapel[`+item.RecID+`]" disabled='disabled'>Jadwal Tersedia</button>`),
             ).appendTo('#dt_mapel');
@@ -389,71 +508,9 @@ function get_mapel() {
               }
             });
         });
-
-        var TotStudent = parseInt($('#totstu').val());
-          //$i = 0;
-        for (i = 1; i < TotStudent+1; ++i) {
-          if(i===1){
-            kelas = `<div class="form-group">
-                            <label for="Kelas">Kelas</label>
-                            <select id="Kelas" class="form-control">
-                              <option value="">- - - Pilih Kelas - - -</option>
-                              <option value="1"> 3 SD </option>
-                              <option value="1"> 4 SD </option>
-                              <option value="1"> 5 SD </option>
-                              <option value="1"> 6 SD </option><!-- 
-                              <option value="1"> 7 SMP </option>
-                              <option value="1"> 8 SMP </option>
-                              <option value="1"> 9 SMP </option>
-                              <option value="1"> 10 SMA IPA </option>
-                              <option value="1"> 10 SMA IPS </option>
-                              <option value="1"> 11 SMA IPA </option>
-                              <option value="1"> 11 SMA IPS </option>
-                              <option value="1"> 12 SMA IPA </option>
-                              <option value="1"> 12 SMA IPS </option> -->
-                            </select>
-                          </div>`;
-          } else {
-            kelas = ``;
-          }
-          var div = `<div class="card mb-4">
-                  <div class="card-header text-white judul">
-                      <b>Form Data Siswa `+i+`</b> 
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="Nama">Nama</label>
-                          <input type="text" name="Nama" class="form-control" placeholder="Isi Nama disini . . .">
-                        </div>
-                        <div class="form-group">
-                          <label for="AsalSekolah">Asal Sekolah</label>
-                          <input type="text" name="AsalSekolah" class="form-control" placeholder="Isi Asal Sekolah . . .">
-                        </div>
-                        `+kelas+`
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="NoHp">No. Handphone</label>
-                          <input type="text" name="NoHp" class="form-control" placeholder="Isi No. Handphone . . .">
-                        </div>
-                        <div class="form-group">
-                          <label for="Email">Email</label>
-                          <input type="email" name="Email" class="form-control" placeholder="Isi Email . . .">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>`;
-          var $tr2 = $('<div class="row">').append(
-              $('<div class="col">').html(div),
-          ).appendTo('#divform');
-        }
-        /*})*/
       }
   });
-}
+}*/
 
 function add_mapel(id) {
   //alert(id);
@@ -514,6 +571,17 @@ function del_mapel(id) {
         }
       }
     });
+}
+
+function get_stage() {
+  var stagecat = $('#stagecat').val();
+  $.getJSON(base_url+"course/get_stage/"+stagecat, function(json){
+      $('#Kelas').empty();
+      $('#Kelas').append($('<option>').text("- - Pilih Kelas - -").attr('value', ''));
+      $.each(json, function(i, obj){
+      $('#Kelas').append($('<option>').text(obj.StageName).attr('value', obj.StageCode));
+      });
+  });
 }
 </script>
 
