@@ -1446,7 +1446,7 @@ class Master extends CI_Controller {
 
 		$this->$name = "Selamat Bergabung Sahabat Primagama...";
 		$this->email->from('noreply@primagama.co.id', 'HUT Primagama 34th');   
-		$this->email->to('Budi.Hartanto@primagama.co.id');   
+		$this->email->to('oni.restu@primagama.co.id');   
 		$this->email->subject('Peserta Tryout Smart Generation Award');   
 		$this->email->message('Selamat Berjuang'); 
 
