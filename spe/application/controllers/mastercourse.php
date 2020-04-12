@@ -326,4 +326,150 @@ class mastercourse extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	// SCHEDULE
+	public function schedule(){
+		restrict();
+		$arr = array(
+				'from' => 'Course_Schedule a',
+			);
+		$item = $this->config_model->find($arr);
+		$data = array(
+			'title' => 'Data Schedule Course',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Schedule Course</a>',
+			'item' => $item,
+		);
+		$this->template->load('template', 'mastercourse/schedule',$data);
+	}
+
+	public function edit_schedule($RecID)
+	{
+		$arr = array(
+				'from' => 'Course_Schedule a',
+				'where' => array('a.RecID' => $RecID)
+			);
+		$data = $this->config_model->find($arr)->row();
+		echo json_encode($data);
+	}
+
+	public function add_schedule()
+	{
+		$data = array(
+	    	'params' => array(
+		    	'IsmartName' => $this->input->post('IsmartName'),
+		    	'StageCat' => $this->input->post('StageCat'),
+		    	'SubID' => $this->input->post('SubID'),
+		    	'Date' => $this->input->post('Date'),
+		    	'TimeFrom' => $this->input->post('TimeFrom'),
+		    	'TimeTo' => $this->input->post('TimeTo'),
+				'CreatedDate' => date("Y-m-d H:i:s"),
+				'CreatedBy' => $this->session->userdata('Username')
+		    ),
+		    'from' => 'Course_Schedule',
+	    );
+	    $msg = $this->config_model->insert($data);
+			echo data_json(array("message"=>"Data berhasil disimpan.","notify"=>"success"));
+	}
+
+	public function update_schedule()
+	{
+		$data = array(
+	    	'params' => array(
+		    	'IsmartName' => $this->input->post('IsmartName'),
+		    	'StageCat' => $this->input->post('StageCat'),
+		    	'SubID' => $this->input->post('SubID'),
+		    	'Date' => $this->input->post('Date'),
+		    	'TimeFrom' => $this->input->post('TimeFrom'),
+		    	'TimeTo' => $this->input->post('TimeTo'),
+				'EditDate' => date("Y-m-d H:i:s"),
+				'EditBy' => $this->session->userdata('Username')
+		    ),
+		    'from' => 'Course_Schedule',
+			'where' => array('RecID' => $this->input->post('RecID'))
+	    );
+	    $msg = $this->config_model->update($data);
+			echo data_json(array("message"=>"Data berhasil diubah.","notify"=>"success"));
+	}
+
+	public function delete_schedule()
+	{
+		$id = $this->input->post('RecID');
+		if(isset($id)) {
+			$msg = $this->config_model->delete_schedule($id);
+			echo data_json(array("message"=>"Data berhasil dihapus.","notify"=>"success"));
+		}
+	}
+
+	public function get_data_schedule()
+	{
+		$arr = array(
+			'select' => array(
+					'a.RecID',
+					'a.BranchCode',
+					'a.IsmartName',
+					"CASE a.StageCat 
+					  WHEN 20 THEN 'SD'
+					  WHEN 21 THEN 'SMP'
+					  WHEN 22 THEN 'SMA IPA'
+					  WHEN 23 THEN 'SMA IPS'
+					  WHEN 24 THEN 'UTBK'
+					END as StageCat",
+					'b.SubName as SubjectsID',
+					'a.Date',
+					'a.TimeFrom',
+					'a.TimeTo',
+				),
+				'from' => 'Course_Schedule a',
+				'join' => array(
+					'Course_Subjects b' => array(
+						'on' => 'a.SubID=b.RecID',
+						'type' => 'inner'
+					),
+				),
+				'order_by' => array('a.RecID'=>'DESC')
+			);
+		$item = $this->config_model->find($arr);
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function get_SubjectsName($ID){
+		$arr = array(
+				'from' => 'Course_Subjects',
+				'where' => array('StageCat'=>$ID)
+			);
+
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);
+	}
+
+	public function save_addschedule()
+	{
+
+		    $data2 = array(
+		    	'params' => array(
+			   		'BranchCode' => $this->input->post('BranchCode'),
+			   		'IsmartName' => $this->input->post('IsmartName'),
+			   		'StageCat' => $this->input->post('StageCat'),
+			   		'SubID' => $this->input->post('SubID'),
+			   		'Date' => date('Y-m-d',strtotime($this->input->post('Date'))),
+			   		'TimeFrom' => $this->input->post('TimeFrom'),
+			   		'TimeTo' => $this->input->post('TimeTo'),
+			   		'BranchCode' => $this->input->post('BranchCode'),
+			   	),
+				'from' => 'Course_Schedule',
+		    );
+		    $msg2 = $this->config_model->insert($data2);		
+			if ($msg2==true) {
+				echo data_json(array("message"=>"Data jadwal berhasil disimpan.","notify"=>"success"));
+			} else {
+				echo data_json(array("message"=>"Data jadwal gagal disimpan.","notify"=>"error"));
+			}
+
+	}
+
 }
