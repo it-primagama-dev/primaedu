@@ -75,9 +75,10 @@
       }
     </style>
     <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/js/sha-1.js"></script>
-    <title>Kelas Tatap Muka Online - Primagama</title>
+    <title>Kelas Online Live - Primagama</title>
   </head>
   <body>
+    <div class="loader"></div>
     <div id="slide" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#slide" data-slide-to="0" class="active"></li>
@@ -210,13 +211,10 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body bg-section3">
+          <div class="modal-body bg-section3 rounded">
                 <div class="row" id="divpaket2">
 
                 </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
           </div>
         </div>
       </div>
@@ -280,6 +278,12 @@ function load_cat() {
       url: base_url+"course/get_category",
       type: "POST",
       dataType: 'JSON',
+          beforeSend: function(){
+              $("#ajax-loader").show();
+          },
+          complete: function() {
+              $("#ajax-loader").hide();
+          },
       success:function(data){
         $.each(data.rows, function(i, item) {
           var div = `<img class="card-img-top" src="<?php echo base_url(); ?>assets/images/img/category/`+item.Photo+`" alt="Photo Pack">
@@ -305,13 +309,23 @@ function detail(id) {
       type: "POST",
       data: ({id:window.btoa(id)}),
       dataType: 'JSON',
+          beforeSend: function(){
+              $("#ajax-loader").show();
+          },
+          complete: function() {
+              $("#ajax-loader").hide();
+          },
       success:function(data){
         $.each(data.rows, function(i, item) {
           var div = `<div class="card-header pt-3 cardpack" style="background-image: url('<?php echo base_url(); ?>assets/images/img/`+item.bgimage+`'); background-size: cover;">
                         <h5 class="card-title text-white">`+item.PackName+`</h5>
                       </div>
                       <div class="card-body">
+                        <div style="margin-left: -20px;">
                           `+item.Description+`
+                        </div>
+                        <h6 class="card-subtitle mb-2" style="color: red; text-decoration: line-through;">`+convertToRupiah(item.PriceDetail*2)+`</h6>
+                        <h5 class="card-subtitle mb-3" style='color: #230346;'>`+convertToRupiah(item.PriceDetail)+`</h5>
                         <button class="btn btn-dark btnbg btn-block" onClick="checkout(`+item.RecID+`)">Beli Paket</button>
                       </div>`;
                       //<h6 class="card-subtitle mb-3 text-muted">`+convertToRupiah(item.Price)+`</h6>
