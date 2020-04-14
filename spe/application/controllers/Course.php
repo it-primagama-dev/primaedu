@@ -496,7 +496,7 @@ class Course extends CI_Controller {
 		  	'from' => 'Logistics_Transactions',
 		);
 	    $this->config_model->insert($data);
-		echo data_json(array("message"=>" Berhasil disimpan 2.","notify"=>"success"));
+		echo data_json(array("message"=>" Berhasil dapatkan kode pembayaran . . .","notify"=>"success"));
 
 	}
 
