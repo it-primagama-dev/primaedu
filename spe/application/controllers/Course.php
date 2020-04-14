@@ -155,19 +155,19 @@ class Course extends CI_Controller {
 				);
 				$this->config_model->insert($data);
 
-				$datasche = array(
+				/*$datasche = array(
 			    	'params' => array(
 						'Status' => 1,
 				    ),
 				    'from' => 'Course_Schedule',
 	            	'where' => array(
-	            		'BranchCode'=>$Referal,
+	            		//'BranchCode'=>$Referal,
 	            		'SubID'=>$SubID,
 	            		'TimeFrom' => base64_decode($this->input->post('time')),
 	            		'Date' => date('Y-m-d',strtotime(base64_decode($this->input->post('date'))))
 	            	),
 			    );
-			    $this->config_model->update($datasche);
+			    $this->config_model->update($datasche);*/
 
 				echo data_json(array("message"=>"Berhasil pilih jadwal.","notify"=>"success"));
 			} else {
@@ -190,7 +190,7 @@ class Course extends CI_Controller {
 			    );
 			    $this->config_model->update($data);
 
-				$datasche = array(
+				/*$datasche = array(
 			    	'params' => array(
 						'Status' => 1,
 				    ),
@@ -202,7 +202,7 @@ class Course extends CI_Controller {
 	            		'Date' => date('Y-m-d',strtotime(base64_decode($this->input->post('date'))))
 	            	),
 			    );
-			    $this->config_model->update($datasche);
+			    $this->config_model->update($datasche);*/
 				echo data_json(array("message"=>"Berhasil ubah jadwal.","notify"=>"success"));
 			} else {
 				echo data_json(array("message"=>"Jumlah Mapel Melebihi Batas.","notify"=>"danger"));
@@ -344,7 +344,7 @@ class Course extends CI_Controller {
         $arr = "SELECT * From (
 					Select b.RecID,a.ScheduleName as IDTem,b.Date from Course_ScheduleTemplate a
 					inner join Course_Schedule b On a.RecID=b.ScheduleTemplateID
-					where b.SubID='$id' and Status is null --and BranchCode = '$Referal' --and b.Date <= '2020-04-13'
+					where b.SubID='$id' AND b.Status is null AND CAST(b.Date AS DATETIME) + CAST(b.TimeFrom AS DATETIME) >= CAST(CONVERT(Date, getdate()) AS DATETIME) + CAST('17:00:00.000' AS DATETIME) AND b.Date < dateadd(day, +14, getdate())
 					group by a.ScheduleName, b.Date,b.RecID
 				)src
 				pivot
@@ -376,16 +376,26 @@ class Course extends CI_Controller {
 	{
 
 		$Referal = base64_decode($this->input->post('Referal'));
+		$SessionID = base64_decode($this->input->post('SessionID'));
+		$PackDetailID = base64_decode($this->input->post('PackDetailID'));
         $arr3 = array(
             'from' => 'Course_Referal a',
             'where' => array('a.ReferalCode' => $Referal),
         );
         $sql3 = $this->config_model->find($arr3);
 
+        $arr4 = array(
+            'from' => 'Course_OrderDetailTmp a',
+            'where' => array('a.SessionID' => $SessionID,'a.PackDetailID' => $PackDetailID),
+        );
+        $sql4 = $this->config_model->find($arr4);
+
 		if ($sql3->num_rows()>0) {
 			$data['rows3'] = $sql3->result_array();
+			$data['rows4'] = $sql4->result_array();
 		} else {
 			$data['rows3'] = 0;
+			$data['rows4'] = 0;
 		}
 		echo json_encode($data);
 	}
@@ -441,11 +451,24 @@ class Course extends CI_Controller {
 		);
 		$msg2 = $this->config_model->insert($arr2);
 
-		$arr = "INSERT INTO Course_OrderDetail ( PackDetailID, SubID, MeetNumber, PriceDetail, DateSchedule,TimeFromSchedule, SessionID)
-			SELECT  a.PackDetailID, a.SubID, a.MeetNumber, a.PriceDetail, a.ScheduleDate, a.ScheduleTime, SessionID
-			FROM    Course_OrderDetailTmp a
-			WHERE a.SessionID = '$SessionID' AND PackDetailID = '$PackDetailID'";
-        $sql = $this->db->query($arr);
+		$orderdetail = "INSERT INTO Course_OrderDetail ( PackDetailID, SubID, MeetNumber, PriceDetail, DateSchedule,TimeFromSchedule, SessionID, ScheduleID)
+				select 
+				a.PackDetailID,a.SubID,a.MeetNumber,c.PriceDetail,a.ScheduleDate,a.ScheduleTime,a.SessionID,
+					(SELECT Top 1 RecID FROM Course_Schedule ab 
+						where ab.Date=a.ScheduleDate AND ab.TimeFrom=a.ScheduleTime AND ab.SubID=a.SubID And ab.Status is null 
+						ORDER BY RecID ) as RecIDJadwal
+				from Course_OrderDetailTmp a 
+				left join Course_Schedule b on a.ScheduleDate=b.Date AND a.ScheduleTime=b.TimeFrom AND a.SubID = b.SubID
+				join Course_PackDetail c on a.PackDetailID=c.RecID
+				where a.SessionID = '$SessionID' And a.PackDetailID = '$PackDetailID'
+				Group by a.SessionID,a.SubID,a.ScheduleDate,a.ScheduleTime,a.RecID,a.MeetNumber,c.PriceDetail,a.PackDetailID";
+        $sqlorderdetail = $this->db->query($orderdetail);
+
+		$updatejadwal = "UPDATE Course_Schedule set Status = 1
+							from Course_OrderDetail a
+							join Course_Schedule b on a.ScheduleID=b.RecID
+							where b.Status is null";
+        $sqlupdatejadwal = $this->db->query($updatejadwal);
 		
 		$PAYMENTCODE = '39206597';
 		$REQUESTDATETIME = $this->input->post('REQUESTDATETIME');
@@ -470,161 +493,43 @@ class Course extends CI_Controller {
 				'REQUESTDATETIME' => $REQUESTDATETIME,
 				'BASKET' => $BASKET
 			),
-		  		'from' => 'Logistics_Transactions',
+		  	'from' => 'Logistics_Transactions',
 		);
 	    $this->config_model->insert($data);
 		echo data_json(array("message"=>" Berhasil disimpan 2.","notify"=>"success"));
 
 	}
 
-
-	public function template_email($data='',$data2)
+	public function cek_stokjadwal()
 	{
-		$htmlContent = '
-		<table width="600" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4">
-			<tbody>
-				<tr>
-					<td>
-						<img style="padding:10px;" src="'.base_url().'assets/images/logo_new_web.png" alt="logo" width="250"/>
-					</td>
-				</tr>
-			</tbody>
-			<tbody>
-				<tr>
-					<td valign="top" width="200">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
-							<tbody>
-								<tr>
-									<td align="left" valign="top" style="font-size:14px;font-weight:bold;color:#00af41;padding-left: 15px;">Detail Pesanan</td>
-								</tr>
-								<tr>
-									<td valign="top">
-										<table width="100%" border="0" cellpadding="0" cellspacing="0">
-											<tbody>
-												<tr>
-													<td align="left" valign="top">
-														<table border="0" cellspacing="0" cellpadding="0" width="100%">
-															<tbody>';
-																foreach ($data as $row) {
-																	foreach ($row as $key => $val) {
-																		$htmlContent .= '<tr>';
-																			$htmlContent .= '<td align="left" class="m_-83677845150779067tdp5">';
-																				$htmlContent .= '<span style="font-size:10px;color:#9e9e9e;line-height:16px;padding-left: 15px;">'.$key.':</span><br>';
-																				$htmlContent .= '<span style="font-size:12px;line-height:16px;font-weight:bold;padding-left: 15px;">'.$val.'</span>';
-																			$htmlContent .= '</td>';
-																		$htmlContent .= '</tr>';
-																	}
-																}
-															$htmlContent .= '</tbody>
-														</table>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-					<td valign="top" width="270">
-						<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="border:1px solid #dddddd">
-							<tbody>
-								<tr>
-									<td height="10px" align="left"></td>
-									<td height="10px" colspan="2"></td>
-									<td height="10px" align="left"></td>
-								</tr>
-								<tr>
-									<td height="5px" align="left"></td>
-									<td height="5px" colspan="2" align="left">
-										 Detail Pembayaran:
-									</td>
-									<td height="25px" align="left"></td>
-								</tr>
-								<tr>
-									<td height="3px" align="left"></td>
-									<td height="3px" colspan="2" align="left" style="border-top:1px dashed #9e9e9e"></td>
-									<td height="3px" align="left"></td>
-								</tr>';
-								foreach ($data2 as $row) {
-									foreach ($row as $key => $val) {
-										$htmlContent .= '<tr>';
-											$htmlContent .= '<td align="left" width="15"></td>';
-											$htmlContent .= '<td width="171" align="left">';
-												$htmlContent .= '<span style="font-size:11px;color:#9e9e9e;line-height:21px">'.$key.'</span>';
-											$htmlContent .= '</td>';
-											$htmlContent .= '<td width="80" align="left">';
-												$htmlContent .= '<span style="font-size:11px;color:#9e9e9e;line-height:28px">&nbsp;&nbsp;'.$val.'</span>';
-											$htmlContent .= '</td>';
-											$htmlContent .= '<td align="left" width="15"></td>';
-										$htmlContent .= '</tr>';
-										$htmlContent .= '<tr>';
-											$htmlContent .= '<td height="5px" align="left"></td>';
-											$htmlContent .= '<td height="5px" colspan="2" align="left" style="border-top:1px dashed #9e9e9e"></td>';
-											$htmlContent .= '<td height="5px" align="left"></td>';
-										$htmlContent .= '</tr>';
-									}
-								}
-								$htmlContent .= '<tr>
-									<td align="left" width="15"></td>
-									<td align="right">
-										<span style="font-size:12px;font-weight:bolder;color:#000000;line-height:28px">- - - - -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-									</td>
-									<td align="left">
-										<span style="font-size:12px;font-weight:bolder;color:#000000;line-height:28px"></span>
-									</td>
-									<td align="left" width="15"></td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				</tr>
-			</tbody>
-		</table>';
-		return $htmlContent;
-	}
 
-	public function tesemail()
-	{
-		require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
-		$data = array(
-			array(
-				'Nama' => 'Oni',
-				'Paket' => 'Privat'
-			)
-		);
-
-		$data2 = array(
-			array(
-				'Jumlah Pembayaran' => 'Rp. 10000'/*,
-				'Pembayaran 2' => 'Rp. 200000'*/
-			)
-		);
-
-		$mail             = new PHPMailer();
-        $mail->IsSMTP();
-        $mail->SMTPAuth   = true;
-        $mail->Host       = "smtp.office365.com";
-        $mail->Port       = "587";
-        $mail->Username   = "no-reply@primagama.co.id";
-        $mail->Password   = "Prima.1234";
-        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
-        $mail->Subject    = "Primagama - Pembayaran Berhasil";
-        $mail->MsgHTML($this->template_email($data,$data2));
-        $mail->AddAddress('oni.pamuji@gmail.com', 'Oni');
-        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
-
-
-        if(!$mail->Send()) {
-        	echo "Mailer Error: " . $mail->ErrorInfo;
-        } else {
-         	echo "Mailer berhasil";
-        }
-	}
-
-	public function test()
-	{
-		echo base_url();
+		$PackDetailID = base64_decode($this->input->post('PackDetailID'));
+		$SessionID = base64_decode($this->input->post('SessionID'));
+		$arr = "SELECT src.JMLJadwal,src.RecIDJadwal,src.MeetNumber FROM 
+				(
+					select 
+					a.SessionID,a.SubID,a.ScheduleDate,a.ScheduleTime,--COUNT(b.RecID) as JmlAvailable
+						(SELECT COUNT(RecID) From Course_Schedule aa 
+							where aa.Date=a.ScheduleDate AND aa.TimeFrom=a.ScheduleTime AND aa.SubID=a.SubID And aa.Status is null 
+							) as JMLJadwal,
+						(SELECT Top 1 RecID FROM Course_Schedule ab 
+							where ab.Date=a.ScheduleDate AND ab.TimeFrom=a.ScheduleTime AND ab.SubID=a.SubID And ab.Status is null 
+							ORDER BY RecID ) as RecIDJadwal,
+							a.MeetNumber
+					from Course_OrderDetailTmp a 
+					left join Course_Schedule b on a.ScheduleDate=b.Date AND a.ScheduleTime=b.TimeFrom AND a.SubID = b.SubID
+					where a.SessionID = '$SessionID' And a.PackDetailID = '$PackDetailID' --AND b.Status is null
+					Group by a.SessionID,a.SubID,a.ScheduleDate,a.ScheduleTime,a.RecID,a.MeetNumber
+					--order by a.RecID
+				) src
+				where JMLJadwal = 0";
+		$sql = $this->db->query($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows4'] = $sql->result_array();
+		} else {
+			$data['rows4'] = 0;
+		}
+		echo json_encode($data);
 	}
 
 }

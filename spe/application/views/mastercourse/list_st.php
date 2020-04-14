@@ -193,13 +193,17 @@ function detail(SessionID)
                     ).appendTo('#dt_siswa');
                 });
                 $.each(data.rows2, function(i2, item2) {
-                    
+                    if(item2.IsmartName==null){
+                      IsmartName = '-';
+                    } else {
+                      IsmartName = item2.IsmartName;
+                    }
                     var $tr = $('<tr>').append(
                         $('<td>').text('Pertemuan Ke - '+item2.MeetNumber),
                         $('<td>').text(item2.SubName),
                         $('<td>').text(get_hari(item2.DateSchedule)),
                         $('<td>').text(item2.TimeFromScheDule.substring(0,5)),
-                        $('<td>').text('-')
+                        $('<td>').text(IsmartName)
                     ).appendTo('#dt_jadwal');
                 });
                 //$('#example2').dataTable();

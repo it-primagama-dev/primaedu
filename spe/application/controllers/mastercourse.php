@@ -361,7 +361,7 @@ class mastercourse extends CI_Controller {
 						'on' => 'a.SubID=b.RecID',
 						'type' => 'inner'
 					),
-					'Course_Schedule c' => array(
+					'Course_ScheduleTemplate c' => array(
 						'on' => 'a.ScheduleTemplateID=c.RecID',
 						'type' => 'inner'
 					),
@@ -509,6 +509,10 @@ class mastercourse extends CI_Controller {
 			'Course_Subjects b' => array(
 				'on' => 'a.SubID=b.RecID',
 					'type' => 'inner'
+				),
+			'Course_Schedule c' => array(
+				'on' => 'a.ScheduleID=c.RecID',
+					'type' => 'left'
 				),
 			),
 			'where' => array('a.SessionID'=>$SessionID),
