@@ -49,10 +49,7 @@
       <div class="container">
         <div class="loader"></div>
         <div class="row">
-          <div class="col">       
-              <!-- <nav class="navbar mt-5" style="background-image: linear-gradient(white, blue 200%);">
-                <font style="font-size: 20px;">Form Pembelian Paket - <?= $PackName ?> </font>  
-              </nav> -->
+          <div class="col"> 
               <input type="hidden" id="packid" class="form-control" value="<?= $id ?>">
               <input type="hidden" id="sesid" class="form-control">
               <input type="hidden" id="pricetot" class="form-control" value="<?= $pricetot ?>">
@@ -63,6 +60,7 @@
               <input type="hidden" id="pricefix" class="form-control">
               <input type="hidden" id="jumlahmapel" class="form-control">
               <input type="hidden" id="namapaket" value="<?= $PackName ?>">
+              <input type="hidden" id="jmlsesi" class="form-control">
               <p style="display: none;" id="basket"></p>
           </div>
         </div>
@@ -131,11 +129,6 @@
                   <tfoot id="dt_pricefixtot">
                   </tfoot>
                 </table>
-              <!-- <nav class="navbar text-white rounded" style="background-image: url('<?php echo base_url(); ?>assets/images/img/nav.jpg')">
-                <font style="font-size: 20px;" id="pricefix"></font>  
-                <button class="btn btn-success text-right" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" onClick="pay()">Lanjut Ke Pembayaran</button>
-              </nav> -->
-
                   <button class="btn btn-success btn-block" style="background-image: url('<?php echo base_url(); ?>assets/images/img/btn-green.jpg')" id="btnbyr" onClick="pay()">Lanjut Ke Pembayaran</button>
                    
               </div>
@@ -318,6 +311,10 @@ function RandomNumber() {
 }
 
 function pay(){ 
+      var radiosesi = true;
+        $('#radiosesi').each(function(){
+           radiosesi = radiosesi && $(this).is(':checked');
+        });
       $(".text-danger").remove();
       var Referal = $('#Referal').val();
       var Kelas = $('#Kelas').val();
@@ -326,6 +323,10 @@ function pay(){
       var array2 = $("input[name^='AsalSekolah']");
       var array3 = $("input[name^='Email']");
       var array4 = $("input[name^='NoHp']");
+
+      idpackdetail = $('#idpackdetail').val();
+      sesid = $('#sesid').val(); 
+      jmlsesi = $('#jmlsesi').val(); 
 
       for(i=0;i<n;i++)
       {
@@ -362,25 +363,31 @@ function pay(){
           $('[id="Kelas"]').after('<p class="text-danger text-left">Pilih Kelas Dulu . . .</p>');
           $('[id="Kelas"]').focus();
           return false;
+        } else if(radiosesi == false) {
+          alert('Pilih Sesi Dulu . . .');
         } else {
 
         $.ajax({
+            //cek jumlah pertemuan yg diinput disini
             url: base_url+"course/cek_referal",
             type: "POST",
-            data: ({Referal:window.btoa(Referal)}),
+            data: ({Referal:window.btoa(Referal),SessionID:window.btoa(sesid),PackDetailID:window.btoa(idpackdetail)}),
             dataType: 'JSON',
             success:function(data){
 
               var cekreferal = Object.keys(data.rows3).length;
-
               if(cekreferal > 0) {
-                $('.modal-title').empty();
-                        $('#myModal2').modal({
-                            show: true,
-                            backdrop: 'static',
-                            keyboard: false
-                });
-                $('.modal-title').text('Pilih Metode Pembayaran');
+                if(Object.keys(data.rows4).length < jmlsesi) {
+                  alert('Pilih jadwal di setiap pertemuan . . .');
+                } else {
+                  $('.modal-title').empty();
+                          $('#myModal2').modal({
+                              show: true,
+                              backdrop: 'static',
+                              keyboard: false
+                  });
+                  $('.modal-title').text('Pilih Metode Pembayaran');
+                }
               } else {
                 alert('Kode Referal Salah');
                 $('[id="Referal"]').after('<p class="text-danger text-left">Isi Kode Referal yg benar . . .</p>');
@@ -422,7 +429,7 @@ function get_sesi() {
         $.each(data.rows, function(i, item) {
             var $tr = $("<tr class='noBorder'>").append(
                 $('<th height="50" style="text-align:left;" width="10%">').html(`<label class="labelradio">
-                      <input type="radio" name="sesi" value=`+item.RecID+`>
+                      <input type="radio" id="radiosesi" name="sesi" value=`+item.RecID+`>
                       <span class="checkmarkradio"></span>
                     </label>`),
                 $('<th height="50" style="text-align:left;">').text(item.PackDetailName),
@@ -516,6 +523,7 @@ function get_sesi() {
                     // alert(catid);
                     $('#pricefixtot').val(pricetot*jmlsiswa);
                     $('#pricefix').val(pricetot);
+                    $('#jmlsesi').val(jmlsesi);
                     if(totalmapel != 1) {
                       $('#divsk').css('display','block');
                       $('#jmlmapel').text(totalmapel);
@@ -704,16 +712,23 @@ function pilihjadwal() {
       jumlahmapel = $('#jumlahmapel').val();
       Referal = $('#Referal').val();
 
+      var jmlcheck = false;
       for (var i = 0, length = idjadwal.length; i < length; i++) {
         if (idjadwal[i].checked) {
           var dateandtime = idjadwal[i].value;
               arraylist = dateandtime.split(",");
               time2 = arraylist[0];
               date2 = arraylist[1];
+              jmlcheck = idjadwal[i].checked;
           break;
         }
       }
 
+      //alert(jmlcheck);
+      if(jmlcheck == false) {
+          alert('Belum Pilih Jadwal . . .');
+          return false;
+      }
       //date3 = tgl_indo_angka(date2);
       //alert(date2);
       $.ajax({
@@ -838,78 +853,95 @@ function savedata() {
       var array4 = $("input[name^='NoHp']");
       //alert(array1);
       //alert(RandomNumber());
-      for(i=0;i<n;i++)
-      {
-          Nama =  array1[i].value;
-          AsalSekolah =  array2[i].value;
-          Email =  array3[i].value;
-          NoHp =  array4[i].value;
-          EmailPertama = array3[0].value;
-          NamaPertama = array1[0].value;
-          //alert(Nama);
-            //alert('ok');
-              $.ajax({
-                  url : base_url+"course/save_order",
-                  type: 'POST',
-                  data: ({
-                    Nama:window.btoa(Nama),
-                    Sekolah:window.btoa(AsalSekolah),
-                    Email:window.btoa(Email),
-                    NoHp:window.btoa(NoHp),
-                    sesid:window.btoa(sesid)
-                  }),
-                  dataType: 'json',
-                  beforeSend: function(){
-                      $("#ajax-loader").show();
-                  },
-                  complete: function() {
-                      $("#ajax-loader").hide();
-                  },
-                  success: function(data){
-                      //redirectPost(base_url+'Logistics/list_do');
-                      //$.notify(data.message,data.notify);
-                  }
-              })
-       }
+      var MeetNumber;
+      $.ajax({
+          url: base_url+"course/cek_stokjadwal",
+          type: "POST",
+          data: ({PackDetailID:window.btoa(idpackdetail),SessionID:window.btoa(sesid)}),
+          dataType: 'JSON',
+          success:function(data){
+            var cekstok = Object.keys(data.rows4).length;
+            if(cekstok!=0){
+              $.each(data.rows4, function(i, item) {
+                  $('#jadwaldipilih'+item.MeetNumber).html("<i style='font-size: 14px; color: red;'>Pilih Jadwal Lain . . .</i>");
+              });
+                  alert('Oops ada jadwal yang sudah digunakan siswa lain');
+                  $('#myModal2').modal('hide');
+            } else {/*
+              alert('AMAN');*/
+              for(i=0;i<n;i++)
+          {
+              Nama =  array1[i].value;
+              AsalSekolah =  array2[i].value;
+              Email =  array3[i].value;
+              NoHp =  array4[i].value;
+              EmailPertama = array3[0].value;
+              NamaPertama = array1[0].value;
+              //alert(Nama);
+                //alert('ok');
+                  $.ajax({
+                      url : base_url+"course/save_order",
+                      type: 'POST',
+                      data: ({
+                        Nama:window.btoa(Nama),
+                        Sekolah:window.btoa(AsalSekolah),
+                        Email:window.btoa(Email),
+                        NoHp:window.btoa(NoHp),
+                        sesid:window.btoa(sesid)
+                      }),
+                      dataType: 'json',
+                      beforeSend: function(){
+                          $("#ajax-loader").show();
+                      },
+                      complete: function() {
+                          $("#ajax-loader").hide();
+                      },
+                      success: function(data){
+                          //redirectPost(base_url+'Logistics/list_do');
+                          //$.notify(data.message,data.notify);
+                      }
+                  })
+           }
 
-       //alert(EmailPertama);
+           //alert(EmailPertama);
 
-              var now = new Date();
-              //formdata['token'] = window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=");
+                  var now = new Date();
+                  //formdata['token'] = window.btoa("Q3IzNHQzZF9ieS5IQG1aNGg=");
 
-              $.ajax({
-                  url : base_url+"course/save_orderheader",
-                  type: 'POST',
-                  data: ({
-                    TotalPrice:window.btoa(pricefixtot),
-                    PackDetailID:window.btoa(idpackdetail),
-                    SessionID:window.btoa(sesid),
-                    StageCode:window.btoa(Kelas),
-                    Referal:window.btoa(Referal),
-                    CURRENCY:decode64('MzYw'),
-                    PURCHASECURRENCY:decode64('MzYw'),
-                    AMOUNT:pricefixtot+'.00',
-                    PURCHASEAMOUNT:pricefixtot+'.00',
-                    REQUESTDATETIME:dateFormat(now, "yyyymmddHHMMss"),
-                    EMAIL:EmailPertama,
-                    NAME:NamaPertama,
-                    BASKET:document.getElementById("basket").innerHTML,
-                    RANDOMNUMBER:RandomNumber(),
-                  }),
-                  dataType: 'json',
-                  beforeSend: function(){
-                      $("#ajax-loader").show();
-                  },
-                  complete: function() {
-                      $("#ajax-loader").hide();
-                  },
-                  success: function(data){
-                      redirectPost(base_url+'info/pembayaran/'+sesid);
-                      $.notify(data.message,data.notify);
-                  }
-              })
-
-
+                  $.ajax({
+                      url : base_url+"course/save_orderheader",
+                      type: 'POST',
+                      data: ({
+                        TotalPrice:window.btoa(pricefixtot),
+                        PackDetailID:window.btoa(idpackdetail),
+                        SessionID:window.btoa(sesid),
+                        StageCode:window.btoa(Kelas),
+                        Referal:window.btoa(Referal),
+                        CURRENCY:decode64('MzYw'),
+                        PURCHASECURRENCY:decode64('MzYw'),
+                        AMOUNT:pricefixtot+'.00',
+                        PURCHASEAMOUNT:pricefixtot+'.00',
+                        REQUESTDATETIME:dateFormat(now, "yyyymmddHHMMss"),
+                        EMAIL:EmailPertama,
+                        NAME:NamaPertama,
+                        BASKET:document.getElementById("basket").innerHTML,
+                        RANDOMNUMBER:RandomNumber(),
+                      }),
+                      dataType: 'json',
+                      beforeSend: function(){
+                          $("#ajax-loader").show();
+                      },
+                      complete: function() {
+                          $("#ajax-loader").hide();
+                      },
+                      success: function(data){
+                          redirectPost(base_url+'info/pembayaran/'+sesid);
+                          $.notify(data.message,data.notify);
+                      }
+                  })
+            }
+        }
+    });
 }
 
 </script>
