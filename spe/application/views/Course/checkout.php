@@ -604,78 +604,78 @@ function jadwal(id) {
             if(item.Jam1 > 0) {
               Jam1 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam1`+item.Date+`" name="jadwal" value="07:30,`+item.Date+`">
-                      <label for="jam1`+item.Date+`">07:30 - 09:00</label>
+                      <label for="jam1`+item.Date+`">07:30 - 09:00 WIB</label>
                     </td>`;
             } else {
               Jam1 = `<td  class="NoAvailable">
                       <input type="radio" id="jam1`+item.Date+`" name="jadwal" value="07:30,`+item.Date+`" disabled="disabled">
-                      <label for="jam1`+item.Date+`">07:30 - 09:00</label>
+                      <label for="jam1`+item.Date+`">07:30 - 09:00 WIB</label>
                     </td>`;
             }
             if(item.Jam2 > 0) {
               Jam2 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam2`+item.Date+`" name="jadwal" value="09:00,`+item.Date+`">
-                      <label for="jam2`+item.Date+`">09:00 - 10:30</label>
+                      <label for="jam2`+item.Date+`">09:00 - 10:30 WIB</label>
                     </td>`;
             } else {
               Jam2 = `<td  class="NoAvailable">
                       <input type="radio" id="jam2`+item.Date+`" name="jadwal" value="09:00,`+item.Date+`" disabled="disabled">
-                      <label for="jam2`+item.Date+`">09:00 - 10:30</label>
+                      <label for="jam2`+item.Date+`">09:00 - 10:30 WIB</label>
                     </td>`;
             }
             if(item.Jam3 > 0) {
               Jam3 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam3`+item.Date+`" name="jadwal" value="10:30,`+item.Date+`">
-                      <label for="jam3`+item.Date+`">10:30 - 12:00</label>
+                      <label for="jam3`+item.Date+`">10:30 - 12:00 WIB</label>
                     </td>`;
             } else {
               Jam3 = `<td  class="NoAvailable">
                       <input type="radio" id="jam3`+item.Date+`" name="jadwal" value="10:30,`+item.Date+`" disabled="disabled">
-                      <label for="jam3`+item.Date+`">10:30 - 12:00</label>
+                      <label for="jam3`+item.Date+`">10:30 - 12:00 WIB</label>
                     </td>`;
             }
             if(item.Jam4 > 0) {
               Jam4 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam4`+item.Date+`" name="jadwal" value="13:00,`+item.Date+`">
-                      <label for="jam4`+item.Date+`">13:00 - 14:30</label>
+                      <label for="jam4`+item.Date+`">13:00 - 14:30 WIB</label>
                     </td>`;
             } else {
               Jam4 = `<td  class="NoAvailable">
                       <input type="radio" id="jam4`+item.Date+`" name="jadwal" value="13:00,`+item.Date+`" disabled="disabled">
-                      <label for="jam4`+item.Date+`">13:00 - 14:30</label>
+                      <label for="jam4`+item.Date+`">13:00 - 14:30 WIB</label>
                     </td>`;
             }
             if(item.Jam5 > 0) {
               Jam5 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam5`+item.Date+`" name="jadwal" value="14:30,`+item.Date+`">
-                      <label for="jam5`+item.Date+`">14:30 - 16:00</label>
+                      <label for="jam5`+item.Date+`">14:30 - 16:00 WIB</label>
                     </td>`;
             } else {
               Jam5 = `<td  class="NoAvailable">
                       <input type="radio" id="jam5`+item.Date+`" name="jadwal" value="14:30,`+item.Date+`" disabled="disabled">
-                      <label for="jam5`+item.Date+`">14:30 - 16:00</label>
+                      <label for="jam5`+item.Date+`">14:30 - 16:00 WIB</label>
                     </td>`;
             }
             if(item.Jam6 > 0) {
               Jam6 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam6`+item.Date+`" name="jadwal" value="16:00,`+item.Date+`">
-                      <label for="jam6`+item.Date+`">16:00 - 17:30</label>
+                      <label for="jam6`+item.Date+`">16:00 - 17:30 WIB</label>
                     </td>`;
             } else {
               Jam6 = `<td  class="NoAvailable">
                       <input type="radio" id="jam6`+item.Date+`" name="jadwal" value="16:00,`+item.Date+`" disabled="disabled">
-                      <label for="jam6`+item.Date+`">16:00 - 17:30</label>
+                      <label for="jam6`+item.Date+`">16:00 - 17:30 WIB</label>
                     </td>`;
             }
             if(item.Jam7 > 0) {
               Jam7 = `<td  class="radio-toolbar">
                       <input type="radio" id="jam7`+item.Date+`" name="jadwal" value="18:30,`+item.Date+`">
-                      <label for="jam7`+item.Date+`">18:30 - 20:00</label>
+                      <label for="jam7`+item.Date+`">18:30 - 20:00 WIB</label>
                     </td>`;
             } else {
               Jam7 = `<td  class="NoAvailable">
                       <input type="radio" id="jam7`+item.Date+`" name="jadwal" value="18:30,`+item.Date+`" disabled="disabled">
-                      <label for="jam7`+item.Date+`">18:30 - 20:00</label>
+                      <label for="jam7`+item.Date+`">18:30 - 20:00 WIB</label>
                     </td>`;
             }
             //alert('OK');
@@ -755,7 +755,7 @@ function pilihjadwal() {
               $("#ajax-loader").hide();
           },
           success:function(data){
-            $('#jadwaldipilih'+meetnumber).text(get_hari(date2)+' - '+time2);
+            $('#jadwaldipilih'+meetnumber).text(get_hari(date2)+' - '+time2+' WIB');
             $.notify(data.message,data.notify); 
             $('#myModal').modal('hide');
           }

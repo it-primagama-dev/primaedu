@@ -78,8 +78,7 @@
               </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
