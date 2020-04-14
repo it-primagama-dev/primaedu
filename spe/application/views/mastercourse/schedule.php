@@ -3,13 +3,13 @@
     <div class="col-lg-6">
         <div class="form-group">
             <div class="col-lg-12">
-                <p style="font-size: 23px; font-weight: bold;"> <i class="fa fa-list"> Data Schedule </i></p>
+                <p style="font-size: 23px; font-weight: bold;"> <i class="fa fa-list"> Data Jadwal </i></p>
             </div>
         </div>
     </div>
     <div class="col-lg-6" style="text-align: right;">
         <div class="form-group">
-            <div class="col-lg-12"><button type="button" class="btn btn-primary pull-right" data-toggle="modal" onclick="modal_form();"><span class="glyphicon glyphicon-plus-sign"></span> Tambah Schedule</button>
+            <div class="col-lg-12"><button type="button" class="btn btn-primary pull-right" data-toggle="modal" onclick="modal_form();"><span class="glyphicon glyphicon-plus-sign"></span> Tambah Jadwal</button>
             </div>
         </div>
     </div>
@@ -24,11 +24,10 @@
                         <th>No</th>
                         <th>Kode Cabang</th>
                         <th>Nama iSmart</th>
-                        <th>Stage</th>
-                        <th>Sub Nama</th>
+                        <th>Jenjang</th>
+                        <th>Mapel</th>
                         <th>Tanggal</th>
-                        <th>Waktu Mulai</th>
-                        <th>Waktu Selesai</th>
+                        <th>Waktu</th>
                     </tr>
                 </thead>
                 <tbody id="data_schedule"></tbody>
@@ -63,10 +62,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Stage Nama</label>
+                            <label class="control-label col-md-3">Jenjang</label>
                             <div class="col-md-9">
                                <select class="form-control" id="StageCat">
-                                   <option value="">Pilih Nama Stage</option>
+                                   <option value="">Pilih Jenjang</option>
                                    <option value="20">SD</option>
                                    <option value="21">SMP</option>
                                    <option value="22">SMA IPA</option>
@@ -94,6 +93,14 @@
                             <div class="col-md-9">
                                <select class="form-control" id="TimeFrom">
                                    <option value="">Pilih Waktu Mulai</option>
+                               </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="control-label col-md-3">Waktu Mulai</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="TimeFrom">
+                                   <option value="">Pilih Waktu Mulai</option>
                                    <option value="07:30">07:30</option>
                                    <option value="09:00">09:00</option>
                                    <option value="10:30">10:30</option>
@@ -103,7 +110,7 @@
                                    <option value="18:30">18:30</option>
                                </select>
                             </div>
-                        </div>
+                        </div> --><!-- 
                         <div class="form-group">
                             <label class="control-label col-md-3">Waktu Selesai</label>
                             <div class="col-md-9">
@@ -118,7 +125,7 @@
                                    <option value="20:00">20:00</option>
                                </select>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
             </div>
@@ -142,14 +149,19 @@
 $(document).ready(function(){
     $(".Idr").autoNumeric('init', {aSign: 'Rp ', aDec: ',', aSep: '.'});
     reload_data();
-    $('#select_all').on('click', function(e) {
-        if($(this).is(':checked',true)) {
-            $(".emp_checkbox").prop('checked', true);
-        } else {
-            $(".emp_checkbox").prop('checked',false);
-        }
-    });
+    get_jadwal();
 });
+
+function get_hari(date) {
+  //var date = tambah;
+
+  var today = new Date(date);
+  today.setDate(today.getDate());
+
+  var options = {  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+  return today.toLocaleDateString('id-id', options);
+}
+
 var save_method;
 var table;
 function modal_form(RecID=null)
@@ -158,7 +170,7 @@ function modal_form(RecID=null)
         $('#modal_form').modal({backdrop: 'static', keyboard: false});
         $('#form')[0].reset();
         $('#modal_form').modal('show');
-        $('.modal-title').text('Tambah Schedule');
+        $('.modal-title').text('Tambah Jadwal');
 }
 
  function save() {
@@ -189,11 +201,6 @@ function modal_form(RecID=null)
           $('[name="TimeFrom"]').focus();
           return false;
       }
-      if($('[name="TimeTo"]').val() == "") {
-          $('[name="TimeTo"]').after('<p class="text-danger">Pilih Tipe iSmart !!!</p>');
-          $('[name="TimeTo"]').focus();
-          return false;
-      }
       if (confirm("Anda yakin data sudah terinput dengan benar ?")) {
 
       var formdata = {};
@@ -202,7 +209,7 @@ function modal_form(RecID=null)
       formdata['SubID'] = $('#SubID').val();
       formdata['Date'] = $('#Date').val();
       formdata['TimeFrom'] = $('#TimeFrom').val();
-      formdata['TimeTo'] = $('#TimeTo').val();
+      //formdata['TimeTo'] = $('#TimeTo').val();
       formdata['BranchCode'] = $('#BranchCode').val();
           $.ajax({
               url : base_url+"mastercourse/save_addschedule",
@@ -254,9 +261,9 @@ function reload_data() {
                         $('<td>').text(item.IsmartName),
                         $('<td>').text(item.StageCat),
                         $('<td>').text(item.SubjectsID),
-                        $('<td>').text(item.Date),
-                        $('<td>').text(TimeFrom),
-                        $('<td>').text(TimeTo)
+                        $('<td>').text(get_hari(item.Date)),
+                        $('<td>').text(TimeFrom+' - '+TimeTo+' WIB'),
+                        //$('<td>').text(TimeTo)
                     ).appendTo('#data_schedule');
                 });
                 $('#example').dataTable();
@@ -274,10 +281,20 @@ $("#StageCat").change(function(e) { //1
     var StageCat = e.target.value; //2
     $.getJSON(base_url+"mastercourse/get_SubjectsName/"+StageCat, function(json){
         $('#SubID').empty();
-        $('#SubID').append($('<option>').text("- - Pilih Sub Nama - -").attr('value',''));
+        $('#SubID').append($('<option>').text("- - Pilih Mapel - -").attr('value',''));
         $.each(json, function(i, obj){
     $('#SubID').append($('<option>').text(obj.SubName).attr('value', obj.RecID));
         });
     });
 })
+
+function get_jadwal() {
+    $.getJSON(base_url+"mastercourse/get_jadwal", function(json){
+        $('#TimeFrom').empty();
+        $('#TimeFrom').append($('<option>').text("- - Pilih Waktu - -").attr('value',''));
+        $.each(json, function(i, obj){
+        $('#TimeFrom').append($('<option>').text(obj.TimeFrom.substring(0,5)+' - '+obj.TimeTo.substring(0,5)+' WIB').attr('value', obj.RecID));
+        });
+    });
+}
 </script>

@@ -32,69 +32,6 @@ class mastercourse extends CI_Controller {
 			exit();
 		}*/
 	}
-	/*
-	public function find_coursee()
-	{
-		$token = base64_decode($this->input->get('token'));
-		if (isset($token) && !empty($token) && $token == base64_encode('Cr34t3d_by.H@mZ4h')) {
-			$data['data'] = $this->config_model->find(array(
-				'select' => array(
-					'a.RecID',
-					'a.CatName',
-					'a.Description',
-					'a.TotalStudents',
-				),
-				'from' => 'Course_Category a',
-				'order_by' => array('a.RecID' => 'DESC')
-			))->result_array();
-			echo json_encode($data);
-		} else {
-			header("HTTP/1.1 403 Origin Denied");
-			exit();
-		}
-	}
-	
-	public function add_coursee()
-	{
-		$token = base64_decode($this->input->post('token'));
-		if (isset($token) && !empty($token) && $token == base64_encode('Cr34t3d_by.H@mZ4h')) {
-			try {
-				$this->config_model->insert(array(
-					'params' => array(
-						'Description' => base64_decode($this->input->post('Description')),
-						'CreatedDate' => date("Y-m-d H:i:s"),
-						'CreatedBy' => $this->session->userdata('Username')
-					),
-					'from' => 'Course_Category'
-				));
-				echo json_encode(array('message'=>'Data berhasil disimpan','notify'=>'success'));
-			} catch (Exception $e) {
-				echo json_encode(array('message'=>'Data gagal disimpan','notify'=>'warning'));
-			}
-		} else {
-			header("HTTP/1.1 403 Origin Denied");
-			exit();
-		}
-	}
-	
-	public function delete_coursee()
-	{
-		$token = base64_decode($this->input->post('token'));
-		if (isset($token) && !empty($token) && $token == base64_encode('Cr34t3d_by.H@mZ4h')) {
-			try {
-				$this->config_model->delete(array(
-					'from' => 'Course_Category',
-					'where' => array('RecID' => base64_decode($this->input->post('RecID')))
-				));
-				echo json_encode(array('message'=>'Data berhasil dihapus','notify'=>'success'));
-			} catch (Exception $e) {
-				echo json_encode(array('message'=>'Data gagal dihapus','notify'=>'warning'));
-			}
-		} else {
-			header("HTTP/1.1 403 Origin Denied");
-			exit();
-		}
-	}*/
 
 	public function edit_paket($RecID)
 	{
@@ -334,8 +271,8 @@ class mastercourse extends CI_Controller {
 			);
 		$item = $this->config_model->find($arr);
 		$data = array(
-			'title' => 'Data Schedule Course',
-			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Schedule Course</a>',
+			'title' => 'Data Jadwal',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Jadwal</a>',
 			'item' => $item,
 		);
 		$this->template->load('template', 'mastercourse/schedule',$data);
@@ -415,13 +352,17 @@ class mastercourse extends CI_Controller {
 					END as StageCat",
 					'b.SubName as SubjectsID',
 					'a.Date',
-					'a.TimeFrom',
-					'a.TimeTo',
+					'c.TimeFrom',
+					'c.TimeTo',
 				),
 				'from' => 'Course_Schedule a',
 				'join' => array(
 					'Course_Subjects b' => array(
 						'on' => 'a.SubID=b.RecID',
+						'type' => 'inner'
+					),
+					'Course_ScheduleTemplate c' => array(
+						'on' => 'a.ScheduleTemplateID=c.RecID',
 						'type' => 'inner'
 					),
 				),
@@ -457,8 +398,8 @@ class mastercourse extends CI_Controller {
 			   		'StageCat' => $this->input->post('StageCat'),
 			   		'SubID' => $this->input->post('SubID'),
 			   		'Date' => date('Y-m-d',strtotime($this->input->post('Date'))),
-			   		'TimeFrom' => $this->input->post('TimeFrom'),
-			   		'TimeTo' => $this->input->post('TimeTo'),
+			   		'ScheduleTemplateID' => $this->input->post('TimeFrom'),
+			   		//'TimeTo' => $this->input->post('TimeTo'),
 			   		'BranchCode' => $this->input->post('BranchCode'),
 			   	),
 				'from' => 'Course_Schedule',
@@ -470,6 +411,122 @@ class mastercourse extends CI_Controller {
 				echo data_json(array("message"=>"Data jadwal gagal disimpan.","notify"=>"error"));
 			}
 
+	}
+
+	public function list_st()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Data Siswa Kelas Online',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Siswa Kelas Online</a>',
+		);
+		$this->template->load('template', 'mastercourse/list_st',$data);
+
+	}
+
+	public function get_datalistst()
+	{
+
+		$arr = array(
+		'select' => array(
+			'a.SessionID',
+			'a.TotalPrice',
+			'b.PackDetailName',
+			'c.PackName',
+			'd.CatName',
+			'e.NAME',
+			'e.EMAIL',
+			'e.AMOUNT',
+			'a.CreatedDate',
+			'a.ReferalCode',
+			'a.Status',
+			'a.OrderCode'
+		),
+		'from' => 'Course_OrderHeader a',
+		'join' => array(
+			'Course_PackDetail b' => array(
+				'on' => 'a.PackDetailID=b.RecID',
+					'type' => 'inner'
+				),
+				'Course_Pack c' => array(
+					'on' => 'b.PackID=c.RecID',
+					'type' => 'inner'
+				),
+				'Course_Category d' => array(
+					'on' => 'c.CatID=d.RecID',
+					'type' => 'inner'
+				),
+				'Logistics_Transactions e' => array(
+					'on' => 'a.OrderCode=e.TRANSIDMERCHANT',
+					'type' => 'inner'
+				),
+			),
+			'order_by' => array('a.RecID'=>'DESC'),
+		);
+		$sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function get_jadwal(){
+		$arr = array(
+				'from' => 'Course_ScheduleTemplate',
+			);
+
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);
+	}
+
+	public function get_liststdetail()
+	{
+
+		$SessionID = $this->input->post('SessionID');
+		$arr = array(
+		'from' => 'Course_OrderHeader a',
+		'join' => array(
+			'Course_OrderStudent b' => array(
+				'on' => 'a.SessionID=b.SessionID',
+					'type' => 'inner'
+				),
+			'Student_Stage c' => array(
+				'on' => 'a.StageCode=c.StageCode',
+					'type' => 'inner'
+				),
+			),
+			'where' => array('a.SessionID'=>$SessionID),
+			'order_by' => array('b.RecID' => '')
+		);
+		$sql = $this->config_model->find($arr);
+
+		$arr2 = array(
+		'from' => 'Course_OrderDetail a',
+		'join' => array(
+			'Course_Subjects b' => array(
+				'on' => 'a.SubID=b.RecID',
+					'type' => 'inner'
+				),
+			'Course_Schedule c' => array(
+				'on' => 'a.ScheduleID=c.RecID',
+					'type' => 'left'
+				),
+			),
+			'where' => array('a.SessionID'=>$SessionID),
+			'order_by' => array('b.RecID' => '')
+		);
+		$sql2 = $this->config_model->find($arr2);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+			$data['rows2'] = $sql2->result_array();
+		} else {
+			$data['rows'] = 0;
+			$data['rows2'] = 0;
+		}
+		echo json_encode($data);
 	}
 
 }

@@ -455,4 +455,22 @@ class Config_model extends CI_Model
         return $this->db->get()->num_rows();
     }
 
+    public function get_ordercode(){
+        $curmonth = date('m');
+        $year = date('y');
+        //$branch = $this->session->userdata('KodeAreaCabang');
+        $month = get_indo_rmw($curmonth);
+        $q = $this->db->query("SELECT MAX(RIGHT(OrderCode,5)) as INV from Course_OrderHeader Where MONTH(CreatedDate)=MONTH(GETDATE())");
+        $kd = "";
+        if($q->num_rows()>0){
+            foreach($q->result() as $k){
+                $tmp = ((int)$k->INV)+1;
+                $kd = sprintf("%05s", $tmp);
+            }
+        }else{
+            $kd = "00001";
+        }
+        return "PG/".$month.'/'.$year.'/'.$kd;
+    }
+
 }

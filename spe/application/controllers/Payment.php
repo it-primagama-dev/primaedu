@@ -121,12 +121,8 @@ class Payment extends CI_Controller {
 				$data = array(
     				'params' => array(
 						'RESULTMSG' => $this->input->post('RESULTMSG'),
-						//'TRANSIDMERCHANT' => $this->input->post('TRANSIDMERCHANT'),
 						'RESPONSECODE' => $this->input->post('RESPONSECODE'),
 						'APPROVALCODE' => $this->input->post('APPROVALCODE'),
-						//'PAYMENTCHANNEL' => $this->input->post('PAYMENTCHANNEL'),
-						//'PAYMENTCODE' => $this->input->post('PAYMENTCODE'),
-						//'SESSIONID' => $this->input->post('SESSIONID'),
 						'MCN' => $this->input->post('MCN'),
 						'PAYMENTDATETIME' => $this->input->post('PAYMENTDATETIME'),
 						'VERIFYID' => $this->input->post('VERIFYID'),
@@ -139,111 +135,150 @@ class Payment extends CI_Controller {
 					'where' => array('TRANSIDMERCHANT'=>$TRANSIDMERCHANT, 'PAYMENTCODE'=>$this->input->post('PAYMENTCODE')),
 				);
 		    	$msg = $this->config_model->update($data);
-		 		$arr2 = array(
-					'select' => array(
-						'a.PR_Number as PR_Number',
-						'a.BranchCode as BranchCode'
-					),
-					'from' => 'Logistics_Invoice a',
-					'where' => array('a.Invoice_Number'=>$TRANSIDMERCHANT),
-				);
-				$sql = $this->config_model->find($arr2)->row_array();
-				if($RESULTMSG=='SUCCESS'){
-					$RESULT='Pembayaran Berhasil';
-					$statuspo=2;
-				} else {
-					$RESULT='Pembayaran Gagal';
-					$statuspo=8;
-				}
 
-				if($this->input->post('PAYMENTCODE')!=''){
-
-					$cektrack = array(
+		    	$PAYCODE = $this->input->post('PAYMENTCODE');
+		    	
+		    	//validation for  course payment
+		    	if(substr($PAYCODE, 8,2) != '05') {
+		    		//BUKU
+			 		$arr2 = array(
 						'select' => array(
-							'Count(a.RecID) as JML'
+							'a.PR_Number as PR_Number',
+							'a.BranchCode as BranchCode'
 						),
-						'from' => 'Logistics_Tracking a',
-						'join' => array(
-							'Logistics_Invoice b' => array(
-								'on' => 'a.PR_Number=b.PR_Number',
-								'type' => 'inner',
-							),
-						),
-						'where' => array('b.Invoice_Number'=>$this->input->post('TRANSIDMERCHANT'),'a.Tracking_Name' => 'Pembayaran Berhasil'),
+						'from' => 'Logistics_Invoice a',
+						'where' => array('a.Invoice_Number'=>$TRANSIDMERCHANT),
 					);
-					$cektracksql = $this->config_model->find($cektrack)->row_array();
-					if($cektracksql['JML']==0){
-						$data2 = array(
-			    			'params' => array(
-				    			'PR_Number' => $sql['PR_Number'],
-				    			'Tracking_Name' => $RESULT,
-				    			'Status' => 1,
-				    			'CreatedDate' => date('Y-m-d H:i:s'),
-				    			'CreatedBy' => 'doku'
-				    		),
-				    		'from' => 'Logistics_Tracking',
-			    		);
-			    		$this->config_model->insert($data2);
-			    	}
-			    	
-				/*$data2 = array(
-	    			'params' => array(
-		    			'PR_Number' => $sql['PR_Number'],
-		    			'Tracking_Name' => $RESULT,
-		    			'Status' => 1,
-		    			'CreatedDate' => date('Y-m-d H:i:s'),
-		    			'CreatedBy' => 'doku'
-		    		),
-		    		'from' => 'Logistics_Tracking',
-	    		);
-	    		$this->config_model->insert($data2);*/
-		    	$data3 = array(
-		    		'params' => array(
-			    		'Status' => $statuspo,
-			    		'EditDate' => date('Y-m-d H:i:s'),
-			    		'EditBy' => 'doku',
-			    	),
-			    	'from' => 'Logistics_POHeader',
-					'where' => array('PR_Number'=>$sql['PR_Number']),
-		    	);
-	    		$this->config_model->update($data3);
-				$arr = array(
-					'params' => array(
-						'Invoice_Status' => $statuspo,
-					),
-					'from' => 'Logistics_Invoice',
-					'where' => array('Invoice_Number'=>$TRANSIDMERCHANT),
-				);
-				$this->config_model->update($arr);
-				$arr3 = array(
-					'params' => array(
-						'Status' => 1,
-			    		'EditDate' => date('Y-m-d H:i:s'),
-			    		'EditBy' => 'doku',
-					),
-					'from' => 'FA_DepositDetail',
-					'where' => array('BranchCode'=>$sql['BranchCode'],'Status'=>0,'IsInOrOut'=>2),
-				);
-				$this->config_model->update($arr3);
-	    		}
+					$sql = $this->config_model->find($arr2)->row_array();
+					if($RESULTMSG=='SUCCESS'){
+						$RESULT='Pembayaran Berhasil';
+						$statuspo=2;
+					} else {
+						$RESULT='Pembayaran Gagal';
+						$statuspo=8;
+					}
+
+					if($this->input->post('PAYMENTCODE')!=''){
+
+						$cektrack = array(
+							'select' => array(
+								'Count(a.RecID) as JML'
+							),
+							'from' => 'Logistics_Tracking a',
+							'join' => array(
+								'Logistics_Invoice b' => array(
+									'on' => 'a.PR_Number=b.PR_Number',
+									'type' => 'inner',
+								),
+							),
+							'where' => array('b.Invoice_Number'=>$this->input->post('TRANSIDMERCHANT'),'a.Tracking_Name' => 'Pembayaran Berhasil'),
+						);
+						$cektracksql = $this->config_model->find($cektrack)->row_array();
+						if($cektracksql['JML']==0){
+							$data2 = array(
+				    			'params' => array(
+					    			'PR_Number' => $sql['PR_Number'],
+					    			'Tracking_Name' => $RESULT,
+					    			'Status' => 1,
+					    			'CreatedDate' => date('Y-m-d H:i:s'),
+					    			'CreatedBy' => 'doku'
+					    		),
+					    		'from' => 'Logistics_Tracking',
+				    		);
+				    		$this->config_model->insert($data2);
+				    	}
+
+			    	$data3 = array(
+			    		'params' => array(
+				    		'Status' => $statuspo,
+				    		'EditDate' => date('Y-m-d H:i:s'),
+				    		'EditBy' => 'doku',
+				    	),
+				    	'from' => 'Logistics_POHeader',
+						'where' => array('PR_Number'=>$sql['PR_Number']),
+			    	);
+		    		$this->config_model->update($data3);
+					$arr = array(
+						'params' => array(
+							'Invoice_Status' => $statuspo,
+						),
+						'from' => 'Logistics_Invoice',
+						'where' => array('Invoice_Number'=>$TRANSIDMERCHANT),
+					);
+					$this->config_model->update($arr);
+					$arr3 = array(
+						'params' => array(
+							'Status' => 1,
+				    		'EditDate' => date('Y-m-d H:i:s'),
+				    		'EditBy' => 'doku',
+						),
+						'from' => 'FA_DepositDetail',
+						'where' => array('BranchCode'=>$sql['BranchCode'],'Status'=>0,'IsInOrOut'=>2),
+					);
+					$this->config_model->update($arr3);
+		    		}
+
+		    	} else {
+		    		//COURSE
+					$course = array(
+						'params' => array(
+							'Status' => 1,
+						),
+						'from' => 'Course_OrderHeader',
+						'where' => array('OrderCode'=>$TRANSIDMERCHANT),
+					);
+					$this->config_model->update($course);
+
+					require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
+					$data = array(
+						array(
+							'Nama' => 'Oni',
+							'Paket' => 'Privat'
+						)
+					);
+
+					$data2 = array(
+						array(
+							'Jumlah Pembayaran' => 'Rp. 10000'/*,
+							'Pembayaran 2' => 'Rp. 200000'*/
+						)
+					);
+
+					$mail             = new PHPMailer();
+			        $mail->IsSMTP();
+			        $mail->SMTPAuth   = true;
+			        $mail->Host       = "smtp.office365.com";
+			        $mail->Port       = "587";
+			        $mail->Username   = "no-reply@primagama.co.id";
+			        $mail->Password   = "Prima.1234";
+			        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
+			        $mail->Subject    = "Primagama - Pembayaran Berhasil";
+			        $mail->MsgHTML($this->template_email($data,$data2));
+			        $mail->AddAddress('oni.pamuji@gmail.com', 'Oni');
+			        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
+
+
+			        if(!$mail->Send()) {
+			        	echo "Mailer Error: " . $mail->ErrorInfo;
+			        } else {
+			         	echo "Mailer berhasil";
+			        }
+		    	}
+
 				echo data_json(array("message"=>"Data berhasil disimpan.","notify"=>"success"));
 	             // CASE RESULTMSG is SUCCESS and PAYMENTCHANNEL using other than CREDIT CARD
 	                  //transaction status = SUCCESS
-	 
-	              //CASE RESULTMSG is FAILED
-	                  //transaction status = FAILED
 	           
-	              //do Action;
-				//echo $RESULTMSG;
+				//DISINI VA 05
 	        } else {
 	            echo "STOP: TRANSACTION NOT FOUND";
 	            //die;        
-	        }
+	        } // WORDS & AMOUNT
 	    } else {
 	          echo "STOP: REQUEST NOT VALID";
 	          //die;
-	    }
-	  	}
+	    } // WORDS_GENERATE
+	  	} //IP VAL
 	}
 
 	function doku_redirect()
@@ -495,5 +530,215 @@ class Payment extends CI_Controller {
 		header('Cache-control: private');
 		header('Expires: -1');
 		echo xml_print($dom);
+	}
+
+	public function template_email($data='',$data2)
+	{
+		$htmlContent = '
+		<table width="600" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4">
+			<tbody>
+				<tr>
+					<td>
+						<img style="padding:10px;" src="'.base_url().'assets/images/logo_new_web.png" alt="logo" width="250"/>
+					</td>
+				</tr>
+			</tbody>
+			<tbody>
+				<tr>
+					<td valign="top" width="200">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr>
+									<td align="left" valign="top" style="font-size:14px;font-weight:bold;color:#00af41;padding-left: 15px;">Detail Pesanan</td>
+								</tr>
+								<tr>
+									<td valign="top">
+										<table width="100%" border="0" cellpadding="0" cellspacing="0">
+											<tbody>
+												<tr>
+													<td align="left" valign="top">
+														<table border="0" cellspacing="0" cellpadding="0" width="100%">
+															<tbody>';
+																foreach ($data as $row) {
+																	foreach ($row as $key => $val) {
+																		$htmlContent .= '<tr>';
+																			$htmlContent .= '<td align="left" class="m_-83677845150779067tdp5">';
+																				$htmlContent .= '<span style="font-size:10px;color:#9e9e9e;line-height:16px;padding-left: 15px;">'.$key.':</span><br>';
+																				$htmlContent .= '<span style="font-size:12px;line-height:16px;font-weight:bold;padding-left: 15px;">'.$val.'</span>';
+																			$htmlContent .= '</td>';
+																		$htmlContent .= '</tr>';
+																	}
+																}
+															$htmlContent .= '</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td valign="top" width="270">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="border:1px solid #dddddd">
+							<tbody>
+								<tr>
+									<td height="10px" align="left"></td>
+									<td height="10px" colspan="2"></td>
+									<td height="10px" align="left"></td>
+								</tr>
+								<tr>
+									<td height="5px" align="left"></td>
+									<td height="5px" colspan="2" align="left">
+										 Detail Pembayaran:
+									</td>
+									<td height="25px" align="left"></td>
+								</tr>
+								<tr>
+									<td height="3px" align="left"></td>
+									<td height="3px" colspan="2" align="left" style="border-top:1px dashed #9e9e9e"></td>
+									<td height="3px" align="left"></td>
+								</tr>';
+								foreach ($data2 as $row) {
+									foreach ($row as $key => $val) {
+										$htmlContent .= '<tr>';
+											$htmlContent .= '<td align="left" width="15"></td>';
+											$htmlContent .= '<td width="171" align="left">';
+												$htmlContent .= '<span style="font-size:11px;color:#9e9e9e;line-height:21px">'.$key.'</span>';
+											$htmlContent .= '</td>';
+											$htmlContent .= '<td width="80" align="left">';
+												$htmlContent .= '<span style="font-size:11px;color:#9e9e9e;line-height:28px">&nbsp;&nbsp;'.$val.'</span>';
+											$htmlContent .= '</td>';
+											$htmlContent .= '<td align="left" width="15"></td>';
+										$htmlContent .= '</tr>';
+										$htmlContent .= '<tr>';
+											$htmlContent .= '<td height="5px" align="left"></td>';
+											$htmlContent .= '<td height="5px" colspan="2" align="left" style="border-top:1px dashed #9e9e9e"></td>';
+											$htmlContent .= '<td height="5px" align="left"></td>';
+										$htmlContent .= '</tr>';
+									}
+								}
+								$htmlContent .= '<tr>
+									<td align="left" width="15"></td>
+									<td align="right">
+										<span style="font-size:12px;font-weight:bolder;color:#000000;line-height:28px">- - - - -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+									</td>
+									<td align="left">
+										<span style="font-size:12px;font-weight:bolder;color:#000000;line-height:28px"></span>
+									</td>
+									<td align="left" width="15"></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>';
+		return $htmlContent;
+	}
+
+	public function tes()
+	{
+		$va = '3920659700038402';
+		$va2 = '3920659705038402';
+		$TRANSIDMERCHANT = 'PG/IV/20/00004';
+		//echo substr($va2,8,2);
+		if(substr($va2, 8,2) != '05') {
+			echo 'BUKU';
+		} else {
+
+			 		$arr = array(
+						'select' => array(
+							'a.SessionID',
+							'a.TotalPrice',
+							'b.PackDetailName',
+							'c.PackName',
+							'd.CatName',
+							'e.NAME',
+							'e.EMAIL',
+							'e.AMOUNT'
+						),
+						'from' => 'Course_OrderHeader a',
+						'join' => array(
+							'Course_PackDetail b' => array(
+								'on' => 'a.PackDetailID=b.RecID',
+								'type' => 'inner'
+							),
+							'Course_Pack c' => array(
+								'on' => 'b.PackID=c.RecID',
+								'type' => 'inner'
+							),
+							'Course_Category d' => array(
+								'on' => 'c.CatID=d.RecID',
+								'type' => 'inner'
+							),
+							'Logistics_Transactions e' => array(
+								'on' => 'a.OrderCode=e.TRANSIDMERCHANT',
+								'type' => 'inner'
+							),
+						),
+						'where' => array('a.OrderCode'=>$TRANSIDMERCHANT),
+					);
+					$sql = $this->config_model->find($arr)->row_array();
+
+					$course = array(
+						'params' => array(
+							'Status' => 1,
+						),
+						'from' => 'Course_OrderHeader',
+						'where' => array('OrderCode'=>$TRANSIDMERCHANT),
+					);
+					$this->config_model->update($course);
+
+					require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
+					$data = array(
+						array(
+							'Nama' => $sql['NAME'],
+							'Paket' => $sql['CatName'].' - '.$sql['PackName'].' - '.$sql['PackDetailName'],
+							'Link' => "<a href='".base_url()."info/pembayaran/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
+						)
+					);
+
+					$data2 = array(
+						array(
+							'Jumlah Pembayaran' => $this->rupiah($sql['AMOUNT'])/*,
+							'Pembayaran 2' => 'Rp. 200000'*/
+						)
+					);
+
+					$mail             = new PHPMailer();
+			        $mail->IsSMTP();
+			        $mail->SMTPAuth   = true;
+			        $mail->Host       = "smtp.office365.com";
+			        $mail->Port       = "587";
+			        $mail->Username   = "no-reply@primagama.co.id";
+			        $mail->Password   = "Prima.1234";
+			        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
+			        $mail->Subject    = "Primagama - Pembayaran Berhasil";
+			        $mail->MsgHTML($this->template_email($data,$data2));
+			        $mail->AddAddress($sql['EMAIL'], $sql['NAME']);
+			        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
+
+
+			        if(!$mail->Send()) {
+			        	echo "Mailer Error: " . $mail->ErrorInfo;
+			        } else {
+			         	echo "Mailer berhasil";
+			        }
+		}
+	}
+
+	public function rupiah($angka){
+		
+		$hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+		return $hasil_rupiah;
+	 
+	}
+
+	public function tesrp() {
+		$nom = '10000.0000';
+		$hasil_rupiah = $this->rupiah($nom);
+		echo $hasil_rupiah;
 	}
 }

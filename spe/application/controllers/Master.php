@@ -1412,12 +1412,12 @@ class Master extends CI_Controller {
         $mail->SMTPAuth   = true;
         $mail->Host       = "smtp.office365.com";
         $mail->Port       = "587";
-        $mail->Username   = "noreply@primagama.co.id";
+        $mail->Username   = "no-reply@primagama.co.id";
         $mail->Password   = "Prima.1234";
-        $mail->SetFrom('noreply@primagama.co.id', 'Primagama');
-        $mail->Subject    = "Email Konfirmasi";
+        $mail->SetFrom('no-reply@primagama.co.id', 'Primagama');
+        $mail->Subject    = "Email Konfirmasi 2";
         $mail->MsgHTML($this->template_email($data,$data2));
-        $mail->AddAddress('hamzah@primagama.co.id', 'hamzah');
+        $mail->AddAddress('erik.alfredo@primagama.co.id', 'hamzah');
         $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
 
 
