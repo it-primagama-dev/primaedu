@@ -354,6 +354,7 @@ class mastercourse extends CI_Controller {
 					'a.Date',
 					'c.TimeFrom',
 					'c.TimeTo',
+					'd.BranchName'
 				),
 				'from' => 'Course_Schedule a',
 				'join' => array(
@@ -363,6 +364,10 @@ class mastercourse extends CI_Controller {
 					),
 					'Course_ScheduleTemplate c' => array(
 						'on' => 'a.ScheduleTemplateID=c.RecID',
+						'type' => 'inner'
+					),
+					'Course_Referal d' => array(
+						'on' => 'a.BranchCode=d.BranchCode',
 						'type' => 'inner'
 					),
 				),
@@ -390,6 +395,12 @@ class mastercourse extends CI_Controller {
 
 	public function save_addschedule()
 	{
+			
+        $arr = array(
+            'from' => 'Course_ScheduleTemplate a',
+            'where' => array('a.RecID' => $this->input->post('TimeFrom')),
+        );
+		$query = $this->config_model->find($arr)->row_array();
 
 		    $data2 = array(
 		    	'params' => array(
@@ -399,7 +410,8 @@ class mastercourse extends CI_Controller {
 			   		'SubID' => $this->input->post('SubID'),
 			   		'Date' => date('Y-m-d',strtotime($this->input->post('Date'))),
 			   		'ScheduleTemplateID' => $this->input->post('TimeFrom'),
-			   		//'TimeTo' => $this->input->post('TimeTo'),
+			   		'TimeFrom' => $query['TimeFrom'],
+			   		'TimeTo' => $query['TimeTo'],
 			   		'BranchCode' => $this->input->post('BranchCode'),
 			   	),
 				'from' => 'Course_Schedule',
@@ -475,6 +487,16 @@ class mastercourse extends CI_Controller {
 	public function get_jadwal(){
 		$arr = array(
 				'from' => 'Course_ScheduleTemplate',
+			);
+
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
+		echo json_encode($data);
+	}
+
+	public function get_Cabang(){
+		$arr = array(
+				'from' => 'Course_Referal',
 			);
 
 		$item = $this->config_model->find($arr);		
