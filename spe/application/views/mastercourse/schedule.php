@@ -22,12 +22,13 @@
                 <thead>
                     <tr class="text-center">
                         <th>No</th>
-                        <th>Kode Cabang</th>
+                        <th>Cabang</th>
                         <th>Nama iSmart</th>
                         <th>Jenjang</th>
                         <th>Mapel</th>
                         <th>Tanggal</th>
                         <th>Waktu</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody id="data_schedule"></tbody>
@@ -50,9 +51,11 @@
                     <input type="hidden" value="" id="RecID" name="RecID" />
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Kode Cabang</label>
+                            <label class="control-label col-md-3">Pilih Cabang</label>
                             <div class="col-md-9">
-                                <input type="text" id="BranchCode" class="form-control" placeholder="input manual dulu ya kode cabangnya ">
+                               <select class="form-control" id="BranchCode" style="width: 100%;">
+                                   <option value="">Pilih Cabang</option>
+                               </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -85,7 +88,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Tanggal</label>
                             <div class="col-md-9">
-                                <input type="date" id="Date" class="form-control">
+                                <input type="text" id="Date" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
@@ -96,36 +99,6 @@
                                </select>
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label class="control-label col-md-3">Waktu Mulai</label>
-                            <div class="col-md-9">
-                               <select class="form-control" id="TimeFrom">
-                                   <option value="">Pilih Waktu Mulai</option>
-                                   <option value="07:30">07:30</option>
-                                   <option value="09:00">09:00</option>
-                                   <option value="10:30">10:30</option>
-                                   <option value="13:00">13:00</option>
-                                   <option value="14:30">14:30</option>
-                                   <option value="16:00">16:00</option>
-                                   <option value="18:30">18:30</option>
-                               </select>
-                            </div>
-                        </div> --><!-- 
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Waktu Selesai</label>
-                            <div class="col-md-9">
-                               <select class="form-control" id="TimeTo">
-                                   <option value="">Pilih Waktu Mulai</option>
-                                   <option value="09:00">09:00</option>
-                                   <option value="10:30">10:30</option>
-                                   <option value="12:00">12:00</option>
-                                   <option value="14:30">14:30</option>
-                                   <option value="16:00">16:00</option>
-                                   <option value="17:30">17:30</option>
-                                   <option value="20:00">20:00</option>
-                               </select>
-                            </div>
-                        </div> -->
                     </div>
                 </form>
             </div>
@@ -143,13 +116,34 @@
 <script type="text/javascript" src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/plugins/datatables/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/plugins/datatables/dataTables.buttons.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/plugins/jquery-ui/jquery-ui.css">
+<script type="text/javascript" src="<?php echo base_url()?>assets/plugins/jquery-ui/jquery-ui.js"></script>
 <script src="<?=base_url('assets/js/autoNumeric.js'); ?>"></script>
-<script type="text/javascript">
+<script type="text/javascript" src="<?php echo base_url()?>assets/js/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/js/css/select2.custom.min.css">
+
+<script type="text/javascript">    
+
+$(function () {
+  $('#BranchCode').select2();
+});
+
+$(function(){
+    var d = new Date();
+    var n = d.getFullYear()+1;
+    $('#Date').datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "2020:"+n
+    });
+})
 
 $(document).ready(function(){
     $(".Idr").autoNumeric('init', {aSign: 'Rp ', aDec: ',', aSep: '.'});
     reload_data();
     get_jadwal();
+    get_cabang();
 });
 
 function get_hari(date) {
@@ -255,14 +249,22 @@ function reload_data() {
 
                     TimeToOri = item.TimeTo;
                     TimeTo = TimeToOri.substring(0,5);
+
+                    if (item.Status==null) {
+                        Status = "<font color='green'>Available";
+                    } else {
+                        Status = "<font color='red'>Booked</font>";
+                    }
+
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
-                        $('<td>').text(item.BranchCode),
+                        $('<td>').text(item.BranchCode+' - '+item.BranchName),
                         $('<td>').text(item.IsmartName),
                         $('<td>').text(item.StageCat),
                         $('<td>').text(item.SubjectsID),
                         $('<td>').text(get_hari(item.Date)),
                         $('<td>').text(TimeFrom+' - '+TimeTo+' WIB'),
+                        $('<td>').html(Status),
                         //$('<td>').text(TimeTo)
                     ).appendTo('#data_schedule');
                 });
@@ -294,6 +296,16 @@ function get_jadwal() {
         $('#TimeFrom').append($('<option>').text("- - Pilih Waktu - -").attr('value',''));
         $.each(json, function(i, obj){
         $('#TimeFrom').append($('<option>').text(obj.TimeFrom.substring(0,5)+' - '+obj.TimeTo.substring(0,5)+' WIB').attr('value', obj.RecID));
+        });
+    });
+}
+
+function get_cabang() {
+    $.getJSON(base_url+"mastercourse/get_cabang", function(json){
+        $('#BranchCode').empty();
+        $('#BranchCode').append($('<option>').text("- - Pilih Cabang - -").attr('value',''));
+        $.each(json, function(i, obj){
+        $('#BranchCode').append($('<option>').text(obj.BranchCode+' - '+obj.BranchName).attr('value', obj.BranchCode));
         });
     });
 }
