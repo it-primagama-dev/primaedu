@@ -126,7 +126,7 @@ class Report extends CI_Controller {
 		}*/
 	}
 
-    // DOWNLOAD TXTX INI DI PAKAI UNTUK TABEL MANA
+    // DOWNLOAD TXT INI DI PAKAI UNTUK TABEL MANA
 	public function downloadFile(){ 
         $yourFile = "Sample-Format.txt";
         $file = @fopen($yourFile, "rb");
