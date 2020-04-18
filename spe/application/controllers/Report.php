@@ -125,4 +125,23 @@ class Report extends CI_Controller {
 			exit();
 		}*/
 	}
+
+    // DOWNLOAD TXTX INI DI PAKAI UNTUK TABEL MANA
+	public function downloadFile(){ 
+        $yourFile = "Sample-Format.txt";
+        $file = @fopen($yourFile, "rb");
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=ContohFileDownload.txt');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($yourFile));
+        while (!feof($file)) {
+            print(@fread($file, 1024 * 8));
+            ob_flush();
+            flush();
+        }
+    }
 }
