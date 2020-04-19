@@ -388,9 +388,27 @@ class ismart extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	/*public function test(){
-		$BidangStudi['KodeBidangStudi'] = "IPA";
-		$query = $this->config_model->getSelectedData($this->db2 .'bidangstudi',$BidangStudi)->row_array();
-		echo $query['NamaBidangStudi']; 
-	}*/
+	public function test(){
+
+			$body = '
+			<table border="0" cellspacing="0" cellpadding="0" style="padding-bottom:15px;">
+				<tr>
+					<td>Yth, Cabang </td>
+				</tr>
+				<tr>
+					<td>Anda menerima data iSmart / IBM / Tentor yang membutuhkan approval. Silahkan login ke PrimaEdu dan melakukan approval dari menu Data Master -> Approval iSmart. <br></br>Terima kasih. </td>
+				</tr>
+			</table>'.msg_fotter();
+
+			$asg = batch_email(array(
+				'penerima' => array('oni.restu@primagama.co.id'/*,$EmailCabang*/),
+				'subjek' => array('Data iSmart Baru'),
+				'body' => array($body)
+			));
+	}
+
+	public function test2()
+	{
+		echo (extension_loaded('openssl')?'SSL loaded':'SSL not loaded')."\n";
+	}
 }

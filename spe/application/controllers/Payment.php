@@ -220,6 +220,41 @@ class Payment extends CI_Controller {
 
 		    	} else {
 		    		//COURSE
+
+			 		$arr = array(
+						'select' => array(
+							'a.SessionID',
+							'a.TotalPrice',
+							'b.PackDetailName',
+							'c.PackName',
+							'd.CatName',
+							'e.NAME',
+							'e.EMAIL',
+							'e.AMOUNT'
+						),
+						'from' => 'Course_OrderHeader a',
+						'join' => array(
+							'Course_PackDetail b' => array(
+								'on' => 'a.PackDetailID=b.RecID',
+								'type' => 'inner'
+							),
+							'Course_Pack c' => array(
+								'on' => 'b.PackID=c.RecID',
+								'type' => 'inner'
+							),
+							'Course_Category d' => array(
+								'on' => 'c.CatID=d.RecID',
+								'type' => 'inner'
+							),
+							'Logistics_Transactions e' => array(
+								'on' => 'a.OrderCode=e.TRANSIDMERCHANT',
+								'type' => 'inner'
+							),
+						),
+						'where' => array('a.OrderCode'=>$TRANSIDMERCHANT),
+					);
+					$sql = $this->config_model->find($arr)->row_array();
+
 					$course = array(
 						'params' => array(
 							'Status' => 1,
@@ -232,14 +267,15 @@ class Payment extends CI_Controller {
 					require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
 					$data = array(
 						array(
-							'Nama' => 'Oni',
-							'Paket' => 'Privat'
+							'Nama' => $sql['NAME'],
+							'Paket' => $sql['CatName'].' - '.$sql['PackName'].' - '.$sql['PackDetailName'],
+							'Link' => "http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
 						)
 					);
 
 					$data2 = array(
 						array(
-							'Jumlah Pembayaran' => 'Rp. 10000'/*,
+							'Jumlah Pembayaran' => $this->rupiah($sql['AMOUNT'])/*,
 							'Pembayaran 2' => 'Rp. 200000'*/
 						)
 					);
@@ -254,7 +290,7 @@ class Payment extends CI_Controller {
 			        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
 			        $mail->Subject    = "Primagama - Pembayaran Berhasil";
 			        $mail->MsgHTML($this->template_email($data,$data2));
-			        $mail->AddAddress('oni.pamuji@gmail.com', 'Oni');
+			        $mail->AddAddress($sql['EMAIL'], $sql['NAME']);
 			        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
 
 
@@ -549,7 +585,7 @@ class Payment extends CI_Controller {
 						<table width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tbody>
 								<tr>
-									<td align="left" valign="top" style="font-size:14px;font-weight:bold;color:#00af41;padding-left: 15px;">Detail Pesanan</td>
+									<td align="left" valign="top" style="font-size:14px;font-weight:bold;color:#00af41;padding-left: 15px;">Detail Pembelian Paket</td>
 								</tr>
 								<tr>
 									<td valign="top">
@@ -696,7 +732,7 @@ class Payment extends CI_Controller {
 						array(
 							'Nama' => $sql['NAME'],
 							'Paket' => $sql['CatName'].' - '.$sql['PackName'].' - '.$sql['PackDetailName'],
-							'Link' => "<a href='".base_url()."info/pembayaran/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
+							'Link' => "<a href='http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
 						)
 					);
 

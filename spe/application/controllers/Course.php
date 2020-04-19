@@ -11,7 +11,8 @@ class Course extends CI_Controller {
 
 	public function index()
 	{	
-		$this->load->view('Course/index');
+		redirect('http://pintarbersama.primagama.co.id');
+		//$this->load->view('Course/index');
 	}
 	
 	public function detail()

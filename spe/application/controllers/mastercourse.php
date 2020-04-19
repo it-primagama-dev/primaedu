@@ -393,19 +393,66 @@ class mastercourse extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function cek_jadwalsama(){
+
+		$ScheduleTemplateID = $this->input->post('TimeFrom');
+		$SubID = $this->input->post('SubID');
+		$Date = date('Y-m-d',strtotime($this->input->post('Date')));
+
+        $arr1 = array(
+            'from' => 'Course_Ismart a',
+            'where' => array('a.RecID' => $this->input->post('IsmartID')),
+        );
+		$query1 = $this->config_model->find($arr1)->row_array();
+
+		$IsmartName = $query1['IsmartName'];
+		$arr = array(
+				'from' => 'Course_Schedule',
+				'where' => array('IsmartName'=>$IsmartName,'ScheduleTemplateID' => $ScheduleTemplateID,'SubID' => $SubID,'Date' => $Date)
+			);
+
+		$item = $this->config_model->find($arr);	
+
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
 	public function save_addschedule()
 	{
-			
+		$ScheduleTemplateID = $this->input->post('TimeFrom');
+		$SubID = $this->input->post('SubID');
+		$Date = date('Y-m-d',strtotime($this->input->post('Date')));
+
         $arr = array(
             'from' => 'Course_ScheduleTemplate a',
             'where' => array('a.RecID' => $this->input->post('TimeFrom')),
         );
 		$query = $this->config_model->find($arr)->row_array();
 
+        $arr1 = array(
+            'from' => 'Course_Ismart a',
+            'where' => array('a.RecID' => $this->input->post('IsmartID')),
+        );
+		$query1 = $this->config_model->find($arr1)->row_array();
+
+		$IsmartName = $query1['IsmartName'];
+		$arr2 = array(
+				'from' => 'Course_Schedule',
+				'where' => array('IsmartName'=>$IsmartName,'ScheduleTemplateID' => $ScheduleTemplateID,'SubID' => $SubID,'Date' => $Date)
+			);
+
+		$item2 = $this->config_model->find($arr2);	
+
+		if($item2->num_rows()==0) {
 		    $data2 = array(
 		    	'params' => array(
 			   		'BranchCode' => $this->input->post('BranchCode'),
-			   		'IsmartName' => $this->input->post('IsmartName'),
+			   		'IsmartName' => $query1['IsmartName'],
+			   		'IsmartID' => $query1['RecID'],
 			   		'StageCat' => $this->input->post('StageCat'),
 			   		'SubID' => $this->input->post('SubID'),
 			   		'Date' => date('Y-m-d',strtotime($this->input->post('Date'))),
@@ -416,12 +463,15 @@ class mastercourse extends CI_Controller {
 			   	),
 				'from' => 'Course_Schedule',
 		    );
-		    $msg2 = $this->config_model->insert($data2);		
-			if ($msg2==true) {
-				echo data_json(array("message"=>"Data jadwal berhasil disimpan.","notify"=>"success"));
-			} else {
+		    $msg2 = $this->config_model->insert($data2);
+			//echo data_json(array("message"=>"Data jadwal berhasil disimpan.","notify"=>"success"));
+
+		}		
+			/*if ($msg2==true) {*/
+			/*} else {
 				echo data_json(array("message"=>"Data jadwal gagal disimpan.","notify"=>"error"));
-			}
+			}*/
+			echo data_json(array("message"=>"Data jadwal berhasil disimpan.","notify"=>"success"));
 
 	}
 
@@ -548,6 +598,17 @@ class mastercourse extends CI_Controller {
 			$data['rows'] = 0;
 			$data['rows2'] = 0;
 		}
+		echo json_encode($data);
+	}
+
+	public function get_ismart($id){
+		$arr = array(
+				'from' => 'Course_Ismart',
+				'where' => array('BranchCode' => $id),
+			);
+
+		$item = $this->config_model->find($arr);		
+		$data = $item->result_array();
 		echo json_encode($data);
 	}
 
