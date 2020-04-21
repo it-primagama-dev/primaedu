@@ -1428,37 +1428,6 @@ class Master extends CI_Controller {
         }
 	}
 
-	public function tesEmail($nama='',$email='',$subject='',$body='') {
-		
-		 $config = Array(  
-		'protocol' => 'smtp',  
-		'smtp_host' => 'ssl://smtp.office365.com', 
-		'smtpauth' => true,
-		'smtp_port' => 587,  
-		'smtp_user' => 'noreply@primagama.co.id',   
-		'smtp_pass' => 'Prima.1234',   
-		'mailtype' => 'html',   
-		'charset' => 'iso-8859-1'  
-		);  
-		$this->load->library('email', $config);  
-
-		$this->email->set_newline("\r\n");
-
-		$this->$name = "Selamat Bergabung Sahabat Primagama...";
-		$this->email->from('noreply@primagama.co.id', 'HUT Primagama 34th');   
-		$this->email->to('oni.restu@primagama.co.id');   
-		$this->email->subject('Peserta Tryout Smart Generation Award');   
-		$this->email->message('Selamat Berjuang'); 
-
-	
-		if (!$this->email->send()) {  
-		echo 'Email gagal terkirim';   
-		}else{  
-		echo 'Email terkirim';   
-		}
-
-	 }
-
 	public function pdf_viewer()
 	{
 		$this->load->view('pdfviewer');

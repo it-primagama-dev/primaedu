@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Pilih Cabang</label>
                             <div class="col-md-9">
-                               <select class="form-control" id="BranchCode" style="width: 100%;">
+                               <select class="form-control" id="BranchCode" name="BranchCode" style="width: 100%;">
                                    <option value="">Pilih Cabang</option>
                                </select>
                             </div>
@@ -61,13 +61,15 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Nama iSmart</label>
                             <div class="col-md-9">
-                                <input type="text" id="IsmartName" class="form-control">
+                               <select class="form-control" id="IsmartID" name="IsmartID" style="width: 100%;">
+                                   <option value="">Pilih Ismart</option>
+                               </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Jenjang</label>
                             <div class="col-md-9">
-                               <select class="form-control" id="StageCat">
+                               <select class="form-control" id="StageCat" name="StageCat">
                                    <option value="">Pilih Jenjang</option>
                                    <option value="20">SD</option>
                                    <option value="21">SMP</option>
@@ -80,7 +82,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Mapel</label>
                             <div class="col-md-9">
-                               <select class="form-control" id="SubID">
+                               <select class="form-control" id="SubID" name="SubID">
                                    <option value="">Pilih Mapel</option>
                                </select>
                             </div>
@@ -88,13 +90,13 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Tanggal</label>
                             <div class="col-md-9">
-                                <input type="text" id="Date" class="form-control">
+                                <input type="text" id="Date" name="Date" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Waktu Mulai</label>
                             <div class="col-md-9">
-                               <select class="form-control" id="TimeFrom">
+                               <select class="form-control" id="TimeFrom" name="TimeFrom">
                                    <option value="">Pilih Waktu Mulai</option>
                                </select>
                             </div>
@@ -125,7 +127,7 @@
 <script type="text/javascript">    
 
 $(function () {
-  $('#BranchCode').select2();
+  $('#BranchCode,#IsmartID').select2();
 });
 
 $(function(){
@@ -170,9 +172,14 @@ function modal_form(RecID=null)
  function save() {
     //alert($('#Date').val());
     $(".text-danger").remove();
-      if($('[name="IsmartName"]').val() == "") {
-          $('[name="IsmartName"]').after('<p class="text-danger">Wajib diisi !!!</p>');
-          $('[name="IsmartName"]').focus();
+      if($('#BranchCode').val() == "") {
+          $('#BranchCode').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#BranchCode').focus();
+          return false;
+      }
+      if($('#IsmartID').val() == "") {
+          $('#IsmartID').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#IsmartID').focus();
           return false;
       }
       if($('[name="StageCat"]').val() == "") {
@@ -180,51 +187,66 @@ function modal_form(RecID=null)
           $('[name="StageCat"]').focus();
           return false;
       }
-      if($('[name="SubName"]').val() == "") {
-          $('[name="SubName"]').after('<p class="text-danger">Wajib diisi !!!</p>');
-          $('[name="SubName"]').focus();
+      if($('[name="SubID"]').val() == "") {
+          $('[name="SubID"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="SubID"]').focus();
           return false;
       }
       if($('[name="Date"]').val() == "") {
-          $('[name="Date"]').after('<p class="text-danger">Pekerjaan Harus Diisi !!!</p>');
+          $('[name="Date"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="Date"]').focus();
           return false;
       }
       if($('[name="TimeFrom"]').val() == "") {
-          $('[name="TimeFrom"]').after('<p class="text-danger">Alamat Harus Diisi !!!</p>');
+          $('[name="TimeFrom"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="TimeFrom"]').focus();
           return false;
       }
       if (confirm("Anda yakin data sudah terinput dengan benar ?")) {
 
-      var formdata = {};
-      formdata['IsmartName'] = $('#IsmartName').val();
-      formdata['StageCat'] = $('#StageCat').val();
-      formdata['SubID'] = $('#SubID').val();
-      formdata['Date'] = $('#Date').val();
-      formdata['TimeFrom'] = $('#TimeFrom').val();
-      //formdata['TimeTo'] = $('#TimeTo').val();
-      formdata['BranchCode'] = $('#BranchCode').val();
           $.ajax({
-              url : base_url+"mastercourse/save_addschedule",
+              url : base_url+"mastercourse/cek_jadwalsama",
               type: "POST",
-              data: formdata,
+              data: ({IsmartID:$('#IsmartID').val(),TimeFrom:$('#TimeFrom').val(),SubID:$('#SubID').val(),Date:$('#Date').val()}),
               dataType: "JSON",
-              beforeSend: function(){
-                  $("#ajax-loader").show();
-              },
-              complete: function() {
-                  $("#ajax-loader").hide();
-              },
-              success: function(data)
-              {
-                    $('#form')[0].reset();
-                    $("#modal_form").modal('hide');
-                    $.notify(data.message,data.notify);
-                    reload_data();
-               
-              }
-        })
+              success: function(data){
+
+                var jml_data = Object.keys(data.rows).length;
+                //alert(jml_data);
+
+                if (jml_data==0) {
+                  var formdata = {};
+                  formdata['IsmartID'] = $('#IsmartID').val();
+                  formdata['StageCat'] = $('#StageCat').val();
+                  formdata['SubID'] = $('#SubID').val();
+                  formdata['Date'] = $('#Date').val();
+                  formdata['TimeFrom'] = $('#TimeFrom').val();
+                  formdata['BranchCode'] = $('#BranchCode').val();
+                      $.ajax({
+                          url : base_url+"mastercourse/save_addschedule",
+                          type: "POST",
+                          data: formdata,
+                          dataType: "JSON",
+                          beforeSend: function(){
+                              $("#ajax-loader").show();
+                          },
+                          complete: function() {
+                              $("#ajax-loader").hide();
+                          },
+                          success: function(data)
+                          {
+                                //$('#form')[0].reset();
+                                //$("#modal_form").modal('hide');
+                                $.notify(data.message,data.notify);
+                                reload_data();
+                           
+                          }
+                    })
+                } else {
+                    alert('Jadwal untuk i-Smart tersebut sudah ada');
+                }
+                  }
+                });
       }
     }
 
@@ -309,4 +331,16 @@ function get_cabang() {
         });
     });
 }
+
+$("#BranchCode").change(function(e) { 
+  var BranchCode = e.target.value; 
+
+  $.getJSON(base_url+"mastercourse/get_ismart/"+BranchCode, function(json){ 
+      $('#IsmartID').empty();
+      $('#IsmartID').append($('<option>').text("- - Pilih Nama - -").attr('value',''));
+       $.each(json, function(i, obj){
+        $('#IsmartID').append($('<option>').text(obj.IsmartName).attr('value', obj.RecID));
+       });
+  });
+});
 </script>

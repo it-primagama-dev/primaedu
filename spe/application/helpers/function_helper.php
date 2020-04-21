@@ -834,9 +834,9 @@ function batch_email($params=array())
         $mail->SMTPAuth   = true;
         $mail->Host       = "smtp.office365.com";
         $mail->Port       = "587";
-        $mail->Username   = "noreply@primagama.co.id";
+        $mail->Username   = "no-reply@primagama.co.id";
         $mail->Password   = "Prima.1234";
-        $mail->SetFrom('noreply@primagama.co.id', 'Primagama');
+        $mail->SetFrom('no-reply@primagama.co.id', 'Primagama');
         //$mail->addReplyTo('helpdesk@primagama.co.id', 'Peserta Tryout Smart CBT');
         if (isset($params['penerima']) && !empty($params['penerima'])) {
             foreach ($params['penerima'] as $key => $value) {
