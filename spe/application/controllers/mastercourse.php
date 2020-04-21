@@ -612,4 +612,263 @@ class mastercourse extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function appr_ismart()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Approve iSmart',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Approve iSmart</a>',
+		);
+		$this->template->load('template', 'mastercourse/appr_ismart',$data);
+
+	}
+
+	public function get_apprismart()
+	{
+
+		$arr = array(
+		'select' => array(
+			'a.BranchCode',
+			'a.IsmartName',
+			'a.RecID IsmartID',
+			"CASE a.Position 
+			  WHEN 1 THEN 'IBM'
+			  WHEN 2 THEN 'Staff Akademik'
+			  WHEN 3 THEN 'iSmart'
+			END as Position",
+			"CASE a.Opsi1 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi1",
+			"CASE a.Opsi2 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi2",
+			"CASE a.Opsi3 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi3",
+			'd.SubName',
+			'b.SubjectBab',
+			'b.RecID',
+			"CASE d.StageCat 
+			  WHEN 20 THEN 'SD'
+			  WHEN 21 THEN 'SMP'
+			  WHEN 22 THEN 'SMA IPA'
+			  WHEN 23 THEN 'SMA IPS'
+			  WHEN 24 THEN 'UTBK'
+			END as StageCat",
+			'a.PhoneNumber',
+			'a.BirthDate'
+
+		),
+		'from' => 'Course_Ismart a',
+		'join' => array(
+			'Course_IsmartSubjects b' => array(
+				'on' => 'a.RecID=b.IsmartID',
+					'type' => 'inner'
+				),/*
+				'Course_Referal c' => array(
+					'on' => 'a.BranchCode=c.BranchCode',
+					'type' => 'inner'
+				),*/
+				'Course_Subjects d' => array(
+					'on' => 'b.SubjectID=d.RecID',
+					'type' => 'inner'
+				),
+			),
+			'where' => array('b.Status'=>0),
+		);
+		$sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function approve_ismart()
+	{
+		$numb = $this->input->post('numb');
+		$data = array(
+	    	'params' => array(
+		    	'Status' => $this->input->post('Status'),
+		    ),
+		    'from' => 'Course_IsmartSubjects',
+			'where' => array('RecID' => $this->input->post('RecID'))
+	    );
+	    $msg = $this->config_model->update($data);
+		echo data_json(array("message"=>"Data berhasil di simpan ( $numb ).","notify"=>"success"));
+	}
+
+	public function appr_schedule()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Approve Jadwal',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Approve Jadwal</a>',
+		);
+		$this->template->load('template', 'mastercourse/appr_schedule',$data);
+
+	}
+
+	public function get_appr_schedule()
+	{
+		$arr = array(
+			'select' => array(
+					'a.RecID',
+					'a.BranchCode',
+					'a.IsmartName',
+					"CASE a.StageCat 
+					  WHEN 20 THEN 'SD'
+					  WHEN 21 THEN 'SMP'
+					  WHEN 22 THEN 'SMA IPA'
+					  WHEN 23 THEN 'SMA IPS'
+					  WHEN 24 THEN 'UTBK'
+					END as StageCat",
+					'b.SubName as SubjectsID',
+					'a.Date',
+					'c.TimeFrom',
+					'c.TimeTo',
+					'd.BranchName'
+				),
+				'from' => 'Course_Schedule a',
+				'join' => array(
+					'Course_Subjects b' => array(
+						'on' => 'a.SubID=b.RecID',
+						'type' => 'inner'
+					),
+					'Course_ScheduleTemplate c' => array(
+						'on' => 'a.ScheduleTemplateID=c.RecID',
+						'type' => 'inner'
+					),
+					'Course_Referal d' => array(
+						'on' => 'a.BranchCode=d.BranchCode',
+						'type' => 'inner'
+					),
+				),
+				'where' => array('a.Status'=>10)
+			);
+		$item = $this->config_model->find($arr);
+		if ($item->num_rows()>0) {
+			$data['rows'] = $item->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function approve_schedule()
+	{
+		$numb = $this->input->post('numb');
+		$data = array(
+	    	'params' => array(
+		    	'Status' => $this->input->post('Status'),
+		    ),
+		    'from' => 'Course_Schedule',
+			'where' => array('RecID' => $this->input->post('RecID'))
+	    );
+	    $msg = $this->config_model->update($data);
+		echo data_json(array("message"=>"Data berhasil di simpan ( $numb ).","notify"=>"success"));
+	}
+
+	public function list_ismart()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Data iSmart',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data iSmart</a>',
+		);
+		$this->template->load('template', 'mastercourse/list_ismart',$data);
+
+	}
+
+	public function get_dataismart()
+	{
+
+		$arr = array(
+		'select' => array(
+			'a.BranchCode',
+			'a.IsmartName',
+			'a.RecID IsmartID',
+			"CASE a.Position 
+			  WHEN 1 THEN 'IBM'
+			  WHEN 2 THEN 'Staff Akademik'
+			  WHEN 3 THEN 'iSmart'
+			END as Position",
+			"CASE a.Opsi1 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi1",
+			"CASE a.Opsi2 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi2",
+			"CASE a.Opsi3 
+			  WHEN 1 THEN 'Sangat Tidak Siap'
+			  WHEN 2 THEN 'Tidak Siap'
+			  WHEN 3 THEN 'Cukup Siap'
+			  WHEN 4 THEN 'Siap'
+			  WHEN 5 THEN 'Sangat Siap'
+			END as Opsi3",
+			'd.SubName',
+			'b.SubjectBab',
+			'b.RecID',
+			"CASE d.StageCat 
+			  WHEN 20 THEN 'SD'
+			  WHEN 21 THEN 'SMP'
+			  WHEN 22 THEN 'SMA IPA'
+			  WHEN 23 THEN 'SMA IPS'
+			  WHEN 24 THEN 'UTBK'
+			END as StageCat",
+			"CASE b.Status 
+			  WHEN 1 THEN 'Approved'
+			  WHEN 2 THEN 'Rejected'
+			END as Status",
+			'a.PhoneNumber',
+			'a.BirthDate'
+
+		),
+		'from' => 'Course_Ismart a',
+		'join' => array(
+			'Course_IsmartSubjects b' => array(
+				'on' => 'a.RecID=b.IsmartID',
+					'type' => 'inner'
+				),/*
+				'Course_Referal c' => array(
+					'on' => 'a.BranchCode=c.BranchCode',
+					'type' => 'inner'
+				),*/
+				'Course_Subjects d' => array(
+					'on' => 'b.SubjectID=d.RecID',
+					'type' => 'inner'
+				),
+			),
+			'where' => array('b.Status !=' => '0'),
+		);
+		$sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
 }

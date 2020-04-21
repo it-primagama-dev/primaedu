@@ -42,12 +42,12 @@
         <div class="row">
             <div class="span12">
                 <a href="{{ link89 }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89<br/>(BCA)</div></a>
-				<a href="{{ link89edc}}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89<br/>(BCA EDC)</div></a>
+                <a href="{{ link89edc}}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89<br/>(BCA EDC)</div></a>
                 <a href="{{ link89edcbri}}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89 <br/>(BRI EDC )</div></a>
-				<a href="{{ link89nonbca }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89<br/>(Non-BCA)</div></a>
+                <a href="{{ link89nonbca }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 89<br/>(Non-BCA)</div></a>
                 <a href="{{ link11 }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 11<br/>(All)</div></a>
-				<a href="{{ link11edc }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 11<br/>(BCA EDC)</div></a>
-				<a href="{{ link11edcbri }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 11<br/>(BCA EDC BRI)</div></a>
+                <a href="{{ link11edc }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 11<br/>(BCA EDC)</div></a>
+                <a href="{{ link11edcbri }}" target="_blank" class="on-left-more"><div class="button bg-emerald fg-white">Download File 11<br/>(BCA EDC BRI)</div></a>
             </div>
         </div>
     </div>
