@@ -220,7 +220,6 @@ class Payment extends CI_Controller {
 
 		    	} else {
 		    		//COURSE
-
 			 		$arr = array(
 						'select' => array(
 							'a.SessionID',
@@ -264,41 +263,58 @@ class Payment extends CI_Controller {
 					);
 					$this->config_model->update($course);
 
-					require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
-					$data = array(
-						array(
-							'Nama' => $sql['NAME'],
-							'Paket' => $sql['CatName'].' - '.$sql['PackName'].' - '.$sql['PackDetailName'],
-							'Link' => "http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
-						)
+		    		//validasi email lebih dari 1x
+					$cekstatus = array(
+						'select' => array(
+							'Count(RecID) as JML'
+						),
+						'from' => 'Logistics_Transactions',
+						'where' => array('TRANSIDMERCHANT'=>$TRANSIDMERCHANT,'RESULTMSG'=>'SUCCESS'),
 					);
+					$cekstatus = $this->config_model->find($cekstatus)->row_array();
+					if($cekstatus['JML']==0){
 
-					$data2 = array(
-						array(
-							'Jumlah Pembayaran' => $this->rupiah($sql['AMOUNT'])/*,
-							'Pembayaran 2' => 'Rp. 200000'*/
-						)
-					);
+					//notif ke telegram
+						$teledata = "<strong>Horeee ".$sql['NAME']." sudah berhasil membayar Paket ".$sql['CatName']." - ".$sql['PackName']." - ".$sql['PackDetailName'].". . .</strong>\n\n<a href='http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>Klik Disini Untuk Lihat Detail</a>";
+						$data = $this->telegram_lib->sendmsg($teledata);
 
-					$mail             = new PHPMailer();
-			        $mail->IsSMTP();
-			        $mail->SMTPAuth   = true;
-			        $mail->Host       = "smtp.office365.com";
-			        $mail->Port       = "587";
-			        $mail->Username   = "no-reply@primagama.co.id";
-			        $mail->Password   = "Prima.1234";
-			        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
-			        $mail->Subject    = "Primagama - Pembayaran Berhasil";
-			        $mail->MsgHTML($this->template_email($data,$data2));
-			        $mail->AddAddress($sql['EMAIL'], $sql['NAME']);
-			        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
+					//notif ke email
+						require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
+						$data = array(
+							array(
+								'Nama' => $sql['NAME'],
+								'Paket' => $sql['CatName'].' - '.$sql['PackName'].' - '.$sql['PackDetailName'],
+								'Link' => "http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>klik disini untuk melihat detail paket</a>"
+							)
+						);
+
+						$data2 = array(
+							array(
+								'Jumlah Pembayaran' => $this->rupiah($sql['AMOUNT'])/*,
+								'Pembayaran 2' => 'Rp. 200000'*/
+							)
+						);
+
+						$mail             = new PHPMailer();
+				        $mail->IsSMTP();
+				        $mail->SMTPAuth   = true;
+				        $mail->Host       = "smtp.office365.com";
+				        $mail->Port       = "587";
+				        $mail->Username   = "no-reply@primagama.co.id";
+				        $mail->Password   = "Prima.1234";
+				        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
+				        $mail->Subject    = "Primagama - Pembayaran Berhasil";
+				        $mail->MsgHTML($this->template_email($data,$data2));
+				        $mail->AddAddress($sql['EMAIL'], $sql['NAME']);
+				        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
 
 
-			        if(!$mail->Send()) {
-			        	echo "Mailer Error: " . $mail->ErrorInfo;
-			        } else {
-			         	echo "Mailer berhasil";
-			        }
+				        if(!$mail->Send()) {
+				        	echo "Mailer Error: " . $mail->ErrorInfo;
+				        } else {
+				         	echo "Mailer berhasil";
+				        }
+				    }
 		    	}
 
 				echo data_json(array("message"=>"Data berhasil disimpan.","notify"=>"success"));
@@ -678,7 +694,7 @@ class Payment extends CI_Controller {
 	{
 		$va = '3920659700038402';
 		$va2 = '3920659705038402';
-		$TRANSIDMERCHANT = 'PG/IV/20/00004';
+		$TRANSIDMERCHANT = 'PG/IV/20/00009';
 		//echo substr($va2,8,2);
 		if(substr($va2, 8,2) != '05') {
 			echo 'BUKU';
@@ -727,6 +743,22 @@ class Payment extends CI_Controller {
 					);
 					$this->config_model->update($course);
 
+		    		//validasi email lebih dari 1x
+					$cekstatus = array(
+						'select' => array(
+							'Count(RecID) as JML'
+						),
+						'from' => 'Logistics_Transactions',
+						'where' => array('TRANSIDMERCHANT'=>$TRANSIDMERCHANT,'RESULTMSG'=>'SUCCESS'),
+					);
+					$cekstatus = $this->config_model->find($cekstatus)->row_array();
+					if($cekstatus['JML']==0){
+
+					//notif ke telegram
+					$teledata = "<strong>Horeee ".$sql['NAME']." sudah berhasil membayar Paket ".$sql['CatName']." - ".$sql['PackName']." - ".$sql['PackDetailName'].". . .</strong>\n\n<a href='http://pintarbersama.primagama.co.id/info/paket/".$sql['SessionID']."'>Klik Disini Untuk Lihat Detail</a>";
+					$data = $this->telegram_lib->sendmsg($teledata);
+
+				    //Notif ke email
 					require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
 					$data = array(
 						array(
@@ -749,11 +781,11 @@ class Payment extends CI_Controller {
 			        $mail->Host       = "smtp.office365.com";
 			        $mail->Port       = "587";
 			        $mail->Username   = "no-reply@primagama.co.id";
-			        $mail->Password   = "Prima.1234";
+			        $mail->Password   = "Prima.2020";
 			        $mail->SetFrom('no-reply@primagama.co.id', 'Auto Reply Primagama');
 			        $mail->Subject    = "Primagama - Pembayaran Berhasil";
 			        $mail->MsgHTML($this->template_email($data,$data2));
-			        $mail->AddAddress($sql['EMAIL'], $sql['NAME']);
+			        $mail->AddAddress('oni.restu@primagama.co.id', $sql['NAME']);
 			        $mail->AddCC("oni.restu@primagama.co.id", "Helpdesk Primagama");
 
 
@@ -762,6 +794,7 @@ class Payment extends CI_Controller {
 			        } else {
 			         	echo "Mailer berhasil";
 			        }
+			    }
 		}
 	}
 
