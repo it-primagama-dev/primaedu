@@ -354,7 +354,8 @@ class mastercourse extends CI_Controller {
 					'a.Date',
 					'c.TimeFrom',
 					'c.TimeTo',
-					'd.BranchName'
+					'd.BranchName',
+					'a.Status'
 				),
 				'from' => 'Course_Schedule a',
 				'join' => array(
@@ -371,6 +372,7 @@ class mastercourse extends CI_Controller {
 						'type' => 'inner'
 					),
 				),
+				'where' => 'a.Status != 10 OR a.Status is null OR a.Status = 1',
 				'order_by' => array('a.RecID'=>'DESC')
 			);
 		$item = $this->config_model->find($arr);
@@ -586,6 +588,10 @@ class mastercourse extends CI_Controller {
 				'on' => 'a.ScheduleID=c.RecID',
 					'type' => 'left'
 				),
+			'Course_ScheduleTemplate d' => array(
+				'on' => 'c.ScheduleTemplateID=d.RecID',
+					'type' => 'inner'
+				),
 			),
 			'where' => array('a.SessionID'=>$SessionID),
 			'order_by' => array('b.RecID' => '')
@@ -771,9 +777,15 @@ class mastercourse extends CI_Controller {
 	public function approve_schedule()
 	{
 		$numb = $this->input->post('numb');
+		$StatusID = $this->input->post('Status');
+		if($StatusID==11) {
+			$Status = null;
+		} else {
+			$Status = $StatusID;
+		}
 		$data = array(
 	    	'params' => array(
-		    	'Status' => $this->input->post('Status'),
+		    	'Status' => $Status,
 		    ),
 		    'from' => 'Course_Schedule',
 			'where' => array('RecID' => $this->input->post('RecID'))
