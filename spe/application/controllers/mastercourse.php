@@ -883,4 +883,66 @@ class mastercourse extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function list_trxfa()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Data Transaksi Kelas Online',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Transaksi Kelas Online</a>',
+		);
+		$this->template->load('template', 'mastercourse/list_trxfa',$data);
+
+	}
+
+	public function get_datatrxfa()
+	{
+
+		$arr = array(
+		'select' => array(
+			'a.SessionID',
+			'a.TotalPrice',
+			'b.PackDetailName',
+			'c.PackName',
+			'd.CatName',
+			'e.NAME',
+			'e.EMAIL',
+			'e.AMOUNT',
+			'a.CreatedDate',
+			'a.ReferalCode',
+			'a.Status',
+			'a.OrderCode',
+			'e.PAYMENTCODE',
+			'e.PAYMENTDATETIME'
+		),
+		'from' => 'Course_OrderHeader a',
+		'join' => array(
+			'Course_PackDetail b' => array(
+				'on' => 'a.PackDetailID=b.RecID',
+					'type' => 'inner'
+				),
+				'Course_Pack c' => array(
+					'on' => 'b.PackID=c.RecID',
+					'type' => 'inner'
+				),
+				'Course_Category d' => array(
+					'on' => 'c.CatID=d.RecID',
+					'type' => 'inner'
+				),
+				'Logistics_Transactions e' => array(
+					'on' => 'a.OrderCode=e.TRANSIDMERCHANT',
+					'type' => 'inner'
+				),
+			),
+			'where' => array('a.Status' => 1),
+			'order_by' => array('a.RecID'=>'DESC'),
+		);
+		$sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
 }
