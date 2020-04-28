@@ -29,6 +29,7 @@
                         <th>Tanggal</th>
                         <th>Waktu</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="data_schedule"></tbody>
@@ -110,7 +111,80 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- /.modal --><!-- 
+<div class="modal fade" id="modal_form2" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Title</h3>
+            </div>
+            <div class="modal-body form">
+                <form action="#" id="form" class="form-horizontal">
+                    <input type="hidden" value="" id="RecID2" name="RecID2" />
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Pilih Cabang</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="BranchCode" name="BranchCode" style="width: 100%;">
+                                   <option value="">Pilih Cabang</option>
+                               </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Nama iSmart</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="IsmartID" name="IsmartID" style="width: 100%;">
+                                   <option value="">Pilih Ismart</option>
+                               </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Jenjang</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="StageCat" name="StageCat">
+                                   <option value="">Pilih Jenjang</option>
+                                   <option value="20">SD</option>
+                                   <option value="21">SMP</option>
+                                   <option value="22">SMA IPA</option>
+                                   <option value="23">SMA IPS</option>
+                                   <option value="24">UTBK</option>
+                               </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Mapel</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="SubID" name="SubID">
+                                   <option value="">Pilih Mapel</option>
+                               </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Tanggal</label>
+                            <div class="col-md-9">
+                                <input type="text" id="Date" name="Date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Waktu Mulai</label>
+                            <div class="col-md-9">
+                               <select class="form-control" id="TimeFrom" name="TimeFrom">
+                                   <option value="">Pilih Waktu Mulai</option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> -->
+
 <!-- datatables css -->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/plugins/datatables/responsive.bootstrap.min.css">
@@ -121,10 +195,14 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/plugins/jquery-ui/jquery-ui.css">
 <script type="text/javascript" src="<?php echo base_url()?>assets/plugins/jquery-ui/jquery-ui.js"></script>
 <script src="<?=base_url('assets/js/autoNumeric.js'); ?>"></script>
+<script src="<?php echo base_url('assets/plugins/ckeditor/ckeditor.js')?>"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/js/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/js/css/select2.custom.min.css">
-
 <script type="text/javascript">    
+
+$(function () {
+    CKEDITOR.replace('StageCat');
+});  
 
 $(function () {
   $('#BranchCode,#IsmartID').select2();
@@ -141,6 +219,7 @@ $(function(){
     });
 })
 
+var jQueryTable;
 $(document).ready(function(){
     $(".Idr").autoNumeric('init', {aSign: 'Rp ', aDec: ',', aSep: '.'});
     reload_data();
@@ -163,13 +242,88 @@ var table;
 function modal_form(RecID=null)
 {
     $(".text-danger").remove();
+    if (!RecID) {
+        save_method = 'add';
         $('#modal_form').modal({backdrop: 'static', keyboard: false});
         $('#form')[0].reset();
         $('#modal_form').modal('show');
         $('.modal-title').text('Tambah Jadwal');
+    }else {
+        save_method = 'update';
+        $('#form')[0].reset();
+
+        $.ajax({
+            url : base_url + "mastercourse/edit_schedule/"+RecID,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data)
+            {
+                $('#modal_form').modal({backdrop: 'static', keyboard: false});
+                $('[name="BranchCode"]').val(data.BranchCode);
+                $('[name="IsmartID"]').val(data.IsmartID);
+                $('[name="StageCat"]').val(data.StageCat);
+                $('[name="SubID"]').val(data.SubID);
+                $('[name="Date"]').val(data.Date);
+                $('[name="TimeFrom"]').val(data.TimeFrom);
+                $('#RecID').val(RecID);
+                $('#modal_form').modal('show');
+                $('.modal-title').text('Edit Schedule');
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+  }
+function modal_form(RecID)
+{
+    $(".text-danger").remove();
+        save_method = 'update';
+        $('#form')[0].reset();
+        $.ajax({
+            url : base_url + "mastercourse/edit_schedule/"+RecID,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data)
+            {
+                $('#modal_form2').modal({backdrop: 'static', keyboard: false});
+                $('[name="BranchCode"]').val(data.BranchCode);
+                $('[name="IsmartID"]').val(data.IsmartID);
+                $('[name="SubID"]').val(data.SubID);
+                $('[name="Date"]').val(data.Date);
+                $('[name="TimeFrom"]').val(data.TimeFrom);
+                CKEDITOR.instances['StageCat'].setData(data.StageCat);
+                $('#RecID').val(data.RecID);
+                $('#modal_form').modal('show');
+                $('.modal-title').text('Edit Jadwal');
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Error get data from ajax');
+            }
+        });
 }
 
- function save() {
+var delID
+function delete_form($RecID) {
+  if (confirm("Are you sure you want to delete this ?")) {
+    $.ajax({
+      url : base_url + "mastercourse/delete_schedule",
+      type: "POST",
+      data: ({"token": window.btoa(unescape(encodeURIComponent("Q3IzNHQzZF9ieS5IQG1aNGg="))),'action':window.btoa(unescape(encodeURIComponent('2'))),"RecID": window.btoa(unescape(encodeURIComponent(delID)))}),
+      dataType: "JSON",
+      success: function(response)
+      {
+        $.notify(response.message,response.notify);/*
+        jQueryTable.ajax.reload( null, true);*/
+        reload_data();
+      }
+    });
+  }
+}
+
+ function save_addschedule() {
     //alert($('#Date').val());
     $(".text-danger").remove();
       if($('#BranchCode').val() == "") {
@@ -201,7 +355,16 @@ function modal_form(RecID=null)
           $('[name="TimeFrom"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="TimeFrom"]').focus();
           return false;
-      }
+      } else {
+        var url;
+        if(save_method == 'add')
+        {
+            url = base_url + "mastercourse/add_schedule";
+        }
+        else
+        {
+            url = base_url + "mastercourse/update_schedule";
+        }
       if (confirm("Anda yakin data sudah terinput dengan benar ?")) {
 
           $.ajax({
@@ -237,7 +400,8 @@ function modal_form(RecID=null)
                           {
                                 //$('#form')[0].reset();
                                 //$("#modal_form").modal('hide');
-                                $.notify(data.message,data.notify);
+                                $.notify(data.message,data.notify);/*
+                                jQuery.ajax.reload( null, true);*/
                                 reload_data();
                            
                           }
@@ -247,9 +411,76 @@ function modal_form(RecID=null)
                 }
                   }
                 });
+        }
       }
     }
+    
+ /*function save_editschedule() {
+    $(".text-danger").remove();
+      if($('#BranchCode').val() == "") {
+          $('#BranchCode').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#BranchCode').focus();
+          return false;
+      }
+      if($('#IsmartID').val() == "") {
+          $('#IsmartID').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#IsmartID').focus();
+          return false;
+      }
+      if($('[name="StageCat"]').val() == "") {
+          $('[name="StageCat"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="StageCat"]').focus();
+          return false;
+      }
+      if($('[name="SubID"]').val() == "") {
+          $('[name="SubID"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="SubID"]').focus();
+          return false;
+      }
+      if($('[name="Date"]').val() == "") {
+          $('[name="Date"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Date"]').focus();
+          return false;
+      }
+      if($('[name="TimeFrom"]').val() == "") {
+          $('[name="TimeFrom"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="TimeFrom"]').focus();
+          return false;
+      } else {
+        var url;
+        if(save_method == 'add')
+        {
+            url = base_url + "mastercourse/add_schedule";
+        }
+        else
+        {
+            url = base_url + "mastercourse/update_schedule";
+        }
 
+        $('#data_schedule').empty();
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(save_method == 'add') {
+                    $.notify(data.message,data.notify);
+                } else {
+                    $.notify(data.message,data.notify);
+                }
+                $('#modal_form').modal('hide');
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Error adding / update data');
+            }
+        });
+    }
+  }
+*/
 function reload_data() {
     $.ajax({
         url : base_url+"mastercourse/get_data_schedule",
@@ -279,6 +510,7 @@ function reload_data() {
                     } else if (item.Status==12) {
                         Status = "<font color='red'>Rejected</font>";
                     }
+                        button = '<button type="button" class="btn btn-warning btn-xs" data-toggle="modal" onclick="modal_form('+item.RecID+');"><span class="glyphicon glyphicon-pencil"></span> Edit</button><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="delete_form(delID='+item.RecID+');">Delete</button>';
 
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
@@ -289,6 +521,9 @@ function reload_data() {
                         $('<td>').text(get_hari(item.Date)),
                         $('<td>').text(TimeFrom+' - '+TimeTo+' WIB'),
                         $('<td>').html(Status),
+                        $("<td style='text-align: center;'>").html(button),/*
+                        $('<td>').html('<button type="button" class="btn btn-warning btn-xs" data-toggle="modal" onclick="modal_form('+item.RecID+');"> Edit</button><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="delete_form(delID='+data+');">Delete</button>'),*//*
+                        $('<td>').html('<input type="checkbox" class="emp_checkbox" data-emp-id="'+item.RecID+'">')*/
                         //$('<td>').text(TimeTo)
                     ).appendTo('#data_schedule');
                 });
@@ -345,4 +580,5 @@ $("#BranchCode").change(function(e) {
        });
   });
 });
+
 </script>

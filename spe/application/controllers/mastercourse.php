@@ -292,12 +292,12 @@ class mastercourse extends CI_Controller {
 	{
 		$data = array(
 	    	'params' => array(
-		    	'IsmartName' => $this->input->post('IsmartName'),
+		    	'BranchCode' => $this->input->post('BranchCode'),
+		    	'IsmartID' => $this->input->post('IsmartID'),
 		    	'StageCat' => $this->input->post('StageCat'),
 		    	'SubID' => $this->input->post('SubID'),
 		    	'Date' => $this->input->post('Date'),
 		    	'TimeFrom' => $this->input->post('TimeFrom'),
-		    	'TimeTo' => $this->input->post('TimeTo'),
 				'CreatedDate' => date("Y-m-d H:i:s"),
 				'CreatedBy' => $this->session->userdata('Username')
 		    ),
@@ -311,14 +311,14 @@ class mastercourse extends CI_Controller {
 	{
 		$data = array(
 	    	'params' => array(
-		    	'IsmartName' => $this->input->post('IsmartName'),
+		    	'BranchCode' => $this->input->post('BranchCode'),
+		    	'IsmartID' => $this->input->post('IsmartID'),
 		    	'StageCat' => $this->input->post('StageCat'),
 		    	'SubID' => $this->input->post('SubID'),
 		    	'Date' => $this->input->post('Date'),
 		    	'TimeFrom' => $this->input->post('TimeFrom'),
-		    	'TimeTo' => $this->input->post('TimeTo'),
-				'EditDate' => date("Y-m-d H:i:s"),
-				'EditBy' => $this->session->userdata('Username')
+				'CreatedDate' => date("Y-m-d H:i:s"),
+				'CreatedBy' => $this->session->userdata('Username')
 		    ),
 		    'from' => 'Course_Schedule',
 			'where' => array('RecID' => $this->input->post('RecID'))
@@ -326,13 +326,32 @@ class mastercourse extends CI_Controller {
 	    $msg = $this->config_model->update($data);
 			echo data_json(array("message"=>"Data berhasil diubah.","notify"=>"success"));
 	}
-
+/*
 	public function delete_schedule()
 	{
 		$id = $this->input->post('RecID');
 		if(isset($id)) {
 			$msg = $this->config_model->delete_schedule($id);
 			echo data_json(array("message"=>"Data berhasil dihapus.","notify"=>"success"));
+		}
+	}*/
+	
+	public function delete_schedule($RecID)
+	{
+		$token = base64_decode($this->input->post('token'));
+		if (isset($token) && !empty($token) && $token == base64_encode('Cr34t3d_by.H@mZ4h')) {
+			try {
+				$this->config_model->delete(array(
+					'from' => 'Course_Schedule',
+					'where' => array('RecID' => base64_decode($this->input->post('RecID')))
+				));
+				echo json_encode(array('message'=>'Data berhasil dihapus','notify'=>'success'));
+			} catch (Exception $e) {
+				echo json_encode(array('message'=>'Data gagal dihapus','notify'=>'warning'));
+			}
+		} else {
+			header("HTTP/1.1 403 Origin Denied");
+			exit();
 		}
 	}
 
