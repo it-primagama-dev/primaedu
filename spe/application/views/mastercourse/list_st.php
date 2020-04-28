@@ -130,8 +130,10 @@ function reload_data() {
                     
                     if(item.Status==null){
                       Status = 'Menunggu Pembayaran';
-                    } else {
+                    } else if(item.Status==1) {
                       Status = 'Sudah Dibayar';
+                    } else if(item.Status==2) {
+                      Status = 'Kadaluarsa';
                     }
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
@@ -201,7 +203,7 @@ function detail(SessionID)
                         $('<td>').text('Pertemuan Ke - '+item2.MeetNumber),
                         $('<td>').text(item2.SubName),
                         $('<td>').text(get_hari(item2.DateSchedule)),
-                        $('<td>').text(item2.TimeFromScheDule.substring(0,5)),
+                        $('<td>').text(item2.TimeFrom.substring(0,5)+' - '+item2.TimeTo.substring(0,5)+' WIB'),
                         $('<td>').text(IsmartName)
                     ).appendTo('#dt_jadwal');
                 });

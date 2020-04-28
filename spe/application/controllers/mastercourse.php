@@ -354,7 +354,8 @@ class mastercourse extends CI_Controller {
 					'a.Date',
 					'c.TimeFrom',
 					'c.TimeTo',
-					'd.BranchName'
+					'd.BranchName',
+					'a.Status'
 				),
 				'from' => 'Course_Schedule a',
 				'join' => array(
@@ -371,6 +372,7 @@ class mastercourse extends CI_Controller {
 						'type' => 'inner'
 					),
 				),
+				'where' => 'a.Status != 10 OR a.Status is null OR a.Status = 1',
 				'order_by' => array('a.RecID'=>'DESC')
 			);
 		$item = $this->config_model->find($arr);
@@ -586,6 +588,10 @@ class mastercourse extends CI_Controller {
 				'on' => 'a.ScheduleID=c.RecID',
 					'type' => 'left'
 				),
+			'Course_ScheduleTemplate d' => array(
+				'on' => 'c.ScheduleTemplateID=d.RecID',
+					'type' => 'inner'
+				),
 			),
 			'where' => array('a.SessionID'=>$SessionID),
 			'order_by' => array('b.RecID' => '')
@@ -771,9 +777,15 @@ class mastercourse extends CI_Controller {
 	public function approve_schedule()
 	{
 		$numb = $this->input->post('numb');
+		$StatusID = $this->input->post('Status');
+		if($StatusID==11) {
+			$Status = null;
+		} else {
+			$Status = $StatusID;
+		}
 		$data = array(
 	    	'params' => array(
-		    	'Status' => $this->input->post('Status'),
+		    	'Status' => $Status,
 		    ),
 		    'from' => 'Course_Schedule',
 			'where' => array('RecID' => $this->input->post('RecID'))
@@ -861,6 +873,68 @@ class mastercourse extends CI_Controller {
 				),
 			),
 			'where' => array('b.Status !=' => '0'),
+		);
+		$sql = $this->config_model->find($arr);
+		if ($sql->num_rows()>0) {
+			$data['rows'] = $sql->result_array();
+		} else {
+			$data['rows'] = 0;
+		}
+		echo json_encode($data);
+	}
+
+	public function list_trxfa()
+	{	
+		restrict();
+		$data = array(
+			'title' => 'Data Transaksi Kelas Online',
+			'breadcrumb_1' => '<a href="'.base_url().'mastercourse">Data Transaksi Kelas Online</a>',
+		);
+		$this->template->load('template', 'mastercourse/list_trxfa',$data);
+
+	}
+
+	public function get_datatrxfa()
+	{
+
+		$arr = array(
+		'select' => array(
+			'a.SessionID',
+			'a.TotalPrice',
+			'b.PackDetailName',
+			'c.PackName',
+			'd.CatName',
+			'e.NAME',
+			'e.EMAIL',
+			'e.AMOUNT',
+			'a.CreatedDate',
+			'a.ReferalCode',
+			'a.Status',
+			'a.OrderCode',
+			'e.PAYMENTCODE',
+			'e.PAYMENTDATETIME'
+		),
+		'from' => 'Course_OrderHeader a',
+		'join' => array(
+			'Course_PackDetail b' => array(
+				'on' => 'a.PackDetailID=b.RecID',
+					'type' => 'inner'
+				),
+				'Course_Pack c' => array(
+					'on' => 'b.PackID=c.RecID',
+					'type' => 'inner'
+				),
+				'Course_Category d' => array(
+					'on' => 'c.CatID=d.RecID',
+					'type' => 'inner'
+				),
+				'Logistics_Transactions e' => array(
+					'on' => 'a.OrderCode=e.TRANSIDMERCHANT',
+					'type' => 'inner'
+				),
+			),
+			'where' => array('a.Status' => 1),
+			'order_by' => array('a.RecID'=>'DESC'),
 		);
 		$sql = $this->config_model->find($arr);
 		if ($sql->num_rows()>0) {

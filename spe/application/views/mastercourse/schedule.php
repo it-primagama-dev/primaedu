@@ -272,10 +272,12 @@ function reload_data() {
                     TimeToOri = item.TimeTo;
                     TimeTo = TimeToOri.substring(0,5);
 
-                    if (item.Status==null) {
+                    if (item.Status==null ) {
                         Status = "<font color='green'>Available";
-                    } else {
+                    } else if (item.Status==1) {
                         Status = "<font color='red'>Booked</font>";
+                    } else if (item.Status==12) {
+                        Status = "<font color='red'>Rejected</font>";
                     }
 
                     var $tr = $('<tr>').append(
