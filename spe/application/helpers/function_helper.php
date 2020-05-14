@@ -219,7 +219,7 @@ function get_url_slides($img, $size = '')
  * @param  string $jk
  * @return string url
  */
- 
+
 function get_url_image_pegawai($img = '', $size = 'medium', $jk = 'Laki-laki') {
     if (is_null($img) OR empty($img)) {
         if ($jk == 'Laki-laki') {
@@ -369,7 +369,7 @@ function get_path_file($file = '')
 
     $user_folder = './assets/files/' . get_post_data('userfiles');
     mkdir($user_folder, 0755);
-    
+
     return $user_folder.'/'.$file;
 }
 
@@ -825,8 +825,8 @@ function msg_fotter()
 }
 
 function batch_email($params=array())
-{   
-    $type = 0;
+{
+    $type = 1;
     if (isset($type) && $type==0) {
         require_once(APPPATH.'libraries/PHPMailer/PHPMailerAutoload.php');
         $mail             = new PHPMailer();
@@ -965,7 +965,7 @@ function format_datetime($datetime)
 function search_duplicate($array)
 {
     $array_temp = array();
-    
+
     foreach($array as $val)
     {
         if (!in_array($val, $array_temp)) {
@@ -980,7 +980,7 @@ function search_duplicate($array)
 /*function search_duplicate($array)
 {
     $array_temp = array();
-    
+
     $total=0;
     foreach($array as $val)
     {
@@ -993,7 +993,7 @@ function search_duplicate($array)
             $total += count(json_encode($val));
         }
     }
-    
+
     $data['duplicate'] = $json;
     $data['total'] = $total;
     return $data;

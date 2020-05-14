@@ -29,6 +29,7 @@
                         <th>Tanggal</th>
                         <th>Waktu</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="data_schedule"></tbody>
@@ -141,6 +142,7 @@ $(function(){
     });
 })
 
+var jQueryTable;
 $(document).ready(function(){
     $(".Idr").autoNumeric('init', {aSign: 'Rp ', aDec: ',', aSep: '.'});
     reload_data();
@@ -163,13 +165,60 @@ var table;
 function modal_form(RecID=null)
 {
     $(".text-danger").remove();
+    if (!RecID) {
+        save_method = 'add';
         $('#modal_form').modal({backdrop: 'static', keyboard: false});
         $('#form')[0].reset();
         $('#modal_form').modal('show');
         $('.modal-title').text('Tambah Jadwal');
+    }else {
+        save_method = 'update';
+        $('#form')[0].reset();
+
+        $.ajax({
+            url : base_url + "mastercourse/edit_schedule/"+RecID,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data)
+            {
+                $('#modal_form').modal({backdrop: 'static', keyboard: false});
+                $('[name="BranchCode"]').val(data.BranchCode);
+                $('[name="IsmartID"]').val(data.IsmartID);
+                $('[name="StageCat"]').val(data.StageCat);
+                $('[name="SubID"]').val(data.SubID);
+                $('[name="Date"]').val(data.Date);
+                $('[name="TimeFrom"]').val(data.TimeFrom);
+                $('#RecID').val(RecID);
+                $('#modal_form').modal('show');
+                $('.modal-title').text('Edit Schedule');
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+  }
+
+var delID
+function delete_form($RecID) {
+  if (confirm("Are you sure you want to delete this ?")) {
+    $.ajax({
+      url : base_url + "mastercourse/delete_schedule",
+      type: "POST",
+      data: ({"token": window.btoa(unescape(encodeURIComponent("Q3IzNHQzZF9ieS5IQG1aNGg="))),'action':window.btoa(unescape(encodeURIComponent('2'))),"RecID": window.btoa(unescape(encodeURIComponent(delID)))}),
+      dataType: "JSON",
+      success: function(response)
+      {
+        $.notify(response.message,response.notify);/*
+        jQueryTable.ajax.reload( null, true);*/
+        reload_data();
+      }
+    });
+  }
 }
 
- function save() {
+ function save_addschedule() {
     //alert($('#Date').val());
     $(".text-danger").remove();
       if($('#BranchCode').val() == "") {
@@ -201,7 +250,16 @@ function modal_form(RecID=null)
           $('[name="TimeFrom"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="TimeFrom"]').focus();
           return false;
-      }
+      } else {
+        var url;
+        if(save_method == 'add')
+        {
+            url = base_url + "mastercourse/add_schedule";
+        }
+        else
+        {
+            url = base_url + "mastercourse/update_schedule";
+        }
       if (confirm("Anda yakin data sudah terinput dengan benar ?")) {
 
           $.ajax({
@@ -237,7 +295,8 @@ function modal_form(RecID=null)
                           {
                                 //$('#form')[0].reset();
                                 //$("#modal_form").modal('hide');
-                                $.notify(data.message,data.notify);
+                                $.notify(data.message,data.notify);/*
+                                jQuery.ajax.reload( null, true);*/
                                 reload_data();
                            
                           }
@@ -247,9 +306,76 @@ function modal_form(RecID=null)
                 }
                   }
                 });
+        }
       }
     }
+    
+ /*function save_editschedule() {
+    $(".text-danger").remove();
+      if($('#BranchCode').val() == "") {
+          $('#BranchCode').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#BranchCode').focus();
+          return false;
+      }
+      if($('#IsmartID').val() == "") {
+          $('#IsmartID').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('#IsmartID').focus();
+          return false;
+      }
+      if($('[name="StageCat"]').val() == "") {
+          $('[name="StageCat"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="StageCat"]').focus();
+          return false;
+      }
+      if($('[name="SubID"]').val() == "") {
+          $('[name="SubID"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="SubID"]').focus();
+          return false;
+      }
+      if($('[name="Date"]').val() == "") {
+          $('[name="Date"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Date"]').focus();
+          return false;
+      }
+      if($('[name="TimeFrom"]').val() == "") {
+          $('[name="TimeFrom"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="TimeFrom"]').focus();
+          return false;
+      } else {
+        var url;
+        if(save_method == 'add')
+        {
+            url = base_url + "mastercourse/add_schedule";
+        }
+        else
+        {
+            url = base_url + "mastercourse/update_schedule";
+        }
 
+        $('#data_schedule').empty();
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(save_method == 'add') {
+                    $.notify(data.message,data.notify);
+                } else {
+                    $.notify(data.message,data.notify);
+                }
+                $('#modal_form').modal('hide');
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Error adding / update data');
+            }
+        });
+    }
+  }
+*/
 function reload_data() {
     $.ajax({
         url : base_url+"mastercourse/get_data_schedule",
@@ -272,13 +398,12 @@ function reload_data() {
                     TimeToOri = item.TimeTo;
                     TimeTo = TimeToOri.substring(0,5);
 
-                    if (item.Status==null ) {
+                    if (item.Status==null) {
                         Status = "<font color='green'>Available";
-                    } else if (item.Status==1) {
+                    } else {
                         Status = "<font color='red'>Booked</font>";
-                    } else if (item.Status==12) {
-                        Status = "<font color='red'>Rejected</font>";
                     }
+                        button = '<button type="button" class="btn btn-warning btn-xs" data-toggle="modal" onclick="modal_form('+item.RecID+');"><span class="glyphicon glyphicon-pencil"></span> Edit</button><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="delete_form(delID='+item.RecID+');">Delete</button>';
 
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
@@ -289,6 +414,9 @@ function reload_data() {
                         $('<td>').text(get_hari(item.Date)),
                         $('<td>').text(TimeFrom+' - '+TimeTo+' WIB'),
                         $('<td>').html(Status),
+                        $("<td style='text-align: center;'>").html(button),/*
+                        $('<td>').html('<button type="button" class="btn btn-warning btn-xs" data-toggle="modal" onclick="modal_form('+item.RecID+');"> Edit</button><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="delete_form(delID='+data+');">Delete</button>'),*//*
+                        $('<td>').html('<input type="checkbox" class="emp_checkbox" data-emp-id="'+item.RecID+'">')*/
                         //$('<td>').text(TimeTo)
                     ).appendTo('#data_schedule');
                 });
@@ -345,4 +473,5 @@ $("#BranchCode").change(function(e) {
        });
   });
 });
+
 </script>

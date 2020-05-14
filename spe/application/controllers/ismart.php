@@ -8,45 +8,66 @@ class ismart extends CI_Controller {
         parent::__construct();
         date_default_timezone_set("Asia/Jakarta");
         $this->load->model('config_model');
-    } 
+    }
 
 	public function index()
-	{	
+	{
 		$this->load->view('ismart/new');
 	}
 
-    public function get_area() {
-        $arr = array(
-            'from' => $this->db2 . 'areacabang a',
-            'where' => 'a.Area is null',
-            'order_by' => array('a.KodeAreaCabang' => '')
-        );
-        $item = $this->config_model->find($arr);
-        $data = $item->result_array();
-        echo json_encode($data);
-    }
+  public function get_area() {
+      $arr = array(
+          'from' => $this->db2 . 'areacabang a',
+          'where' => 'a.Area is null',
+          'order_by' => array('a.KodeAreaCabang' => '')
+      );
+      $item = $this->config_model->find($arr);
+      $data = $item->result_array();
+      echo json_encode($data);
+	}
 
 	public function get_cabang($Area)
 	{
+
+		if (!$this->input->is_ajax_request()) {
+			redirect('ismart');
+		};
+
 		$arr = array(
-				'from' => $this->db2.'areacabang a',
-				'where' => "a.Area = '$Area'",
-				'order_by' => array('a.KodeAreaCabang' => '')
-			);
-		$item = $this->config_model->find($arr);		
-		$data = $item->result_array();
-		echo json_encode($data);		
+			'from' => $this->db2.'areacabang a',
+			'where' => "a.Area = '$Area'",
+			'order_by' => array('a.KodeAreaCabang' => '')
+		);
+		$item 	= $this->config_model->find($arr);
+		$data 	= $item->row();
+		$datas 	= $item->result();
+
+		// print_r($data);
+
+		if ($item->num_rows() > 0) {
+
+			echo '<option value="">-- Pilih Cabang --</option>';
+
+			foreach ($datas as $key => $value) {
+
+				echo '<option value="'.trim($value->KodeAreaCabang).'">'.$value->NamaAreaCabang.'</option>';
+
+			}
+		}
+
+
+		//echo json_encode($data);
 	}
 
 	public function get_BidangStudi() {
-        $arr = array(
-            'from' => $this->db2 . 'bidangstudi a',
-            'order_by' => array('a.KodeBidangStudi' => '')
-        );
-        $item = $this->config_model->find($arr);
-        $data = $item->result_array();
-        echo json_encode($data);
-    }
+    $arr = array(
+      'from' => $this->db2 . 'bidangstudi a',
+      'order_by' => array('a.KodeBidangStudi' => '')
+    );
+    $item = $this->config_model->find($arr);
+    $data = $item->result_array();
+    echo json_encode($data);
+	}
 
 	public function save_addiSmart()
 	{
@@ -106,80 +127,168 @@ class ismart extends CI_Controller {
 
 			$KodeBidangStudi['KodeBidangStudi'] = $BidangStudi;
 			$query = $this->config_model->getSelectedData($this->db2 .'bidangstudi',$KodeBidangStudi)->row_array();
-			$NamaBidangStudi = $query['NamaBidangStudi']; 
+			$NamaBidangStudi = $query['NamaBidangStudi'];
 
 			$KodeCabang['KodeAreaCabang'] = $Cabang;
 			$querycabang = $this->config_model->getSelectedData($this->db2 .'areacabang',$KodeCabang)->row_array();
-			$NamaCabang = $querycabang['NamaAreaCabang']; 
-			$EmailCabang = $querycabang['Email']; 
+			$NamaCabang = $querycabang['NamaAreaCabang'];
+			$EmailCabang = $querycabang['Email'];
 
-		    $data2 = array(
-		    	'params' => array(
-			   		'Nama' => $Nama,
-			   		'NoKTP' => $this->input->post('NoKTP'),
-			   		'TipeISmart' => $this->input->post('TipeiSmart'),
-			   		'KodeAreaCabang' => $this->input->post('Area'),
-			   		'KodeAreaCabang' => $Cabang,
-			   		'BidStudi' => $BidangStudi,
-			   		'BidangStudi2' => $this->input->post('BidangStudi2'),
-			   		'AlamatRumah' => $this->input->post('Alamat'),
-			   		'Email' => $Email,
-			   		'PendidikanAkhir' => $this->input->post('Pendidikan'),
-			   		'Pekerjaan' => $this->input->post('Pekerjaan'),
-			   		'ScanIjazah' => $IjazahName,
-			   		'Notelp' => $NoTelp,
-			   		'Jurusan' => $this->input->post('Jurusan'),
-			   		'ScanCertificate' => $SertifikatName,
-			   		'ScanKTP' => $KTPName,
-					'CreateDate'=> date('Y-m-d H:i:s'),
-			   	),
-			   	'from' => $this->db2 .'iSmartNew',
-		    );
-		    $msg2 = $this->config_model->insert($data2);
+			if (isset($_POST['NoKTP'])) {
 
-			if (isset($IjazahFile) && !empty($IjazahFile)) {
-				$xdata = base64_decode($IjazahFile);
-				$file_path = 'assets/upload/ismart/ijazah/';
-				file_put_contents($file_path.$NameIjazah, $xdata);
-			}
+				$no_ktp = $this->input->post('NoKTP', true);
 
-			if (isset($SertifikatFile) && !empty($SertifikatFile)) {
-				$xdata = base64_decode($SertifikatFile);
-				$file_path = 'assets/upload/ismart/sertifikat/';
-				file_put_contents($file_path.$NameSertifikat, $xdata);
-			}
+					$arr = array(
+						'from' => $this->db2.'iSmartNew',
+						'where' => "NoKTP = '$no_ktp'",
+					);
 
-			if (isset($KTPFile) && !empty($KTPFile)) {
-				$xdata = base64_decode($KTPFile);
-				$file_path = 'assets/upload/ismart/KTP/';
-				file_put_contents($file_path.$NameKTP, $xdata);
-			}		
-			if ($msg2==true) {
+					$item 	= $this->config_model->find($arr);
 
-			$body = '
-			<table border="0" cellspacing="0" cellpadding="0" style="padding-bottom:15px;">
-				<tr>
-					<td>Yth, Cabang '.$NamaCabang.', </td>
-				</tr>
-				<tr>
-					<td>Anda menerima data iSmart / IBM / Tentor yang membutuhkan approval. Silahkan login ke PrimaEdu dan melakukan approval dari menu Data Master -> Approval iSmart. <br></br>Terima kasih. </td>
-				</tr>
-			</table>'.msg_fotter();
+				if ($item->num_rows() > 0) {
+					echo data_json(array("message"=>"Data iSmart gagal disimpan, No KTP sudah tersedia.","status"=>"warning"));
+				}else {
+					$data2 = array(
+			    	'params' => array(
+				   		'Nama' => $Nama,
+				   		'NoKTP' => $this->input->post('NoKTP'),
+				   		'TipeISmart' => $this->input->post('TipeiSmart'),
+				   		'KodeAreaCabang' => $this->input->post('Area'),
+				   		'KodeAreaCabang' => $Cabang,
+				   		'BidStudi' => $BidangStudi,
+				   		'BidangStudi2' => $this->input->post('BidangStudi2'),
+				   		'AlamatRumah' => $this->input->post('Alamat'),
+				   		'Email' => $Email,
+				   		'PendidikanAkhir' => $this->input->post('Pendidikan'),
+				   		'Pekerjaan' => $this->input->post('Pekerjaan'),
+				   		'ScanIjazah' => $IjazahName,
+				   		'Notelp' => $NoTelp,
+				   		'Jurusan' => $this->input->post('Jurusan'),
+				   		'ScanCertificate' => $SertifikatName,
+				   		'ScanKTP' => $KTPName,
+						'CreateDate'=> date('Y-m-d H:i:s'),
+				   	),
+				   	'from' => $this->db2 .'iSmartNew',
+			    );
 
-			$asg = batch_email(array(
-				'penerima' => array('erik.alfredo@primagama.co.id'/*,$EmailCabang*/),
-				'subjek' => array('Data iSmart Baru'),
-				'body' => array($body)
-			));
-				echo data_json(array("message"=>"Data iSmart berhasil disimpan.","notify"=>"success"));
-			} else {
-				echo data_json(array("message"=>"Data iSmart gagal disimpan.","notify"=>"error"));
+					$msg2 = $this->config_model->insert($data2);
+
+					if (isset($IjazahFile) && !empty($IjazahFile)) {
+						$xdata = base64_decode($IjazahFile);
+						$file_path = 'assets/upload/ismart/ijazah/';
+						file_put_contents($file_path.$NameIjazah, $xdata);
+					}
+
+					if (isset($SertifikatFile) && !empty($SertifikatFile)) {
+						$xdata = base64_decode($SertifikatFile);
+						$file_path = 'assets/upload/ismart/sertifikat/';
+						file_put_contents($file_path.$NameSertifikat, $xdata);
+					}
+
+					if (isset($KTPFile) && !empty($KTPFile)) {
+						$xdata = base64_decode($KTPFile);
+						$file_path = 'assets/upload/ismart/KTP/';
+						file_put_contents($file_path.$NameKTP, $xdata);
+					}
+
+					if ($msg2) {
+
+					$body = '
+					<table border="0" cellspacing="0" cellpadding="0" style="padding-bottom:15px;">
+						<tr>
+							<td>Yth, Cabang '.$NamaCabang.', </td>
+						</tr>
+						<tr>
+							<td>Anda menerima data iSmart / IBM / Tentor yang membutuhkan approval. Silahkan login ke PrimaEdu dan melakukan approval dari menu Data Master -> Approval iSmart. <br></br>Terima kasih. </td>
+						</tr>
+					</table>'.msg_fotter();
+
+					$asg = batch_email(array(
+						'penerima' => array('erik.alfredo@primagama.co.id'/*,$EmailCabang*/),
+						'subjek' => array('Data iSmart Baru'),
+						'body' => array($body)
+					));
+
+						echo data_json(array("message"=>"Data iSmart berhasil disimpan.","status"=>"success"));
+
+					} else {
+						echo data_json(array("message"=>"Data iSmart gagal disimpan.","status"=>"error"));
+					}
+				}
 			}
 
 	}
 
+	public function check_ktp()
+	{
+		$no_ktp = $this->input->post('NoKTP', true);
+
+		if (isset($no_ktp)) {
+
+			$arr = array(
+				'from' => $this->db2.'iSmartNew',
+				'where' => "NoKTP = '$no_ktp'",
+			);
+
+			$item 	= $this->config_model->find($arr);
+
+			if ($item->num_rows() > 0) {
+				echo 1;
+			}else {
+				0;
+			}
+		}
+	}
+
+	public function test_email($value='')
+	{
+		$NamaCabang = 'Jakarta';
+
+		$body = '
+		<table border="0" cellspacing="0" cellpadding="0" style="padding-bottom:15px;">
+			<tr>
+				<td>Yth, Cabang '.$NamaCabang.', </td>
+			</tr>
+			<tr>
+				<td>Anda menerima data iSmart / IBM / Tentor yang membutuhkan approval. Silahkan login ke PrimaEdu dan melakukan approval dari menu Data Master -> Approval iSmart. <br></br>Terima kasih. </td>
+			</tr>
+		</table>'.msg_fotter();
+
+		$asg = batch_email(array(
+		'penerima' => array('toniewibowo@gmail.com'/*,$EmailCabang*/),
+			'subjek' => array('Data iSmart Baru'),
+			'body' => array($body)
+		));
+	}
+
+	public function testing()
+	{
+		$data = $this->db->query('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES');
+
+		foreach ($data->result_array() as $key => $value) {
+			echo $value['TABLE_NAME'] .'<br />';
+		}
+		echo '<h1>COBA</h1>';
+
+		$cek = $this->db->get('Franchise_Fee')->row();
+
+		print_r($cek);
+
+		echo '<br /> <br />';
+
+		var_dump($cek);
+
+		$arr = array(
+			'from' => $this->db2.'iSmartNew'
+		);
+
+		$item 	= $this->config_model->find($arr);
+
+		print_r($item->row_array());
+	}
+
 	public function list_ismart()
-	{	
+	{
 		restrict();
 		$data = array(
 			'title' => 'Data iSmart',
@@ -208,7 +317,7 @@ class ismart extends CI_Controller {
 					'a.Jurusan',
 					'a.ScanCertificate',
 					'a.ScanKTP',
-					"CASE a.Status 
+					"CASE a.Status
 					  WHEN 1 THEN 'Approve'
 					  WHEN 2 THEN 'Reject'
 					  ELSE 'Menunggu'
@@ -279,7 +388,7 @@ class ismart extends CI_Controller {
 	}
 
 	public function list_approve()
-	{	
+	{
 		restrict();
 		$data = array(
 			'title' => 'Data iSmart Approve',
@@ -290,7 +399,7 @@ class ismart extends CI_Controller {
 	}
 
 	public function list_reject()
-	{	
+	{
 		restrict();
 		$data = array(
 			'title' => 'Data iSmart Reject',
@@ -320,7 +429,7 @@ class ismart extends CI_Controller {
 					'a.Jurusan',
 					'a.ScanCertificate',
 					'a.ScanKTP',
-					"CASE a.Status 
+					"CASE a.Status
 					  WHEN 1 THEN 'Approve'
 					  WHEN 2 THEN 'Reject'
 					  ELSE 'Menunggu'
@@ -359,7 +468,7 @@ class ismart extends CI_Controller {
 					'a.Jurusan',
 					'a.ScanCertificate',
 					'a.ScanKTP',
-					"CASE a.Status 
+					"CASE a.Status
 					  WHEN 1 THEN 'Approve'
 					  WHEN 2 THEN 'Reject'
 					  ELSE 'Menunggu'
