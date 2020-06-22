@@ -20,7 +20,7 @@ class stpayment extends CI_Controller {
 	{
 	  	#check if IP ADDRESS request != DOKU IP
 		/*if($this->input->ip_address() != '103.10.129.7' OR $this->input->ip_address() != '103.10.129.8' OR $this->input->ip_address() != '103.10.129.9' OR $this->input->ip_address() != '103.10.129.20'){*/
-		if(/*$this->input->ip_address() != '103.10.129.9' AND */$this->input->ip_address() != '103.10.130.35'){
+		if(/*$this->input->ip_address() != '103.10.129.9' AND */$this->input->ip_address() != '103.10.130.75'){
 	      echo "STOP: IP NOT ALLOWED";
 	      //die;
 	  	} else {
@@ -34,7 +34,7 @@ class stpayment extends CI_Controller {
 	    # Compare WORDS receive with WORDS generate
 	    //WORDS_GENERATE = sha1( AMOUNT + MALLID + SHAREDKEY + TRANSIDMERCHANT + RESULTMSG + VERIFYSTATUS ); 
 	    // mallid pro 3363 / dev 5547
-		$WORDS_GENERATED = sha1("$AMOUNT"."3363"."S9SduJM092zc"."$TRANSIDMERCHANT"."$RESULTMSG"."$VERIFYSTATUS");
+		$WORDS_GENERATED = sha1("$AMOUNT"."8087"."FLdaGUv0YL8gin"."$TRANSIDMERCHANT"."$RESULTMSG"."$VERIFYSTATUS");
 	       
 	    # check if WORDS_GENERATE = WORDS
 		if($WORDS==$WORDS_GENERATED){
@@ -61,87 +61,6 @@ class stpayment extends CI_Controller {
 
 		    	$PAYCODE = $this->input->post('PAYMENTCODE');
 		    	
-		    	//validation for  course payment
-		    	if(substr($PAYCODE, 8,2) != '05') {
-		    		//BUKU
-			 		$arr2 = array(
-						'select' => array(
-							'a.PR_Number as PR_Number',
-							'a.BranchCode as BranchCode'
-						),
-						'from' => 'Logistics_Invoice a',
-						'where' => array('a.Invoice_Number'=>$TRANSIDMERCHANT),
-					);
-					$sql = $this->config_model->find($arr2)->row_array();
-					if($RESULTMSG=='SUCCESS'){
-						$RESULT='Pembayaran Berhasil';
-						$statuspo=2;
-					} else {
-						$RESULT='Pembayaran Gagal';
-						$statuspo=8;
-					}
-
-					if($this->input->post('PAYMENTCODE')!=''){
-
-						$cektrack = array(
-							'select' => array(
-								'Count(a.RecID) as JML'
-							),
-							'from' => 'Logistics_Tracking a',
-							'join' => array(
-								'Logistics_Invoice b' => array(
-									'on' => 'a.PR_Number=b.PR_Number',
-									'type' => 'inner',
-								),
-							),
-							'where' => array('b.Invoice_Number'=>$this->input->post('TRANSIDMERCHANT'),'a.Tracking_Name' => 'Pembayaran Berhasil'),
-						);
-						$cektracksql = $this->config_model->find($cektrack)->row_array();
-						if($cektracksql['JML']==0){
-							$data2 = array(
-				    			'params' => array(
-					    			'PR_Number' => $sql['PR_Number'],
-					    			'Tracking_Name' => $RESULT,
-					    			'Status' => 1,
-					    			'CreatedDate' => date('Y-m-d H:i:s'),
-					    			'CreatedBy' => 'doku'
-					    		),
-					    		'from' => 'Logistics_Tracking',
-				    		);
-				    		$this->config_model->insert($data2);
-				    	}
-
-			    	$data3 = array(
-			    		'params' => array(
-				    		'Status' => $statuspo,
-				    		'EditDate' => date('Y-m-d H:i:s'),
-				    		'EditBy' => 'doku',
-				    	),
-				    	'from' => 'Logistics_POHeader',
-						'where' => array('PR_Number'=>$sql['PR_Number']),
-			    	);
-		    		$this->config_model->update($data3);
-					$arr = array(
-						'params' => array(
-							'Invoice_Status' => $statuspo,
-						),
-						'from' => 'Logistics_Invoice',
-						'where' => array('Invoice_Number'=>$TRANSIDMERCHANT),
-					);
-					$this->config_model->update($arr);
-					$arr3 = array(
-						'params' => array(
-							'Status' => 1,
-				    		'EditDate' => date('Y-m-d H:i:s'),
-				    		'EditBy' => 'doku',
-						),
-						'from' => 'FA_DepositDetail',
-						'where' => array('BranchCode'=>$sql['BranchCode'],'Status'=>0,'IsInOrOut'=>2),
-					);
-					$this->config_model->update($arr3);
-		    		}
-
-		    	} else {
 		    		//COURSE
 			 		$arr = array(
 						'select' => array(
@@ -238,7 +157,6 @@ class stpayment extends CI_Controller {
 				         	echo "Mailer berhasil";
 				        }
 				    }
-		    	}
 
 				echo data_json(array("message"=>"Data berhasil disimpan.","notify"=>"success"));
 	             // CASE RESULTMSG is SUCCESS and PAYMENTCHANNEL using other than CREDIT CARD
@@ -262,7 +180,7 @@ class stpayment extends CI_Controller {
 	    $CHAINMERCHANT = $this->input->post('CHAINMERCHANT');
 	    $PAYMENTCHANNEL = $this->input->post('PAYMENTCHANNEL');
 	    $PAYMENTCODE = $this->input->post('PAYMENTCODE');
-	    $WORDS = sha1("$MALLID"."S9SduJM092zc"."$PAYMENTCODE");
+	    $WORDS = sha1("$MALLID"."FLdaGUv0YL8gin"."$PAYMENTCODE");
 		$trx = array(
 			'from' => 'Logistics_Transactions a',
 			'where' => array('a.PAYMENTCODE'=>$PAYMENTCODE,'a.PAYMENTCHANNEL'=>$PAYMENTCHANNEL,'a.RESULTMSG' => null),
@@ -270,7 +188,7 @@ class stpayment extends CI_Controller {
 		$sql = $this->config_model->find($trx)->row_array();
 		$AMOUNT = $sql['AMOUNT'];
 		$TRANSIDMERCHANT = $sql['TRANSIDMERCHANT'];
-		$WORDS2 = sha1("$AMOUNT"."3363"."S9SduJM092zc"."TRANSIDMERCHANT");
+		$WORDS2 = sha1("$AMOUNT"."8087"."FLdaGUv0YL8gin"."TRANSIDMERCHANT");
 		$dom = xml_dom();
 		$INQUIRY_RESPONSE = xml_add_child($dom, 'INQUIRY_RESPONSE');
 		xml_add_child($INQUIRY_RESPONSE, 'PAYMENTCODE', $sql['PAYMENTCODE']);
