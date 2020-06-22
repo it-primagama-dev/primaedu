@@ -1,5 +1,5 @@
-var uri = window.location.pathname.split('/');
-var baseUrl = window.location.protocol+ "//" +window.location.host+'/'+ uri[1] +'/'+ uri[2] +'/';
+/*var uri = window.location.pathname.split('/');
+var baseUrl = window.location.protocol+ "//" +window.location.host+'/'+ uri[1] +'/'+ uri[2] +'/';*/
 
 $('document').ready(function(){
   get_area();
@@ -25,7 +25,7 @@ $('document').ready(function(){
     var areaval = this.value;
 
     $(".loader").show();
-    $.get(baseUrl +'ismart/get_cabang/'+ areaval, function(data){
+    $.get(base_url +'ismart/get_cabang/'+ areaval, function(data){
       $('#Cabang').html(data);
       $('#Cabang').select2();
     })
