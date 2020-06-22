@@ -115,7 +115,7 @@ $("document").ready(function() {
 
         var no_ktp = $('[name="NoKTP"]').val();
 
-        $.post(baseUrl +'ismart/check_ktp', {NoKTP: no_ktp})
+        $.post(base_url +'ismart/check_ktp', {NoKTP: no_ktp})
         .done(function(val){
           if (val == 1) {
             $('[name="NoKTP"]').after('<p class="text-danger">No. KTP yang anda masukkan sudah tersedia didatabase.</p>');
