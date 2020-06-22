@@ -32,13 +32,10 @@ class GrafiksiswaController extends ControllerBase
 
     public function indexAction()
     {
-        if ($this->auth['username']=='ridwan.sobar' || $this->auth['username']=='rini' || $this->auth['username']=='admin.pusat')
-        {
+        
         	$tahun = $this->request->getPost('tahun') ? $this->request->getPost('tahun'):'2017';
         	$this->view->tahun = $tahun;
-		} else {
-			return $this->forward();
-		}
+		
     }
 	
 	public function load_drildownAction()

@@ -293,8 +293,10 @@ function Checkout(){
         data: ({PR:PR}),
         dataType: 'json',
         success: function(data){
-            Nom=data.rows[0].Nominal;
-            if(Nom==PriceTotal){
+            Nom=data.rows[0];
+            Nom2=data.rows2[0];
+            NomTot=Nom+Nom2;
+            if(NomTot==PriceTotal){
             $('#NoPR').text(PR);
             //$('#INV').text(inv);
             //$('#myModal').modal('show');
@@ -388,6 +390,11 @@ function reload_data() {
                 $('#data_item').empty();
                 $('#btnSavehide').css('display','block');
                 $.each(data.rows, function(i, item) {
+                    if (item.PackType==8) {
+                        PriceFix = item.PricePack;   
+                    } else {
+                        PriceFix = item.Price;
+                    }
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
                         $('<td>').text(item.PackName),
@@ -395,14 +402,14 @@ function reload_data() {
                         $('<td style="display:none">').html("<input class=\"form-control\" type=\"text\" name=\"PackType\" id=\"PackType"+item.RecID+"\" value=\""+item.PackType+"\">"),
                         $('<td style="display:none">').html("<input class=\"form-control\" type=\"text\" name=\"PackCode\" id=\"PackCode"+item.RecID+"\" value=\""+item.PackCode+"\">"),
                         $('<td>').html("<input class=\"form-control\" type=\"text\" name=\"qty\" id=\"qty"+item.RecID+"\" onblur=\"ubah_qty("+item.RecID+",'"+item.ItemCode+"')\" value=\""+item.Quantity+"\"><input class=\"hidden\" type=\"text\" name=\"qty2\" id=\"qty2"+item.RecID+"\" value=\""+item.Quantity+"\">"),
-                        $('<td style="text-align:right;">').text(convertToRupiah(item.Price)),
-                        $('<td style="display:none">').html("<input class=\"Idr form-control\" type=\"text\" style=\"text-align:right;\" name=\"harga\" id=\"harga"+item.RecID+"\" value=\""+convertToRupiah(item.Price)+"\">"),
-                        $('<td style="text-align:right;">').text(convertToRupiah(parseInt(item.Price)*parseInt(item.Quantity))),
+                        $('<td style="text-align:right;">').text(convertToRupiah(PriceFix)),
+                        $('<td style="display:none">').html("<input class=\"Idr form-control\" type=\"text\" style=\"text-align:right;\" name=\"harga\" id=\"harga"+item.RecID+"\" value=\""+convertToRupiah(PriceFix)+"\">"),
+                        $('<td style="text-align:right;">').text(convertToRupiah(parseInt(PriceFix)*parseInt(item.Quantity))),
                         $('<td class="print-hidden">').html("<a href=\"javascript:void(0)\" onclick=\"delete_data("+item.RecID+",'"+item.ItemCode+"',"+item.Quantity+")\"><i style=\"color: red\" class=\"fa fa-trash\"></i></a>"),
                         $('<td style="display:none">').html('<input type="hidden" name="id" class="emp_checkbox" data-emp-id="'+item.RecID+'" value="'+item.RecID+'">')
                     ).appendTo('#data_item');
-                    total += isNaN(parseInt(item.Price)*parseInt(item.Quantity)) ? 0 : parseInt(parseInt(item.Price)*parseInt(item.Quantity));
-                    basket = item.PackCode+','+item.Price+'.00'+','+item.Quantity+','+item.Price*item.Quantity+'.00'+';';
+                    total += isNaN(parseInt(PriceFix)*parseInt(item.Quantity)) ? 0 : parseInt(parseInt(PriceFix)*parseInt(item.Quantity));
+                    basket = item.PackCode+','+PriceFix+'.00'+','+item.Quantity+','+PriceFix*item.Quantity+'.00'+';';
                     $('#basket').append(basket);
                 });
                 $('#total_t').text(convertToRupiah(total));
@@ -499,7 +506,7 @@ function ubah_qty(RecID,ItemCode) {
             var total_stok = parseInt(data.rows[0].stok);
             //alert(ItemCode+' = '+input_stok+' / '+input_stokori+' / '+input_stok_tmp);
             //alert(PackType);
-            if (input_stok > total_stok && PackType!=1 && PackType !=6) {
+            if (input_stok > total_stok && PackType!=1 && PackType !=6 && PackType !=8) {
                 alert('Stok item tidak mencukupi sisa stok adalah '+total_stok);
                 reload_data();
             } else {

@@ -525,7 +525,7 @@ class Logistics extends CI_Controller {
 				'count(a.RecID) as Order6',
 			),
 			'from' => 'Logistics_POHeader a',
-			'where' => "a.BranchCode = '".$this->session->userdata('KodeAreaCabang')."' AND a.PR_Date >= '2019-07-14' AND a.Status != 0",
+			'where' => "a.BranchCode = '".$this->session->userdata('KodeAreaCabang')."' AND a.PR_Date >= '2019-06-14' AND a.Status != 0",
 		);
 		$sqlorder6 = $this->config_model->find($order6)->row_array();
 		$ceknoexp = array(
@@ -573,16 +573,19 @@ class Logistics extends CI_Controller {
 		$PackType=$sqlpk['PackType'];
 	    $IC = 'a.ItemCode';
 	    if($sqlcekpack <= 0){
-			if($sqlorder6['Order6']>=6 AND $sqlcekno <= 0 AND $PackType!=6){  
+			if($sqlorder6['Order6']>=6 AND $sqlcekno <= 0 AND $PackType!=6 AND $PackType!=8){  
 				$DelivFee = 'a.DelivFee';
 				$Price = 'a.Price';
 			} else if($sqlorder6['Order6']>=6 AND $sqlcekno <= 0 AND $PackType==6){ 	
 				$DelivFee = 'a.DelivFeeB';
 				$Price = 'a.PriceB';
-			} else if($sqlorder6['Order6'] >=6 AND $sqlcekno > 0 AND $PackType!=6){ 	
+			} else if($sqlorder6['Order6'] >=6 AND $sqlcekno > 0 AND $PackType!=6 AND $PackType!=8){ 	
 				$DelivFee = 0;
 				$Price = 'a.Price';
-			} else if($sqlorder6['Order6'] < 6 AND $PackType!=6){ 	
+			} else if($sqlorder6['Order6'] >=6 AND $sqlcekno > 0 AND $PackType==8){ 	
+				$DelivFee = 0;
+				$Price = 'c.PricePack';
+			} else if($sqlorder6['Order6'] < 6 AND $PackType!=6 AND $PackType!=8){ 	
 				$DelivFee = 0;
 				$Price = 'a.Price';
 			} else if($sqlorder6['Order6'] < 6 AND $PackType==6){ 	
@@ -605,6 +608,7 @@ class Logistics extends CI_Controller {
 						$DelivFee
 					FROM Logistics_PackageDetail b
 					JOIN Logistics_MasterItem a ON b.ItemCode=a.ItemCode
+					JOIN Logistics_PackageItem c ON b.PackId=c.RecID
 					where b.PackId='$itempack'");	 
 		}
 
@@ -640,10 +644,12 @@ class Logistics extends CI_Controller {
 
 	public function get_order_tmp()
 	{
+		//note : delivfee packtype 8 belum
 		$arr = array(
 			'select' => array(
 				'isnull(a.Quantity,0) as Quantity',
 				'sum(a.Price) + sum(a.DelivFee) as Price',
+				'c.PricePack',
 				'c.PackName',
 				'c.RecID',
 				'c.PackType',
@@ -664,6 +670,7 @@ class Logistics extends CI_Controller {
 			'group_by' => array(
 						'a.Quantity',
 						'c.PackName',
+						'c.PricePack',
 						'c.RecID',
 						'c.PackType',
 						'c.PackCode'
@@ -1034,6 +1041,7 @@ class Logistics extends CI_Controller {
 	public function get_order_inv()
 	{
 		$inv=base64_decode($this->input->post('pr'));
+		//delivfeepack belum
 		$arr = array(
 			'select' => array(
 				'g.PackName',
@@ -1057,7 +1065,9 @@ class Logistics extends CI_Controller {
 				'c.Status',
 				'c.IsTrouble',
 				'f.PAYMENTCHANNEL as Channel',
-				'f.PAYMENTCODE'
+				'f.PAYMENTCODE',
+				'g.PricePack',
+				'g.PackType'
 			),
 			'from' => 'Logistics_PODetail a',
 			'join' => array(
@@ -1108,7 +1118,9 @@ class Logistics extends CI_Controller {
 				'c.Status',
 				'c.IsTrouble',
 				'f.PAYMENTCHANNEL',
-				'f.PAYMENTCODE'
+				'f.PAYMENTCODE',
+				'g.PricePack',
+				'g.PackType'
 			),
 			'order_by' => array('g.RecID' => ''),
 		);
@@ -1301,7 +1313,7 @@ class Logistics extends CI_Controller {
 		} else {
 			$data['rowsinten'] = 0;
 		}	
-		$sql7 = $this->db->query("SELECT *
+		$sql8 = $this->db->query("SELECT *
 				from 
 				(
 				select b.RecID,b.PS_Pack,SUBSTRING(c.ItemStage,1,3) as ItemStage,a.Quantity from Logistics_PODetail a
@@ -1315,10 +1327,30 @@ class Logistics extends CI_Controller {
 				  for ItemStage in (SE1,SE2)
 				) piv
 				order by RecID");
-		if ($sql7->num_rows()>0) {
-			$data['rowsse'] = $sql7->result_array();
+		if ($sql8->num_rows()>0) {
+			$data['rowsse'] = $sql8->result_array();
 		} else {
 			$data['rowsse'] = 0;
+		}				
+		$sql9 = $this->db->query("SELECT SUBSTRING(b.PackCode,4,14) as PackCode, LEFT(c.ItemCode, LEN(c.ItemCode) - 3) as ItemCode,a.Quantity from Logistics_PODetail a
+				join Logistics_PackageItem b on a.PackCode=b.RecID
+				join Logistics_MasterItem c on a.ItemCode=c.ItemCode
+				where a.PR_Number = '$pr' AND b.PackType = '8' AND b.PackCode like '%MB%'
+				order by b.RecID,c.RecID");
+		if ($sql9->num_rows()>0) {
+			$data['rowsmbmapel'] = $sql9->result_array();
+		} else {
+			$data['rowsmbmapel'] = 0;
+		}				
+		$sql10 = $this->db->query("SELECT SUBSTRING(b.PackCode,4,14) as PackCode, LEFT(c.ItemCode, LEN(c.ItemCode) - 3) as ItemCode,a.Quantity from Logistics_PODetail a
+				join Logistics_PackageItem b on a.PackCode=b.RecID
+				join Logistics_MasterItem c on a.ItemCode=c.ItemCode
+				where a.PR_Number = '$pr' AND b.PackType = '8' AND b.PackCode like '%SE %'
+				order by b.RecID,c.RecID");
+		if ($sql10->num_rows()>0) {
+			$data['rowssemapel'] = $sql10->result_array();
+		} else {
+			$data['rowssemapel'] = 0;
 		}	
 		$arr = array(
 			'select' => array(
@@ -1631,7 +1663,7 @@ class Logistics extends CI_Controller {
 					),
 				),
 				'where' => array('b.PR_Number' => $pr),
-				'order_by' => array('e.Number' => '','e.PackType'=>'','e.Pack' => '', 'c.RecID' => ''),
+				'order_by' => array('e.Number' => '','e.PackType'=>'','e.Pack' => '','e.RecID' => '', 'c.RecID' => ''),
 			);
 		$sql = $this->config_model->find($arr);
 		if ($sql->num_rows()>0) {
@@ -2830,19 +2862,43 @@ class Logistics extends CI_Controller {
 
 	public function cek_nominal()
 	{
+		//note delivefeepack belum
 		$arr = array(
 			'select' => array(
 				'sum(a.Quantity*(a.Price+a.DelivFee)) as Nominal',
 			),
 			'from' => 'Logistics_PODetail a',
-			'where' => array('a.PR_Number'=>$this->input->post('PR')),
+				'join' => array(
+					'Logistics_PackageItem b' => array(
+						'on' => 'a.PackCode=b.RecID',
+						'type' => 'inner',
+					),
+				),
+			'where' => array('a.PR_Number'=>$this->input->post('PR'),'b.PackType !='=>8),
 		);
-		$sql = $this->config_model->find($arr);
-		if ($sql->num_rows()>0) {
-			$data['rows'][] = $sql->row_array();
-		} else {
-			$data['rows'][] = array('Nominal'=>0);
-		}
+		$sql = $this->config_model->find($arr)->row_array();
+		
+		$sql2 = $this->db->query("
+			SELECT SUM(Price*Quantity) as Nominal from (
+				SELECT 
+				a.Price,
+				a.DelivFee,
+				a.Quantity,
+				a.PackCode
+				from Logistics_PODetail a
+				join Logistics_PackageItem b on a.PackCode=b.RecID
+				where a.PR_Number = '".$this->input->post('PR')."' and b.PackType = 8
+				group by 
+				a.PackCode,
+				a.DelivFee,
+				a.Quantity,
+				a.PackCode ,
+				a.Price
+			) cte
+			")->row_array();
+		//echo $sql['Nominal']+$sql2['Nominal'];
+		$data['rows'][] = $sql['Nominal'];
+		$data['rows2'][] = $sql2['Nominal'];
 		echo json_encode($data);
 	}
 
@@ -2955,6 +3011,8 @@ class Logistics extends CI_Controller {
 					'sum(c.DelivFee) as DelivFee',
 					'sum(c.PriceB) as PriceB',
 					'sum(c.DelivFeeB) as DelivFeeB',
+					'b.PricePack',
+					'b.DelivFeePack',
 					"CASE b.Status 
 					  WHEN 0 THEN 'Tutup'
 					  WHEN 1 THEN 'Buka'
@@ -2977,6 +3035,8 @@ class Logistics extends CI_Controller {
 					'b.PackCode',
 					'b.PackName',
 					'b.Status',
+					'b.PricePack',
+					'b.DelivFeePack',
 					'b.PackType',
 					'c.PageId'
 				),

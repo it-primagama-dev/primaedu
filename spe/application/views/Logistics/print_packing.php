@@ -317,6 +317,121 @@
 	</div>
 </form>
 
+<!-- Paket MB SE Per-Mapel -->
+<form action="#" id="form3" class="form-horizontal" style="display: none;">
+	<div class="printheight" id="printheight" style="display: none;"></div>
+	<div class="row print-hidden">
+		<div class="col-lg-12">
+			<legend></legend>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group">
+				<div class="col-md-3">
+				<p style="padding-bottom: 10px"><img src="<?php echo base_url(); ?>assets/images/logo_new_web.png" width="215"></p>
+				<table>
+					<tr>
+						<td width="215" style="background: #87CEEB !important;text-align: center;color: #FFFFFF !important;padding: 5px 0px 5px 0px;">SHIP TO</td>
+					</tr>
+				</table>
+				</div>
+				<div class="col-md-6" style="text-align:center;">
+				<p style="font-size: 23px; font-weight: bold;"><i class="fa"> Packing Slip <b><?php echo $PR ;?> <b class="print-hidden"> / </b><b id="print_ps3" class="print-hidden"></b></b> </i></p>
+				</div>
+				<div class="col-md-3" style="text-align: center;">
+					<table style="float: right;">
+						<tr>
+							<td style="padding-bottom: 33px;"><?php echo date('d-m-Y'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i id="page3" class=""></i></td>
+						</tr>
+						<tr>
+							<td width="215" style="background: #87CEEB !important;text-align: center;color: #FFFFFF !important;padding: 5px 0px 5px 0px;">SHIPPER</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>    
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group">
+				<div class="col-xs-12">
+				<label id="area2"></label><br>
+				<label id="kodecabang2"></label>,
+				<label id="namacabang2"></label><br>
+				<label id="alamat2"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+	<div class="col-lg-12">
+		<div class="col-md-6" style="display: /*none*/; padding-right: 0px; padding-left: 0px;">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover dt-responsive" cellspacing="0" width="100%" id="tableMenuMB">
+					<thead>
+						<tr>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 34%;"> Paket MB</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 34%;"> Nama Buku</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 10%;"> QTY ORDER</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px;width: 10%;"> QTY TERKIRIM</th>
+						</tr>
+					</thead>
+					<tbody id="data_mbmapel"></tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-6" style="display: /*none*/; padding-right: 0px; padding-left: 0px;">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover dt-responsive" cellspacing="0" width="100%" id="tableMenuSE">
+					<thead>
+						<tr>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 34%;"> Paket SE</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 34%;"> Nama Buku</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px; width: 10%;"> QTY ORDER</th>
+							<th style="text-align:center;background: #87CEEB !important; color: #FFFFFF !important; font-size: 15px;width: 10%;"> QTY TERKIRIM</th>
+						</tr>
+					</thead>
+					<tbody id="data_semapel"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>  
+	</div>
+	<div class="row" style="padding-top: -100px">
+		<div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover dt-responsive" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;background-color: #87CEEB !important; color: #FFFFFF !important;width: 33.5%">STAF LOGISTIK</th>
+                            <th style="text-align:center;background-color: #87CEEB !important; color: #FFFFFF !important;width: 33.5%">PROSES BARCODE</th>
+                            <th style="text-align:center;background-color: #87CEEB !important; color: #FFFFFF !important;width: 33.5%">TANGGAL PENGIRIMAN</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center; padding: 35px"></th>
+                            <th style="text-align:center; padding: 35px"></th>
+                            <th style="text-align:center; padding: 35px"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group">
+				<div class="col-xs-12">
+					<p style="border: solid; padding: 10px; text-align: justify; font-size: 10px">
+						<b> Catatan penting untuk penerima :</b> <br>
+						"Harap konfirmasi melalui email ke logistik@primagama.co.id dan cc ke Area Manager paling lambat 3(tiga) hari setelah barang diterima apabila ada ketidak sesuaian dalam jumlah/jenis barang yang diorder, setelah masa konfimasi tersebut terlewati barang yang diterima dinyatakan telah sesuai dengan order"
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
 <form action="#" id="form3" class="form-horizontal">
 	<div class="printheight2" id="printheight2" style="display: none;"></div>
 	<div class="row1">
@@ -567,6 +682,23 @@ function reload_data() {
 						$('<td style="text-align:center;">').text('')
 					).appendTo('#data_item_SE');
 				});
+                $.each(data.rowsmbmapel, function(i, item) {
+					var $tr = $('<tr>').append(
+						$('<td>').text(item.PackCode),
+						$('<td style="text-align:left;">').text(item.ItemCode),
+						$('<td style="text-align:center;">').text(item.Quantity),
+						$('<td style="text-align:center;">').text('')
+					).appendTo('#data_mbmapel');
+				});
+                $.each(data.rowssemapel, function(i, item) {
+					var $tr = $('<tr>').append(
+						$('<td>').text(item.PackCode),
+						$('<td style="text-align:left;">').text(item.ItemCode),
+						$('<td style="text-align:center;">').text(item.Quantity),
+						$('<td style="text-align:center;">').text('')
+					).appendTo('#data_semapel');
+				});
+					MergeGridCells();
 				$.each(data.rowsinfo, function(i, item) {
 					area = item.Area;
 					print_ps = item.Print_PS+1;
@@ -583,7 +715,7 @@ function reload_data() {
 				$('#namacabang,#namacabang2').text('Nama Cabang : '+namacabang);
 				$('#namacabang3,#namacabang32').text('PRIMAGAMA '+namacabang);
 				$('#alamat,#alamat2').text(alamat);
-				$('#print_ps,#print_ps2').text(print_ps);
+				$('#print_ps,#print_ps2,#print_ps3').text(print_ps);
 				$('#alamat3,#alamat32').text(alamat3);
 				$('#notelp,#notelp2').text(notelp);
 				$('#kota,#kota2').text(kota);
@@ -598,6 +730,7 @@ function reload_data() {
 				jnas = Object.keys(data.rowsnas).length;
 				jinten = Object.keys(data.rowsinten).length;
 				jse = Object.keys(data.rowsse).length;
+				jmbmapel = Object.keys(data.rowsmbmapel).length;
 				jtot1 = jsd+jsmp+jipa+jips;
 				jtot2 = jnas+j2006+jinten+jse;
 				if(jtot1!=0){
@@ -605,10 +738,14 @@ function reload_data() {
 				} 
 				if(jtot2!=0){
 					$('#form2').css('display','block');
+				} 
+				if(jmbmapel!=0){
+					$('#form3').css('display','block');
 				}
-				if(jtot1!=0 && jtot2!=0){
-					$('#page1').text('1/2');
-					$('#page2').text('2/2');
+				if(jtot1!=0 && jtot2!=0 && jmbmapel!=0){
+					$('#page1').text('1/3');
+					$('#page2').text('2/3');
+					$('#page3').text('3/3');
 					$('#printheight').css('margin-top','800px');
 				} else {
 					$('#printheight').css('margin-top','0px');
@@ -653,6 +790,43 @@ function update_print() {
         e.preventDefault()
     }
 });*/
+
+//rowspan table
+function MergeGridCells() {
+    var dimension_cells = new Array();
+    var dimension_col = null;
+    var columnCount = $("#tableMenuMB,#tableMenuSE tr:first th").length;
+    for (dimension_col = 0; dimension_col <= columnCount-2; dimension_col++) {
+        // first_instance holds the first instance of identical td
+        var first_instance = null;
+        var rowspan = 1;
+        // iterate through rows
+        $("#tableMenuMB,#tableMenuSE").find('tr').each(function () {
+
+            // find the td of the correct column (determined by the dimension_col set above)
+            var dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+
+
+
+            if (first_instance === null) {
+                // must be the first row
+                first_instance = dimension_td;
+            } else if (dimension_td.text() === first_instance.text()) {
+                // the current td is identical to the previous
+                // remove the current td
+               // dimension_td.remove();
+                dimension_td.attr('hidden', true);
+                ++rowspan;
+                // increment the rowspan attribute of the first instance
+                first_instance.attr('rowspan', rowspan);
+            } else {
+                // this cell is different from the last
+                first_instance = dimension_td;
+                rowspan = 1;
+            }
+        });
+    }
+}
 </script>
 <style type="text/css">
 .header-laporan {display: none;}

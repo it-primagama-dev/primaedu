@@ -196,14 +196,19 @@ function reload_data() {
             if (jml_data > 0) {
                 $('#data_item').empty();
                 $.each(data.rows, function(i, item) {
-                    var basket = item.PackName+','+item.Price+'.00'+','+item.Quantity+','+item.Price*item.Quantity+'.00'+';'; 
+                    if (item.PackType==8) {
+                        PriceFix = item.PricePack;   
+                    } else {
+                        PriceFix = item.Price;
+                    }
+                    var basket = item.PackName+','+PriceFix+'.00'+','+item.Quantity+','+PriceFix*item.Quantity+'.00'+';'; 
                     $('#BASKETVAL').append(basket);
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
                         $('<td>').text(item.PackName),
                         $('<td style="text-align:center;">').text(item.Quantity),
-                        $('<td style="text-align:right;">').text(convertToRupiah(item.Price)),
-                        $('<td style="text-align:right;">').text(convertToRupiah(item.Price*item.Quantity)),
+                        $('<td style="text-align:right;">').text(convertToRupiah(PriceFix)),
+                        $('<td style="text-align:right;">').text(convertToRupiah(PriceFix*item.Quantity)),
                     ).appendTo('#data_item');
                     //MergeGridCells();
                     PR = item.PR_Number;

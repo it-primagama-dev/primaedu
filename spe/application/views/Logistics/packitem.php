@@ -114,18 +114,22 @@ $(document).ready(function() {
 			{"data":"PackCode","autoWidth":true},
 			{"data":"PackName","autoWidth":true},
 			{"data": null,"sClass": "text-right","autoWidth":true,"render": function(data) {
-					if(data.PackType!=6){
-						return convertToRupiah(data.Price);
-					} else {
+					if(data.PackType==6){
 						return convertToRupiah(data.PriceB);
+					} else if(data.PackType==8) {
+						return convertToRupiah(data.PricePack);
+					} else {
+						return convertToRupiah(data.Price);
 					}
 				}
 			},
 			{"data": null,"sClass": "text-right","autoWidth":true,"render": function(data) {
-					if(data.PackType!=6){
-						return convertToRupiah(data.DelivFee);
-					} else {
+					if(data.PackType==6){
 						return convertToRupiah(data.DelivFeeB);
+					} else if(data.PackType==8){
+						return convertToRupiah(data.DelivFeePack);
+					} else {
+						return convertToRupiah(data.DelivFee);
 					}
 				}
 			},
@@ -229,8 +233,10 @@ function Detailform() {
 						{"data": null,"sClass": "text-right","autoWidth":true,"render": function(data) {
 								if(data.PackType==6){
 									return convertToRupiah(data.PriceB);
+								} else if(data.PackType==8){
+									return '-';
 								} else {
-									return convertToRupiah(data.Price);
+									return convertToRupiah(data.Price);	
 								}
 							}
 						},
