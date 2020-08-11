@@ -4,9 +4,14 @@ var baseUrl = window.location.protocol+ "//" +window.location.host+'/'+ uri[1] +
 $('document').ready(function(){
   get_area();
   get_BidangStudi();
+  get_BidangStudi2();
+  get_BidangStudi3();
+
 
   $('#Area').select2();
   $('#BidangStudi').select2();
+  $('#BidangStudi2').select2();
+  $('#BidangStudi3').select2();
 
   function get_area() {
     $.getJSON(base_url+"ismart/get_area", function(json){
@@ -58,14 +63,50 @@ $('document').ready(function(){
         $('#BidangStudi').append($('<option>').text("- - Pilih Bidang Studi - -").attr('value',''));
         //$('#Cabang').append($('<option>').text("- - Pilih Cabang - -").attr('value',''));
         $.each(json, function(i, obj){
-        $('#BidangStudi').append($('<option>').text(obj.NamaBidangStudi).attr('value', obj.KodeBidangStudi));
+        $('#BidangStudi').append($('<option>').text(obj.MapelName+' - '+obj.StageCat).attr('value', obj.StageCat+' - '+obj.MapelName));
         });
     });
     }
 
+    function get_BidangStudi2() {
+        $.getJSON(base_url+"ismart/get_BidangStudi2", function(json){
+        $('#BidangStudi2').empty();
+        $('#BidangStudi2').append($('<option>').text("- - Pilih Bidang Studi - -").attr('value',''));
+        //$('#Cabang').append($('<option>').text("- - Pilih Cabang - -").attr('value',''));
+        $.each(json, function(i, obj){
+        $('#BidangStudi2').append($('<option>').text(obj.MapelName+' - '+obj.StageCat).attr('value', obj.MapelName+' - '+obj.StageCat));
+        });
+    });
+    }
+
+     function get_BidangStudi3() {
+        $.getJSON(base_url+"ismart/get_BidangStudi3", function(json){
+        $('#BidangStudi3').empty();
+        $('#BidangStudi3').append($('<option>').text("- - Pilih Bidang Studi - -").attr('value',''));
+        //$('#Cabang').append($('<option>').text("- - Pilih Cabang - -").attr('value',''));
+        $.each(json, function(i, obj){
+        $('#BidangStudi3').append($('<option>').text(obj.MapelName+' - '+obj.StageCat).attr('value', obj.MapelName+' - '+obj.StageCat));
+        });
+    });
+    }
+    /*
+    function get_BidangStudi4() {
+        $.getJSON(base_url+"ismart/get_BidangStudi4", function(json){
+        $('#BidangStudi4').empty();
+        $('#BidangStudi4').append($('<option>').text("- - Pilih Bidang Studi - -").attr('value',''));
+        //$('#Cabang').append($('<option>').text("- - Pilih Cabang - -").attr('value',''));
+        $.each(json, function(i, obj){
+        $('#BidangStudi4').append($('<option>').text(obj.MapelName).attr('value', obj.StageCat));
+        });
+    });
+    }*/
+
 var userfile = {
+    Foto:{},
     Ijazah:{},
     Sertifikat:{},
+    Sertifikatt:{},
+    Sertifikattt:{},
     KTP:{},
 };
 
@@ -139,9 +180,19 @@ $("document").ready(function() {
           $('[name="Telepon"]').focus();
           return false;
       }
-      if($('[name="Pekerjaan"]').val() == "") {
+/*      if($('[name="Pekerjaan"]').val() == "") {
           $('[name="Pekerjaan"]').after('<p class="text-danger">Pekerjaan Harus Diisi !!!</p>');
           $('[name="Pekerjaan"]').focus();
+          return false;
+      }*/
+      if($('[name="Pendidikan"]').val() == "") {
+          $('[name="Pendidikan"]').after('<p class="text-danger">Pilih Pendidikan Terakhir !!!</p>');
+          $('[name="Pendidikan"]').focus();
+          return false;
+      }
+      if($('[name="Jurusan"]').val() == "") {
+          $('[name="Jurusan"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Jurusan"]').focus();
           return false;
       }
       if($('[name="Alamat"]').val() == "") {
@@ -149,9 +200,14 @@ $("document").ready(function() {
           $('[name="Alamat"]').focus();
           return false;
       }
-      if($('[name="TipeiSmart"]').val() == "") {
-          $('[name="TipeiSmart"]').after('<p class="text-danger">Pilih Tipe iSmart !!!</p>');
-          $('[name="TipeiSmart"]').focus();
+      if($('[name="Foto"]').val() == "") {
+          $('[name="Foto"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Foto"]').focus();
+          return false;
+      }
+      if($('[name="Posisi"]').val() == "") {
+          $('[name="Posisi"]').after('<p class="text-danger">Pilih Posisi !!!</p>');
+          $('[name="Posisi"]').focus();
           return false;
       }
       if($('[name="Area"]').val() == "") {
@@ -164,27 +220,77 @@ $("document").ready(function() {
           $('[name="Cabang"]').focus();
           return false;
       }
-      if($('[name="Pendidikan"]').val() == "") {
-          $('[name="Pendidikan"]').after('<p class="text-danger">Pilih Pendidikan Terakhir !!!</p>');
-          $('[name="Pendidikan"]').focus();
-          return false;
-      }
       if($('[name="BidangStudi"]').val() == "") {
           $('[name="BidangStudi"]').after('<p class="text-danger">Pilih Bidang Studi !!!</p>');
           $('[name="BidangStudi"]').focus();
           return false;
       }
-      if($('[name="Jurusan"]').val() == "") {
-          $('[name="Jurusan"]').after('<p class="text-danger">Wajib diisi !!!</p>');
-          $('[name="Jurusan"]').focus();
+      if($('[name="subject1"]').val() == "") {
+          $('[name="subject1"]').after('<p class="text-danger">Isi Bab paling dikuasai !!!</p>');
+          $('[name="subject1"]').focus();
+          return false;
+      }/*
+      if($('[name="BidangStudi2"]').val() == "") {
+          $('[name="BidangStudi2"]').after('<p class="text-danger">Pilih Bidang Studi !!!</p>');
+          $('[name="BidangStudi2"]').focus();
           return false;
       }
+      if($('[name="subject2"]').val() == "") {
+          $('[name="subject2"]').after('<p class="text-danger">Isi Bab paling dikuasai !!!</p>');
+          $('[name="subject2"]').focus();
+          return false;
+      }
+      if($('[name="BidangStudi3"]').val() == "") {
+          $('[name="BidangStudi3"]').after('<p class="text-danger">Pilih Bidang Studi !!!</p>');
+          $('[name="BidangStudi3"]').focus();
+          return false;
+      }
+      if($('[name="subject3"]').val() == "") {
+          $('[name="subject3"]').after('<p class="text-danger">Isi Bab paling dikuasai !!!</p>');
+          $('[name="subject3"]').focus();
+          return false;
+      }*/
+      if($('[name="NamaRek"]').val() == "") {
+          $('[name="NamaRek"]').after('<p class="text-danger">Nama Rekening Harus Diisi !!!</p>');
+          $('[name="NamaRek"]').focus();
+          return false;
+      } 
+      if($('[name="NoRek"]').val() == "") {
+          $('[name="NoRek"]').after('<p class="text-danger">Nomor Rekening Harus Diisi !!!</p>');
+          $('[name="NoRek"]').focus();
+          return false;
+      }   
+      if($('[name="CabangRek"]').val() == "") {
+          $('[name="CabangRek"]').after('<p class="text-danger">Cabang Bank Harus Diisi !!!</p>');
+          $('[name="CabangRek"]').focus();
+          return false;
+      }     
+      if($('[name="NoNPWP"]').val() == "") {
+          $('[name="NoNPWP"]').after('<p class="text-danger">NPWP Harus Diisi !!!</p>');
+          $('[name="NoNPWP"]').focus();
+          return false;
+      }
+      if($('[name="NSPK"]').val() == "") {
+          $('[name="NSPK"]').after('<p class="text-danger">Nomor Surat Harus Diisi !!!</p>');
+          $('[name="NSPK"]').focus();
+          return false;
+      }     
+      if($('[name="NoRek"]').val() == "") {
+          $('[name="NoRek"]').after('<p class="text-danger">Nomor Rekening Harus Diisi !!!</p>');
+          $('[name="NoRek"]').focus();
+          return false;
+      }                    
+      if($('[name="AlamatKTP"]').val() == "") {
+          $('[name="AlamatKTP"]').after('<p class="text-danger">Nomor NPWP Harus Diisi !!!</p>');
+          $('[name="AlamatKTP"]').focus();
+          return false;
+      }                              
       if($('[name="KTP"]').val() == "") {
           $('[name="KTP"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="KTP"]').focus();
           return false;
-      }
-/*       if($('[name="Ijazah"]').val() == "") {
+      }      
+       if($('[name="Ijazah"]').val() == "") {
           $('[name="Ijazah"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="Ijazah"]').focus();
           return false;
@@ -193,6 +299,16 @@ $("document").ready(function() {
           $('[name="Sertifikat"]').after('<p class="text-danger">Wajib diisi !!!</p>');
           $('[name="Sertifikat"]').focus();
           return false;
+      }                    
+/*      if($('[name="Sertifikatt"]').val() == "") {
+          $('[name="Sertifikatt"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Sertifikatt"]').focus();
+          return false;
+      }                    
+      if($('[name="Sertifikattt"]').val() == "") {
+          $('[name="Sertifikattt"]').after('<p class="text-danger">Wajib diisi !!!</p>');
+          $('[name="Sertifikattt"]').focus();
+          return false;
       }*/
 
       if (confirm("Anda yakin data sudah terinput dengan benar ?")) {
@@ -200,11 +316,15 @@ $("document").ready(function() {
       var formdata = {};
       formdata['Name'] = $('#Name').val();
       formdata['NoKTP'] = $('#NoKTP').val();
-      formdata['TipeiSmart'] = $('#TipeiSmart').val();
+      formdata['Posisi'] = $('#Posisi').val();
       formdata['Area'] = $('#Area').val();
       formdata['Cabang'] = $('#Cabang').val();
       formdata['BidangStudi'] = $('#BidangStudi').val();
       formdata['BidangStudi2'] = $('#BidangStudi2').val();
+      formdata['BidangStudi3'] = $('#BidangStudi3').val();
+      formdata['subject1'] = $('#subject1').val();
+      formdata['subject2'] = $('#subject2').val();
+      formdata['subject3'] = $('#subject3').val();
       formdata['Alamat'] = $('#Alamat').val();
       formdata['Email'] = $('#Email').val();
       formdata['Pendidikan'] = $('#Pendidikan').val();
@@ -212,14 +332,23 @@ $("document").ready(function() {
       formdata['Ijazah'] = $('#Ijazah').val();
       formdata['Telepon'] = $('#Telepon').val();
       formdata['Jurusan'] = $('#Jurusan').val();
+      formdata['NamaRek'] = $('#NamaRek').val();
+      formdata['NoRek'] = $('#NoRek').val();
+      formdata['CabangRek'] = $('#CabangRek').val();
+      formdata['NoNPWP'] = $('#NoNPWP').val();
+      formdata['NSPK'] = $('#NSPK').val();
+      formdata['AlamatKTP'] = $('#AlamatKTP').val();
       formdata['Sertifikat'] = $('#Sertifikat').val();
+      formdata['Sertifikatt'] = $('#Sertifikatt').val();
+      formdata['Sertifikattt'] = $('#Sertifikattt').val();
       formdata['ScanKTP'] = $('#KTP').val();
+      formdata['Foto'] = $('#Foto').val();
+
 
         if(userfile.Ijazah.file) {
             formdata['IjazahMime'] = userfile.Ijazah.type;
             formdata['IjazahFile'] = userfile.Ijazah.file;
         }
-
         if(userfile.Sertifikat.file) {
             formdata['SertifikatMime'] = userfile.Sertifikat.type;
             formdata['SertifikatFile'] = userfile.Sertifikat.file;
@@ -227,6 +356,18 @@ $("document").ready(function() {
         if(userfile.KTP.file) {
             formdata['KTPMime'] = userfile.KTP.type;
             formdata['KTPFile'] = userfile.KTP.file;
+        }
+        if(userfile.Foto.file) {
+            formdata['FotoMime'] = userfile.Foto.type;
+            formdata['FotoFile'] = userfile.Foto.file;
+        }
+        if(userfile.Sertifikatt.file) {
+            formdata['SertifikattMime'] = userfile.Sertifikatt.type;
+            formdata['SertifikattFile'] = userfile.Sertifikatt.file;
+        }
+        if(userfile.Sertifikattt.file) {
+            formdata['SertifikatttMime'] = userfile.Sertifikattt.type;
+            formdata['SertifikatttFile'] = userfile.Sertifikattt.file;
         }
         //test = formdata['IjazahFile'];
         //test = formdata['SertifikatFile'];
