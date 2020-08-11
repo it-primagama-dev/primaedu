@@ -18,7 +18,7 @@
                     <tr class="text-center">
                         <th width="1%">No</th>
                         <th>Nama</th>
-                        <th>Tipe iSmart</th>
+                        <th>Posisi</th>
                         <th>Bidang Studi</th>
                         <th>Email</th>
                         <th>Nomor Telepon</th>
@@ -59,45 +59,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4">Tipe iSmart</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" id="TipeISmart" class="form-control" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Bidang Studi</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" id="BidangStudi" class="form-control" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Bidang Studi Tambahan</label>
-                                            <div class="col-lg-8">
-                                                <textarea class="form-control" id="BidangStudi2" readonly="readonly"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Alamat</label>
-                                            <div class="col-lg-8">
-                                                <textarea class="form-control" id="Alamat" readonly="readonly"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label class="col-md-4">Email</label>
                                             <div class="col-lg-8">
                                                 <input type="text" id="Email" class="form-control" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Pendidikan Terakhir</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" id="Pendidikan" class="form-control" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Pekerjaan</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" id="Pekerjaan" class="form-control" readonly="readonly">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -107,9 +71,81 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="col-md-4">Pekerjaan</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="Pekerjaan" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Pendidikan Terakhir</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="Pendidikan" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-md-4">Jurusan</label>
                                             <div class="col-lg-8">
                                                 <input type="text" id="Jurusan" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Alamat</label>
+                                            <div class="col-lg-8">
+                                                <textarea class="form-control" id="Alamat" readonly="readonly"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Posisi</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="Posisi" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Bidang Studi(1)</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="BidangStudi" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Bidang Studi(2)</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="BidangStudi2" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Nama Rekening</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="NamaRek" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Nomor Rekening</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="NoRek" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Cabang Bank</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="CabangRek" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Nomor NPWP</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="NoNPWP" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">No.Surat Perjanjian</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" id="NSPK" class="form-control" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Alamat KTP</label>
+                                            <div class="col-lg-8">
+                                                <textarea class="form-control" id="AlamatKTP" readonly="readonly"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -121,21 +157,39 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="col-md-4">Ijazah</label>
+                                            <label class="col-md-4">Foto</label>
                                             <div class="col-lg-8">
-                                                <img src="" id="Ijazah" alt="no-image" class="img-responsive img">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Sertifikat</label>
-                                            <div class="col-lg-8">
-                                                <img src="" id="Sertifikat" alt="no-image" class="img-responsive img">
+                                                <img src="" id="Foto" alt="no-image" class="img-responsive img">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-4">KTP</label>
                                             <div class="col-lg-8">
                                                 <img src="" id="KTP" alt="no-image" class="img-responsive img">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Ijazah</label>
+                                            <div class="col-lg-8">
+                                                <img src="" id="Ijazah" alt="no-image" class="img-responsive img">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Sertifikat(1)</label>
+                                            <div class="col-lg-8">
+                                                <img src="" id="Sertifikat" alt="no-image" class="img-responsive img">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Sertifikat(2)</label>
+                                            <div class="col-lg-8">
+                                                <img src="" id="Sertifikatt" alt="no-image" class="img-responsive img">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Sertifikat(3)</label>
+                                            <div class="col-lg-8">
+                                                <img src="" id="Sertifikattt" alt="no-image" class="img-responsive img">
                                             </div>
                                         </div>
                                     </div>
@@ -188,19 +242,29 @@ function modal_form3(RecID)
                 $('#modal_form3').modal({backdrop: 'static', keyboard: false});
                 $('#Name').val(data.Nama).attr('readonly', true);
                 $('#NoKTP').val(data.NoKTP);
-                $('#TipeISmart').val(data.TipeISmart);
+                $('#Posisi').val(data.Posisi);
                 $('#BidangStudi').val(data.BidStudi);
-                $('#BidangStudi2').val(data.BidangStudi2);
+                $('#BidangStudi2').val(data.BidStudi1);
+                $('#BidangStudi3').val(data.BidStudi2);
                 $('#Alamat').val(data.AlamatRumah);
                 $('#Email').val(data.Email);
                 $('#Pendidikan').val(data.PendidikanAkhir);
                 $('#Pekerjaan').val(data.Pekerjaan);
                 $('#Jurusan').val(data.Jurusan);
                 $('#Telepon').val(data.NoTelp);
+                $('#NamaRek').val(data.NamaRek);
+                $('#NoRek').val(data.NoRek);
+                $('#CabangRek').val(data.CabangRek);
+                $('#NoNPWP').val(data.NoNPWP);
+                $('#NSPK').val(data.NoSurat);
                 $('#Grade').val(data.Grade);
+                $('#AlamatKTP').val(data.AlamatKTP);
                 $("#Ijazah").attr("src",base_url+"assets/upload/ismart/ijazah/"+data.ScanIjazah);
                 $("#KTP").attr("src",base_url+"assets/upload/ismart/KTP/"+data.ScanKTP);
+                $("#Foto").attr("src",base_url+"assets/upload/ismart/foto/"+data.Foto);
                 $("#Sertifikat").attr("src",base_url+"assets/upload/ismart/sertifikat/"+data.ScanCertificate);
+                $("#Sertifikatt").attr("src",base_url+"assets/upload/ismart/sertifikat1/"+data.ScanCertificate1);
+                $("#Sertifikattt").attr("src",base_url+"assets/upload/ismart/sertifikat2/"+data.ScanCertificate2);
                 $('#modal_form3').modal('show');
                 $('.modal-title').text('Detail iSmart');
             },
@@ -230,7 +294,7 @@ function reload_data() {
                     var $tr = $('<tr>').append(
                         $('<td>').text(i+1),
                         $('<td>').text(item.Nama),
-                        $('<td>').text(item.TipeISmart),
+                        $('<td>').text(item.Posisi),
                         $('<td>').text(item.BidStudi),
                         $('<td>').text(item.Email),
                         $('<td>').text(item.NoTelp),
