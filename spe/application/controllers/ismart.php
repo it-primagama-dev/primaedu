@@ -255,7 +255,7 @@ class ismart extends CI_Controller {
 		</table>'.msg_fotter();
 
 		$asg = batch_email(array(
-		'penerima' => array('toniewibowo@gmail.com'/*,$EmailCabang*/),
+		'penerima' => array('oni.pamuji@gmail.com'/*,$EmailCabang*/),
 			'subjek' => array('Data iSmart Baru'),
 			'body' => array($body)
 		));

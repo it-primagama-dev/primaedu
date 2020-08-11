@@ -104,7 +104,7 @@ class SessionController extends ControllerBase {
                     $uri = 'http://';
                 }
                 $uri .= $_SERVER['HTTP_HOST'];
-                header('Location: ' . $uri . '/primaedu/spe?q=' . base64_encode(base64_encode($username) . '-' . base64_encode($password)));
+                header('Location: ' . $uri . '/spe?q=' . base64_encode(base64_encode($username) . '-' . base64_encode($password)));
                 exit; /*
                   } else {
                   return $this->dispatcher->forward(array(

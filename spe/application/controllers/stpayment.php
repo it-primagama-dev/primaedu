@@ -176,6 +176,10 @@ class stpayment extends CI_Controller {
 
 	function doku_inquiry()
 	{
+		/*if($this->input->ip_address() != '103.10.130.75'){
+	      echo "IP NOT ALLOWED";
+	      die;
+	  	} else {*/
 	    $MALLID = $this->input->post('MALLID');
 	    $CHAINMERCHANT = $this->input->post('CHAINMERCHANT');
 	    $PAYMENTCHANNEL = $this->input->post('PAYMENTCHANNEL');
@@ -209,6 +213,7 @@ class stpayment extends CI_Controller {
 		header('Cache-control: private');
 		header('Expires: -1');
 		echo xml_print($dom);
+		/*}*/
 	}
 
 	public function template_email($data='',$data2)

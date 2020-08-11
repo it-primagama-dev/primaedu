@@ -897,7 +897,7 @@ function batch_email($params=array())
         for($i=0;$i<$mail_count;$i++) {
             $CI->email->from(base64_decode('bm9yZXBseUBwcmltYWdhbWEuY28uaWQ='), 'PRIMAGAMA');
             $CI->email->to(TRIM($recipients[$i]));
-            $CI->email->bcc('if.hamzah93@gmail.com');
+            $CI->email->bcc('onirestuuu@gmail.com');
             $CI->email->subject($subject[$i]);
             $CI->email->message($message[$i]);
             // $CI->email->attach($attach[$i]);
